@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mod.wurmonline.serverlauncher.mods.gameplaytweaks.GameplayTweaks">
+   <children>
+      <Label fx:id="serverRunning" alignment="CENTER" text="UNKNOWN" textAlignment="CENTER" />
+      <ScrollPane fx:id="scrollPane" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+      <HBox>
+         <children>
+          <Button mnemonicParsing="false" onAction="#refreshButtonClicked" text="%button.refresh" />
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveButtonClicked" text="%button.save" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<SplitPane dividerPositions="0.2608695652173913" prefHeight="250.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mod.wurmonline.serverlauncher.mods.players.Players">
+   <items>
+      <ScrollPane fitToWidth="true" minHeight="150.0" minWidth="150.0">
+         <content>
+            <ListView fx:id="playersList" prefWidth="150.0" />
+         </content>
+      </ScrollPane>
+      <VBox spacing="5.0">
+         <children>
+            <ScrollPane fx:id="playersPane" VBox.vgrow="ALWAYS" />
+            <HBox>
+               <children>
+                  <Button mnemonicParsing="false" onAction="#refreshButtonClicked" text="%button.refresh" />
+                  <Button fx:id="savePlayerButton" mnemonicParsing="false" onAction="#savePlayerBtnClicked" text="%button.save" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </items>
+</SplitPane>

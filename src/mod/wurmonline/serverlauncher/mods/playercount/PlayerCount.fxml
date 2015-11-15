@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mod.wurmonline.serverlauncher.mods.playercount.PlayerCount">
+   <children>
+      <Label fx:id="serverStatus" alignment="CENTER" text="UNKNOWN" textAlignment="CENTER" />
+      <TableView fx:id="playersList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idCol" maxWidth="1.7976931348623157E308" minWidth="50.0" prefWidth="-1.0" text="%column.id" />
+          <TableColumn fx:id="nameCol" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="%column.name" />
+          <TableColumn fx:id="kingdomCol" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="-1.0" text="%column.kingdom" />
+        </columns>
+      </TableView>
+      <HBox>
+         <children>
+          <Button mnemonicParsing="false" onAction="#refreshButtonClicked" text="%button.refresh" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

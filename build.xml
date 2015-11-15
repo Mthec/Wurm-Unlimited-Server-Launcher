@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="zip" name="Wurm Unlimited Mod Launcher">
+    <target name="main_jar">
+        <jar destfile="out/jar/serverlauncher.jar">
+            <manifest>
+                <attribute name="Main-Class" value="mod.wurmonline.serverlauncher.DelegatingLauncher" />
+                <attribute name="Class-Path" value="icu4j-56_1.jar javassist.jar server.jar common.jar lib/activation.jar lib/annotations.jar lib/commons-codec-1.6.jar lib/controlsfx-8.20.8.jar lib/controlsfx-8.20.8-sources.jar lib/httpclient-4.2.5.jar lib/httpcore-4.2.4.jar lib/javaws.jar lib/jsr305.jar lib/jtwitter.jar lib/mail.jar lib/mysql-connector.jar lib/mysql-connector-java-5.1.23-bin.jar lib/servlet.jar lib/signpost-core.jar lib/sqlite-jdbc-3.8.11.2.jar lib/SteamServerJni.jar" />
+            </manifest>
+            <fileset dir="out/production/Wurm-Unlimited-Server-Launcher">
+                <exclude name="mod/wurmonline/serverlauncher/mods/**"/>
+                <exclude name="mod/wurmonline/serverlauncher/Test*"/>
+            </fileset>
+            <fileset dir="src">
+                <include name="mod/wurmonline/serverlauncher/gui/ServerGui.fxml"/>
+            </fileset>
+        </jar>
+
+        <jar destfile="out/jar/mods/players/players.jar">
+        <fileset dir="out/production/Wurm-Unlimited-Server-Launcher">
+            <include name="mod/wurmonline/serverlauncher/mods/players/**"/>
+        </fileset>
+        </jar>
+        <copy file="mods/players.properties" tofile="out/jar/mods/players.properties" />
+        <copy file="out/jar/mods/players/players.jar" tofile="mods/players/players.jar" />
+
+        <jar destfile="out/jar/mods/gameplaytweaks/gameplaytweaks.jar">
+            <fileset dir="out/production/Wurm-Unlimited-Server-Launcher">
+                <include name="mod/wurmonline/serverlauncher/mods/gameplaytweaks/**"/>
+            </fileset>
+        </jar>
+        <copy file="mods/gameplaytweaks.properties" tofile="out/jar/mods/gameplaytweaks.properties" />
+        <copy file="out/jar/mods/gameplaytweaks/gameplaytweaks.jar" tofile="mods/gameplaytweaks/gameplaytweaks.jar" />
+
+        <jar destfile="out/jar/mods/serversettings/serversettings.jar">
+            <fileset dir="out/production/Wurm-Unlimited-Server-Launcher">
+                <include name="mod/wurmonline/serverlauncher/mods/serversettings/**"/>
+            </fileset>
+        </jar>
+        <copy file="mods/serversettings.properties" tofile="out/jar/mods/serversettings.properties" />
+        <copy file="out/jar/mods/serversettings/serversettings.jar" tofile="mods/serversettings/serversettings.jar" />
+
+        <jar destfile="out/jar/mods/playercount/playercount.jar">
+            <fileset dir="out/production/Wurm-Unlimited-Server-Launcher">
+                <include name="mod/wurmonline/serverlauncher/mods/playercount/**"/>
+            </fileset>
+        </jar>
+        <copy file="mods/playercount.properties" tofile="out/jar/mods/playercount.properties" />
+        <copy file="out/jar/mods/playercount/playercount.jar" tofile="mods/playercount/playercount.jar" />
+    </target>
+
+
+    <target name="examples" depends="main_jar">
+        <jar destfile="out/jar/mods/example/example.jar">
+            <fileset dir="out/production/Wurm-Unlimited-Server-Launcher">
+                <include name="mod/wurmonline/serverlauncher/mods/example/**"/>
+            </fileset>
+        </jar>
+        <copy file="mods/example.properties" tofile="out/jar/mods/example.properties" />
+        <copy file="out/jar/mods/example/example.jar" tofile="mods/example/example.jar" />
+
+        <jar destfile="out/jar/mods/example2/example2.jar">
+            <fileset dir="out/production/Wurm-Unlimited-Server-Launcher">
+                <include name="mod/wurmonline/serverlauncher/mods/example2/**"/>
+            </fileset>
+        </jar>
+        <copy file="mods/example2.properties" tofile="out/jar/mods/example2.properties" />
+        <copy file="out/jar/mods/example2/example2.jar" tofile="mods/example2/example2.jar" />
+
+        <jar destfile="out/jar/mods/example3/example3.jar">
+            <fileset dir="out/production/Wurm-Unlimited-Server-Launcher">
+                <include name="mod/wurmonline/serverlauncher/mods/example3/**"/>
+            </fileset>
+        </jar>
+        <copy file="mods/example3.properties" tofile="out/jar/mods/example3.properties" />
+        <copy file="out/jar/mods/example3/example3.jar" tofile="mods/example3/example3.jar" />
+    </target>
+
+    <target name="zip" depends="examples">
+        <zip destfile="serverlauncher.zip">
+            <zipfileset dir="out/jar/" includes="serverlauncher.jar"/>
+            <zipfileset dir="locales" prefix="locales/" excludes="**/*fr_FR*" />
+            <zipfileset dir="." includes="serverlauncher.bat"/>
+            <zipfileset dir="." includes="serverlauncher.sh"/>
+            <zipfileset dir="mods" prefix="mods" excludes="example*,example*/**"/>
+            <zipfileset dir="." prefix="" includes="javassist.jar"/>
+            <zipfileset dir="." prefix="" includes="icu4j-56_1.jar"/>
+        </zip>
+        <zip destfile="example_mods.zip">
+            <zipfileset dir="mods" prefix="mods" includes="example*,example*/**"/>
+        </zip>
+        <zip destfile="serverlauncher_source.zip">
+            <zipfileset dir="src" />
+            <zipfileset dir="locales" prefix="locales/" excludes="**/*fr_FR*" />
+            <zipfileset dir="mods" prefix="mods" includes="*.properties"/>
+            <zipfileset dir="." includes="serverlauncher.bat"/>
+            <zipfileset dir="." includes="serverlauncher.sh"/>
+        </zip>
+    </target>
+</project>

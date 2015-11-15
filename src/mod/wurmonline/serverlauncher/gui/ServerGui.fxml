@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mod.wurmonline.serverlauncher.gui.ServerGuiController">
+   <children>
+      <HBox alignment="CENTER_LEFT" spacing="10.0" VBox.vgrow="SOMETIMES">
+         <children>
+            <ComboBox fx:id="databaseDropdown" prefWidth="150.0" />
+            <ComboBox fx:id="localServerDropdown" prefWidth="150.0" />
+            <Label text="%label.status" />
+            <Text fx:id="statusText" strokeType="OUTSIDE" strokeWidth="0.0" text="UNKNOWN" />
+         </children>
+      </HBox>
+      <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <tabs>
+          <Tab text="%tab.run_server">
+            <content>
+                  <HBox alignment="TOP_CENTER">
+                     <children>
+                        <Group>
+                           <children>
+                              <VBox alignment="CENTER" spacing="40.0">
+                                 <children>
+                                    <HBox alignment="TOP_CENTER" spacing="5.0">
+                                       <children>
+                                          <Label text="%label.server" />
+                                          <Text fx:id="serverToRun" strokeType="OUTSIDE" strokeWidth="0.0" text="UNKNOWN" textAlignment="CENTER" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" fillHeight="false">
+                                       <children>
+                                          <Button fx:id="startServerButton" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#startServerButtonClicked" text="Start Server" />
+                                          <ProgressIndicator fx:id="startServerProgress" disable="true" progress="0.0" scaleX="0.5" scaleY="0.5" scaleZ="0.5" />
+                                       </children>
+                                    </HBox>
+                                    <GridPane fx:id="serverControls" alignment="CENTER" hgap="30.0" vgap="20.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" fillHeight="false" spacing="5.0" GridPane.columnIndex="1">
+                                             <children>
+                                                <Label text="%label.seconds" />
+                                                <Spinner fx:id="serverShutdownTime" editable="true" prefHeight="25.0" prefWidth="75.0" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" fillHeight="false" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                             <children>
+                                                <Label text="%label.reason" />
+                                                <TextField fx:id="serverShutdownReason" text="%textfield.reason" />
+                                             </children>
+                                          </HBox>
+                                          <Button fx:id="shutdownServerButton" mnemonicParsing="false" onAction="#shutdownButtonClicked" text="%button.shutdown" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                                          <ChoiceBox fx:id="broadcastMessageType" prefWidth="150.0" GridPane.valignment="CENTER" />
+                                          <TextField fx:id="broadcastMessageText" promptText="%textfield.broadcast_placeholder" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                          <Button fx:id="broadcastMessageButton" mnemonicParsing="false" onAction="#broadcastMessageButtonClicked" text="%button.broadcast" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </Group>
+                     </children>
+                     <padding>
+                        <Insets top="20.0" />
+                     </padding>
+                  </HBox>
+            </content>
+          </Tab>
+          <Tab text="%tab.network_settings">
+            <content>
+                  <VBox alignment="TOP_CENTER" spacing="5.0">
+                     <children>
+                        <Text fx:id="localServerText" strokeType="OUTSIDE" strokeWidth="0.0" text="UNKNOWN" textAlignment="CENTER" />
+                        <SplitPane dividerPositions="0.3" prefHeight="300.0" VBox.vgrow="ALWAYS">
+                           <items>
+                              <VBox>
+                                 <children>
+                                    <Accordion fx:id="localRemoteAccordion" VBox.vgrow="ALWAYS">
+                                      <panes>
+                                        <TitledPane animated="false" text="%list.local">
+                                             <content>
+                                                <ScrollPane fitToHeight="true" fitToWidth="true">
+                                                   <content>
+                                                      <ListView fx:id="networkSettingsLocalServerList" />
+                                                   </content>
+                                                </ScrollPane>
+                                             </content>
+                                          </TitledPane>
+                                          <TitledPane animated="false" layoutX="10.0" layoutY="10.0" text="%list.remote">
+                                             <content>
+                                                <ScrollPane fitToHeight="true" fitToWidth="true">
+                                                   <content>
+                                                      <ListView fx:id="networkSettingsRemoteServerList" />
+                                                   </content>
+                                                </ScrollPane>
+                                             </content>
+                                          </TitledPane>
+                                      </panes>
+                                    </Accordion>
+                                    <HBox alignment="CENTER" spacing="10.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#addServerButtonClicked" text="%button.add_server" />
+                                          <Button mnemonicParsing="false" onAction="#deleteServerButtonClicked" text="%button.delete_server" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <ScrollPane fx:id="networkSettingsScrollPane" />
+                           </items>
+                        </SplitPane>
+                        <Button fx:id="saveNetworkSettingsButton" mnemonicParsing="false" onAction="#saveNetworkSettings" text="%button.save" />
+                     </children>
+                  </VBox>
+            </content>
+          </Tab>
+            <Tab text="%tab.neighbours">
+              <content>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <GridPane alignment="CENTER" hgap="20.0" vgap="20.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <children>
+                                    <Label text="%label.north" />
+                                    <ComboBox fx:id="north" prefWidth="150.0" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" GridPane.rowIndex="2">
+                                 <children>
+                                    <Label text="%label.west" />
+                                    <ComboBox fx:id="west" prefWidth="150.0" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                 <children>
+                                    <Label text="%label.east" />
+                                    <ComboBox fx:id="east" prefWidth="150.0" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <children>
+                                    <Label text="%label.south" />
+                                    <ComboBox fx:id="south" prefWidth="150.0" />
+                                 </children>
+                              </VBox>
+                              <Label text="%label.description" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                              <Button mnemonicParsing="false" onAction="#saveNeighboursButtonClicked" text="%button.save_neighbours" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                              <Text fx:id="neighbourText" strokeType="OUTSIDE" strokeWidth="0.0" text="UNKNOWN" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" />
+                           </children>
+                        </GridPane>
+                     </children>
+                  </HBox>
+              </content>
+            </Tab>
+            <Tab text="%tab.server_settings">
+               <content>
+                  <SplitPane dividerPositions="0.3" prefHeight="160.0" prefWidth="200.0">
+                    <items>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" minWidth="150.0" prefHeight="200.0" prefWidth="200.0">
+                           <content>
+                              <ListView fx:id="serverSettingsList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                           </content>
+                        </ScrollPane>
+                        <AnchorPane fx:id="serverSettingsPane" minHeight="-Infinity" minWidth="-Infinity" />
+                    </items>
+                  </SplitPane>
+               </content>
+            </Tab>
+            <Tab text="%tab.create_database">
+              <content>
+                  <StackPane alignment="TOP_CENTER">
+                     <children>
+                        <Group>
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <HBox alignment="CENTER" spacing="10.0">
+                                       <children>
+                                          <Label text="%label.new_database_name" />
+                                          <TextField fx:id="newDatabaseName" text="%textfield.new_database_name" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="50.0">
+                                       <children>
+                                          <VBox alignment="TOP_RIGHT" fillWidth="false" spacing="20.0">
+                                             <children>
+                                                <HBox alignment="CENTER" layoutX="30.0" layoutY="30.0" spacing="10.0">
+                                                   <children>
+                                                      <Label text="%label.new_local_server_name" />
+                                                      <TextField fx:id="newDatabaseServerName" text="%new_server_name" />
+                                                   </children>
+                                                </HBox>
+                                                <Button mnemonicParsing="false" onAction="#addDatabaseButtonClicked" text="%button.create_new" />
+                                             </children>
+                                          </VBox>
+                                          <Separator orientation="VERTICAL" prefHeight="200.0" />
+                                          <Button mnemonicParsing="false" onAction="#copyCurrentDatabase" text="%button.create_copy" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="20.0" top="20.0" />
+                                       </padding>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </Group>
+                     </children>
+                  </StackPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</VBox>
