@@ -575,6 +575,8 @@ public class ServerGuiController extends ServerController {
         AnchorPane.setRightAnchor(region, 0.0);
         AnchorPane.setBottomAnchor(region, 0.0);
         AnchorPane.setLeftAnchor(region, 0.0);
+        serverSettingsPane.setMinWidth(region.getWidth());
+        serverSettingsPane.setMinHeight(region.getHeight());
     }
 
     void updateServerSettingsTab () {
