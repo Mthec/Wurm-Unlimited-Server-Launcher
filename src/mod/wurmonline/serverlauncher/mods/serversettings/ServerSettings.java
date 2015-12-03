@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 public class ServerSettings implements WurmMod, WurmLoadDumpMod {
     static Logger logger = Logger.getLogger(ServerSettings.class.getName());
-    static ResourceBundle messages = LocaleHelper.getBundle("OfficialSettings");
+    static ResourceBundle messages = LocaleHelper.getBundle("ServerPropertySheet");
     String CATEGORY = "serversettings.";
     boolean changedId = false;
     int oldId;

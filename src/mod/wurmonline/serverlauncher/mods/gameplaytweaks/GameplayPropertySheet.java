@@ -1,6 +1,7 @@
 package mod.wurmonline.serverlauncher.mods.gameplaytweaks;
 
 import com.ibm.icu.text.MessageFormat;
+import com.wurmonline.server.Constants;
 import com.wurmonline.server.ServerEntry;
 import com.wurmonline.server.ServerProperties;
 import javafx.beans.property.SimpleObjectProperty;
@@ -58,7 +59,7 @@ public class GameplayPropertySheet extends VBox {
                         // Mode
                         case 1:
                             boolean npcs = (Boolean) item.getValue();
-                            if(npcs != ServerProperties.getBoolean("NPCS", true)) {
+                            if(npcs != ServerProperties.getBoolean("NPCS", Constants.loadNpcs)) {
                                 ServerProperties.setValue("NPCS", Boolean.toString(npcs));
                                 ServerProperties.checkProperties();
                             }
@@ -230,6 +231,12 @@ public class GameplayPropertySheet extends VBox {
                             current.setApplicationSecret(item.getValue().toString());
                             saveTwitter = true;
                             break;
+                        case 43:
+                            boolean loadEGI = (Boolean) item.getValue();
+                            if(loadEGI != ServerProperties.getBoolean("ENDGAMEITEMS", Constants.loadEndGameItems)) {
+                                ServerProperties.setValue("ENDGAMEITEMS", Boolean.toString(loadEGI));
+                                ServerProperties.checkProperties();
+                            }
                     }
                 } catch (Exception ex) {
                     saveAtAll = false;
@@ -282,10 +289,11 @@ public class GameplayPropertySheet extends VBox {
 
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.MOTD, categoryMOTD, messages.getString("motd_label"), messages.getString("motd_help_text"), true, entry.getMotd()));
 
-        list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.NPCS, categoryMode, messages.getString("npcs_label"), messages.getString("npcs_help_text"), true, ServerProperties.getBoolean("NPCS", true)));
+        list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.NPCS, categoryMode, messages.getString("npcs_label"), messages.getString("npcs_help_text"), true, ServerProperties.getBoolean("NPCS", Constants.loadNpcs)));
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.MAXPLAYERS, categoryMode, messages.getString("max_players_label"), messages.getString("max_players_help_text"), true, entry.pLimit));
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.PVPSERVER, categoryMode, messages.getString("pvp_label"), messages.getString("pvp_help_text"), true, entry.PVPSERVER));
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.EPIC, categoryMode, messages.getString("epic_label"), messages.getString("epic_help_text"), true, entry.EPIC));
+        list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.ENDGAMEITEMS, categoryMode, messages.getString("end_game_items_label"), messages.getString("end_game_items_help_text"), true, ServerProperties.getBoolean("ENDGAMEITEMS", Constants.loadEndGameItems)));
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.HOMESERVER, categoryMode, messages.getString("home_label"), messages.getString("home_help_text"), true, entry.HOMESERVER));
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.KINGDOM, categoryMode, messages.getString("home_kingdom_label"), messages.getString("home_kingdom_help_text"), true, entry.KINGDOM));
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.LOGINSERVER, categoryMode, messages.getString("login_label"), messages.getString("login_help_text"), true, entry.LOGINSERVER));
@@ -481,5 +489,7 @@ public class GameplayPropertySheet extends VBox {
         TWITTERCONSUMERSECRET,
         TWITTERAPPTOKEN,
         TWITTERAPPSECRET,
+
+        ENDGAMEITEMS,
     }
 }

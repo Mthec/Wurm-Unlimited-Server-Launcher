@@ -213,6 +213,7 @@ public class ServerPropertySheet extends VBox {
 
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.INTRASERVERPASSWORD, categoryAdvancedSettings, messages.getString("intra_password_label"), messages.getString("intra_password_help_text"), true, entry.INTRASERVERPASSWORD));
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.STEAMPW, categoryServerSettings, messages.getString("server_password_label"), messages.getString("server_password_help_text"), true, entry.getSteamServerPassword()));
+        list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.ADMINPWD, categoryServerSettings, messages.getString("admin_password_label"), messages.getString("admin_password_help_text"), true, ServerProperties.getString("ADMINPWD", "")));
 
         if(saveNewGui) {
             saveNewGui = false;
@@ -404,6 +405,7 @@ public class ServerPropertySheet extends VBox {
         INTRASERVERPASSWORD,
         NAME,
         STEAMPW,
-        STEAMQUERYPORT
+        STEAMQUERYPORT,
+        ADMINPWD
     }
 }
