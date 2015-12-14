@@ -212,7 +212,7 @@ public class ServerMain extends Application {
 
         if(!dbToStart.isEmpty()) {
             System.out.println(main_messages.getString("no_gui"));
-            ServerConsoleController.startDB(dbToStart);
+            new ServerConsoleController().startDB(dbToStart);
         } else {
             launch(args);
         }

@@ -96,4 +96,20 @@
             <zipfileset dir="." includes="serverlauncher.sh"/>
         </zip>
     </target>
+
+    <target name="copy" depends="examples">
+        <copy todir="C:/Steam/steamapps/common/Wurm Unlimited/WurmServerLauncher">
+            <fileset dir="out/jar/" includes="serverlauncher.jar"/>
+            <fileset dir="." includes="serverlauncher.bat"/>
+            <fileset dir="." includes="serverlauncher.sh"/>
+            <fileset dir="." includes="javassist.jar"/>
+            <fileset dir="." includes="icu4j-56_1.jar"/>
+        </copy>
+        <copy todir="C:/Steam/steamapps/common/Wurm Unlimited/WurmServerLauncher/locales">
+            <fileset dir="locales" excludes="**/*fr_FR*" />
+        </copy>
+        <copy todir="C:/Steam/steamapps/common/Wurm Unlimited/WurmServerLauncher/mods">
+            <fileset dir="mods" />
+        </copy>
+    </target>
 </project>

@@ -1,90 +1,37 @@
 package mod.wurmonline.serverlauncher;
 
 import com.ibm.icu.text.MessageFormat;
-import com.wurmonline.server.*;
+import com.wurmonline.server.ServerEntry;
+import com.wurmonline.server.ServerProperties;
+import com.wurmonline.server.Servers;
 import com.wurmonline.server.console.CommandReader;
 import com.wurmonline.server.kingdom.Kingdoms;
 
 import java.io.File;
 import java.io.IOException;
-import java.rmi.registry.LocateRegistry;
-import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 public class ServerConsoleController extends ServerController {
     protected static Logger logger = Logger.getLogger(ServerConsoleController.class.getName());
-    static ResourceBundle server_messages = LocaleHelper.getBundle("ServerController");
+    ResourceBundle server_messages = LocaleHelper.getBundle("ServerController");
 
-    public static void startDB(String dbName) {
-        File gameDir = new File(dbName);
-        boolean ok = false;
-        File newCurrent;
-        if(gameDir.isDirectory()) {
-            File[] var6;
-            int iox = (var6 = gameDir.listFiles()).length;
-
-            for(int launcher = 0; launcher < iox; ++launcher) {
-                newCurrent = var6[launcher];
-                if(!newCurrent.isDirectory() && newCurrent.getName().equalsIgnoreCase("gamedir")) {
-                    ok = true;
-                }
-            }
-        }
-
-        if(ok) {
-            newCurrent = new File(dbName + File.separator + "currentdir");
-
-            try {
-                newCurrent.createNewFile();
-                DbConnector.closeAll();
-                ServerDirInfo.setFileDBPath(dbName + (dbName.endsWith(File.separator) ? "" : File.separator));
-                ServerDirInfo.setConstantsFileName(ServerDirInfo.getFileDBPath() + "wurm.ini");
-                Constants.load();
-                Constants.dbHost = dbName;
-                Constants.dbPort = "";
-                Constants.loginDbHost = dbName;
-                Constants.loginDbPort = "";
-                Constants.siteDbHost = dbName;
-                Constants.siteDbPort = "";
-                DbConnector.closeAll();
-                DbConnector.initialize();
-                initServer(dbName);
-            } catch (Exception var12) {
-                var12.printStackTrace();
-
-                try {
-                    newCurrent.delete();
-                    DbConnector.closeAll();
-                    ServerDirInfo.setConstantsFileName(dbName + File.separator + "wurm.ini");
-                    return;
-                } catch (Exception ex) {
-                    return;
-                }
-            }
-
-            ServerLauncher staticCurrentServer = new ServerLauncher();
-
-            try {
-                LocateRegistry.createRegistry(Servers.localServer.REGISTRATION_PORT);
-                ServerProperties.setValue("ADMINPASSWORD", adminPassword);
-                staticCurrentServer.runServer(true);
-                (new Thread(new CommandReader(staticCurrentServer.getServer(), System.in), "Console Command Reader")).start();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } finally {
-                System.out.println("\n==================================================================\n");
-                System.out.println(MessageFormat.format(server_messages.getString("launcher_finished"), new Date()));
-                System.out.println("\n==================================================================\n");
-            }
-
-        } else {
-            System.out.println(MessageFormat.format(server_messages.getString("cannot_find_db"), dbName));
+    public void startDB(String dbName) {
+        try {
+            setCurrentDir(dbName + (dbName.endsWith(File.separator) ? "" : File.separator));
+            initServer(dbName);
+            startServer();
+            (new Thread(new CommandReader(currentServer.getServer(), System.in), "Console Command Reader")).start();
+        } catch (IOException ex) {
+            logger.severe(MessageFormat.format(server_messages.getString("cannot_find_db"), dbName));
+            ex.printStackTrace();
+            System.exit(-1);
         }
     }
 
-    static void initServer(String dbName) {
-        // TODO - Sort static stuff, should use ServerController.loadAllServers.
+    void initServer(String dbName) {
+        // TODO - Move to ServerMain/ServerController.
+        // TODO - Should use ServerController.loadAllServers.
         Servers.loadAllServers(true);
         int _int;
 
