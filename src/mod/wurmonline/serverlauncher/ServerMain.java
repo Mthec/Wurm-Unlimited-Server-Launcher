@@ -131,10 +131,8 @@ public class ServerMain extends Application {
                     ACCEPTED_ARGS.addAll(argMod.getArgs());
                 }
             }
-            PluralRules pluralRules = PluralRules.forLocale(ULocale.getDefault());
             int num_of_mods = mods.size();
-            String resourceKey = "number_of_mods." + pluralRules.select(num_of_mods);
-            logger.info(MessageFormat.format(main_messages.getString(resourceKey), num_of_mods));
+            logger.info(MessageFormat.format(LocaleHelper.getPluralString(main_messages, "number_of_mods.", num_of_mods), num_of_mods));
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);

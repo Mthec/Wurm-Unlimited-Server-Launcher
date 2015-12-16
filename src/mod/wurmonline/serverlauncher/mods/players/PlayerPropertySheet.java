@@ -131,6 +131,7 @@ public class PlayerPropertySheet extends VBox implements MiscConstants {
 
         if (toReturn.length() == 0 && saveAtAll) {
             try {
+                // TODO - Position saving not working.
                 current.save();
                 toReturn = "ok";
             } catch (Exception ex) {
