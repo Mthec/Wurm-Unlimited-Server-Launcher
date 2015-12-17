@@ -1,8 +1,8 @@
-package mod.wurmonline.serverlauncher;
+package org.gotti.wurmunlimited.serverlauncher;
 
 import org.gotti.wurmunlimited.modloader.classhooks.HookManager;
 
-public class SecondLauncher {
+public class DelegatedLauncher2 {
 
     public static void main(String[] args) {
 

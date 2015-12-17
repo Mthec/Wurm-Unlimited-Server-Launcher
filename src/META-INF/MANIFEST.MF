@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Class-Path: icu4j-56_1.jar javassist.jar modloader.jar server.jar comm
+ on.jar lib/activation.jar lib/annotations.jar lib/commons-codec-1.6.j
+ ar lib/controlsfx-8.20.8.jar lib/controlsfx-8.20.8-sources.jar lib/ht
+ tpclient-4.2.5.jar lib/httpcore-4.2.4.jar lib/javaws.jar lib/jsr305.j
+ ar lib/jtwitter.jar lib/mail.jar lib/mysql-connector.jar lib/mysql-co
+ nnector-java-5.1.23-bin.jar lib/servlet.jar lib/signpost-core.jar lib
+ /sqlite-jdbc-3.8.11.2.jar lib/SteamServerJni.jar
+Main-Class: org.gotti.wurmunlimited.serverlauncher.ServerLauncher2
+
