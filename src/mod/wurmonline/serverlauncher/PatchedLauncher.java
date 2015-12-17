@@ -11,11 +11,11 @@ public class PatchedLauncher {
 
         try {
             URL[] urls = new URL[] {
-                    Paths.get("modlauncher.jar").toUri().toURL(),
+                    Paths.get("serverlauncher.jar").toUri().toURL(),
                     Paths.get("javassist.jar").toUri().toURL()
             };
             try (URLClassLoader urlClassLoader = new URLClassLoader(urls)) {
-                Class<?> launcher = urlClassLoader.loadClass("org.gotti.wurmunlimited.serverlauncher.ServerLauncher");
+                Class<?> launcher = urlClassLoader.loadClass("org.gotti.wurmunlimited.serverlauncher.ServerLauncher2");
                 Method method = launcher.getDeclaredMethod("main", new Class[] { String[].class });
                 method.invoke(launcher, new Object[] { args });
             }

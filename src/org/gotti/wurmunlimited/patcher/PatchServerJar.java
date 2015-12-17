@@ -89,7 +89,7 @@ public class PatchServerJar {
                 return;
             }
 
-            Path loaderFile = loaderFS.getPath("com/wurmonline/serverlauncher/PatchedLauncher.class");
+            Path loaderFile = loaderFS.getPath("mod/wurmonline/serverlauncher/PatchedLauncher.class");
             if (!Files.exists(loaderFile)) {
                 throw new FileNotFoundException(loaderFile.toString());
             }
