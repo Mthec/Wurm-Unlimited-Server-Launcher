@@ -92,8 +92,8 @@
             <zipfileset dir="locales" prefix="locales/" excludes="**/*fr_FR*" />
             <zipfileset dir="." includes="serverlauncher.bat"/>
             <zipfileset dir="." includes="serverlauncher.sh"/>
-            <fileset dir="." includes="patcher.bat"/>
-            <fileset dir="." includes="patcher.sh"/>
+            <fileset dir="." includes="serverlauncherpatcher.bat"/>
+            <fileset dir="." includes="serverlauncherpatcher.sh"/>
             <zipfileset dir="mods" prefix="mods" excludes="example*,example*/**"/>
             <zipfileset dir="." prefix="" includes="javassist.jar"/>
             <zipfileset dir="." prefix="" includes="icu4j-56_1.jar"/>
@@ -108,8 +108,8 @@
             <fileset dir="out/jar/" includes="serverlauncher.jar,serverlauncherpatcher.jar"/>
             <fileset dir="." includes="serverlauncher.bat"/>
             <fileset dir="." includes="serverlauncher.sh"/>
-            <fileset dir="." includes="patcher.bat"/>
-            <fileset dir="." includes="patcher.sh"/>
+            <fileset dir="." includes="serverlauncherpatcher.bat"/>
+            <fileset dir="." includes="serverlauncherpatcher.sh"/>
             <fileset dir="." includes="javassist.jar"/>
             <fileset dir="." includes="icu4j-56_1.jar"/>
         </copy>
