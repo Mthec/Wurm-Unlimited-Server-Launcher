@@ -237,6 +237,12 @@ public class GameplayPropertySheet extends VBox {
                                 ServerProperties.setValue("ENDGAMEITEMS", Boolean.toString(loadEGI));
                                 ServerProperties.checkProperties();
                             }
+                        case 44:
+                            boolean spy = (Boolean) item.getValue();
+                            if(spy != ServerProperties.getBoolean("SPYPREVENTION", Constants.enableSpyPrevention)) {
+                                ServerProperties.setValue("SPYPREVENTION", Boolean.toString(spy));
+                                ServerProperties.checkProperties();
+                            }
                     }
                 } catch (Exception ex) {
                     saveAtAll = false;
@@ -296,6 +302,7 @@ public class GameplayPropertySheet extends VBox {
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.ENDGAMEITEMS, categoryMode, messages.getString("end_game_items_label"), messages.getString("end_game_items_help_text"), true, ServerProperties.getBoolean("ENDGAMEITEMS", Constants.loadEndGameItems)));
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.HOMESERVER, categoryMode, messages.getString("home_label"), messages.getString("home_help_text"), true, entry.HOMESERVER));
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.KINGDOM, categoryMode, messages.getString("home_kingdom_label"), messages.getString("home_kingdom_help_text"), true, entry.KINGDOM));
+        list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.SPYPREVENTION, categoryMode, messages.getString("spy_prevention_label"), messages.getString("spy_prevention_help_text"), true, ServerProperties.getBoolean("SPYPREVENTION", Constants.enableSpyPrevention)));
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.LOGINSERVER, categoryMode, messages.getString("login_label"), messages.getString("login_help_text"), true, entry.LOGINSERVER));
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.TESTSERVER, categoryMode, messages.getString("test_label"), messages.getString("test_help_text"), true, entry.testServer));
         list.add(new GameplayPropertySheet.CustomPropertyItem(GameplayPropertySheet.PropertyType.MAINTAINING, categoryMode, messages.getString("maintenance_label"), messages.getString("maintenance_help_text"), true, false));
@@ -491,5 +498,6 @@ public class GameplayPropertySheet extends VBox {
         TWITTERAPPSECRET,
 
         ENDGAMEITEMS,
+        SPYPREVENTION,
     }
 }
