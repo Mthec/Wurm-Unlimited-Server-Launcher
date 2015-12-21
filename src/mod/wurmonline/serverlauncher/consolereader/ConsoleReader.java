@@ -27,6 +27,7 @@ public class ConsoleReader implements Runnable {
                     continue;
                 }
 
+                // TODO - Remove.
                 if (nextLine.equals("exit")) {
                     System.exit(1);
                 }
@@ -38,6 +39,9 @@ public class ConsoleReader implements Runnable {
                 if (nextLine.equals("help")) {
                     System.out.println(currentMenu.help());
                     continue;
+                } else if (nextLine.startsWith("help ")) {
+                    System.out.println(currentMenu.help(nextLine.substring(5)));
+                    continue;
                 } else if (nextLine.equals("menu")) {
                     currentMenu = topMenu;
                     currentMenu.action();
@@ -46,15 +50,18 @@ public class ConsoleReader implements Runnable {
 
                 Option response = currentMenu.ask(nextLine);
                 if (response == null) {
-                    logger.warning("Unknown command - " + nextLine);
+                    System.err.println("Unknown command - " + nextLine);
                 } else {
                     if (response instanceof Menu) {
                         currentMenu = (Menu)response;
                     }
                     System.out.println(response.action());
                 }
+                throw new NoSuchOption(nextLine);
             } catch (IOException ex) {
                 ex.printStackTrace();
+            } catch (NoSuchOption ex) {
+                System.err.println("Unknown command - " + ex.option);
             }
         } while (nextLine != null);
     }

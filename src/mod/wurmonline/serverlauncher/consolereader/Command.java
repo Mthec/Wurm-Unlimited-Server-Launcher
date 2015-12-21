@@ -1,6 +1,6 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
-public class Command implements Option {
+public abstract class Command implements Option {
     String helpText;
     String name;
 
@@ -10,10 +10,7 @@ public class Command implements Option {
     }
 
     @Override
-    public String action() {
-        System.out.println("1 + 1 = 5");
-        return "Done";
-    }
+    public abstract String action();
 
     @Override
     public Option ask(String input) {

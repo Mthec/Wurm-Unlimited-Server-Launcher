@@ -34,6 +34,18 @@ public class Menu implements Option {
         return "Options - " + options.keySet().toString();
     }
 
+    public String help(String option) throws NoSuchOption {
+        if (option.equals("")) {
+            return "Options - " + options.keySet().toString();
+        } else {
+            try {
+                return options.get(option).help();
+            } catch (NullPointerException ex) {
+                throw new NoSuchOption(option);
+            }
+        }
+    }
+
     @Override
     public String getName() {
         return name;
