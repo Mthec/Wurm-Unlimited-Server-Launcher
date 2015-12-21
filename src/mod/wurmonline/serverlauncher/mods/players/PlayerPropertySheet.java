@@ -8,11 +8,14 @@ import com.ibm.icu.text.MessageFormat;
 import com.wurmonline.server.MiscConstants;
 import com.wurmonline.server.Server;
 import com.wurmonline.server.gui.PlayerData;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import mod.wurmonline.serverlauncher.gui.FormattedFloatEditor;
 import org.controlsfx.control.PropertySheet;
+import org.controlsfx.property.editor.DefaultPropertyEditorFactory;
 
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -61,7 +64,19 @@ public class PlayerPropertySheet extends VBox implements MiscConstants {
                                                             players_messages.getString("undead_label"),
                                                             players_messages.getString("undead_help_text"),
                                                             true, entry.isUndead()));
+        SimpleObjectProperty<DefaultPropertyEditorFactory> propertyEditorFactory = new SimpleObjectProperty<>(this, "propertyEditor", new DefaultPropertyEditorFactory());
         PropertySheet propertySheet = new PropertySheet(list);
+        propertySheet.setPropertyEditorFactory(param -> {
+            if(param instanceof PlayerPropertySheet.CustomPropertyItem) {
+                CustomPropertyItem pi = (CustomPropertyItem)param;
+                if(pi.getValue().getClass() == Float.class) {
+                    return new FormattedFloatEditor(param);
+                }
+            }
+
+            return propertyEditorFactory.get().call(param);
+        });
+
         VBox.setVgrow(propertySheet, Priority.ALWAYS);
         getChildren().add(propertySheet);
     }
@@ -74,28 +89,32 @@ public class PlayerPropertySheet extends VBox implements MiscConstants {
         String toReturn = "";
         boolean saveAtAll = false;
 
-        for(PlayerPropertySheet.CustomPropertyItem player : new CustomPropertyItem[list.size()]) {
-            if(changedProperties.contains(player.getPropertyType())) {
+        for(PropertySheet.Item propertyItem : list) {
+            if (!(propertyItem instanceof CustomPropertyItem)) {
+                continue;
+            }
+            CustomPropertyItem item = (CustomPropertyItem)propertyItem;
+            if(changedProperties.contains(item.getPropertyType())) {
                 saveAtAll = true;
 
                 try {
-                    switch(player.getPropertyType().ordinal()) {
+                    switch(item.getPropertyType().ordinal()) {
+                        case 0:
+                            current.setName(item.getValue().toString());
+                            break;
                         case 1:
-                            current.setName(player.getValue().toString());
+                            current.setPosx((Float) item.getValue());
                             break;
                         case 2:
-                            current.setPosx((Float) player.getValue());
+                            current.setPosy((Float) item.getValue());
                             break;
                         case 3:
-                            current.setPosy((Float) player.getValue());
+                            current.setPower((Integer) item.getValue());
                             break;
                         case 4:
-                            current.setPower((Integer) player.getValue());
+                            current.setServer((Integer) item.getValue());
                             break;
                         case 5:
-                            current.setServer((Integer) player.getValue());
-                            break;
-                        case 6:
                             if(!current.isUndead()) {
                                 current.setUndeadType((byte)(1 + Server.rand.nextInt(3)));
                             } else {
@@ -104,7 +123,7 @@ public class PlayerPropertySheet extends VBox implements MiscConstants {
                     }
                 } catch (Exception ex) {
                     saveAtAll = false;
-                    toReturn = toReturn + MessageFormat.format(players_messages.getString("invalid_value"), player.getCategory(), player.getValue());
+                    toReturn = toReturn + MessageFormat.format(players_messages.getString("invalid_value"), item.getCategory(), item.getValue());
                     logger.log(Level.INFO, MessageFormat.format(players_messages.getString("error"), ex.getMessage()), ex);
                 }
             }
@@ -112,6 +131,7 @@ public class PlayerPropertySheet extends VBox implements MiscConstants {
 
         if (toReturn.length() == 0 && saveAtAll) {
             try {
+                // TODO - Position saving not working.
                 current.save();
                 toReturn = "ok";
             } catch (Exception ex) {

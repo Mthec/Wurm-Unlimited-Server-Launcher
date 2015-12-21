@@ -3,15 +3,26 @@
     <target name="main_jar">
         <jar destfile="out/jar/serverlauncher.jar">
             <manifest>
-                <attribute name="Main-Class" value="mod.wurmonline.serverlauncher.DelegatingLauncher" />
-                <attribute name="Class-Path" value="icu4j-56_1.jar javassist.jar server.jar common.jar lib/activation.jar lib/annotations.jar lib/commons-codec-1.6.jar lib/controlsfx-8.20.8.jar lib/controlsfx-8.20.8-sources.jar lib/httpclient-4.2.5.jar lib/httpcore-4.2.4.jar lib/javaws.jar lib/jsr305.jar lib/jtwitter.jar lib/mail.jar lib/mysql-connector.jar lib/mysql-connector-java-5.1.23-bin.jar lib/servlet.jar lib/signpost-core.jar lib/sqlite-jdbc-3.8.11.2.jar lib/SteamServerJni.jar" />
+                <attribute name="Main-Class" value="org.gotti.wurmunlimited.serverlauncher.ServerLauncher2" />
+                <attribute name="Class-Path" value="modlauncher.jar icu4j-56_1.jar javassist.jar server.jar common.jar lib/activation.jar lib/annotations.jar lib/commons-codec-1.6.jar lib/controlsfx-8.20.8.jar lib/controlsfx-8.20.8-sources.jar lib/httpclient-4.2.5.jar lib/httpcore-4.2.4.jar lib/javaws.jar lib/jsr305.jar lib/jtwitter.jar lib/mail.jar lib/mysql-connector.jar lib/mysql-connector-java-5.1.23-bin.jar lib/servlet.jar lib/signpost-core.jar lib/sqlite-jdbc-3.8.11.2.jar lib/SteamServerJni.jar" />
             </manifest>
             <fileset dir="out/production/Wurm-Unlimited-Server-Launcher">
                 <exclude name="mod/wurmonline/serverlauncher/mods/**"/>
                 <exclude name="mod/wurmonline/serverlauncher/Test*"/>
+                <exclude name="org/gotti/wurmunlimited/patcher/*"/>
             </fileset>
             <fileset dir="src">
                 <include name="mod/wurmonline/serverlauncher/gui/ServerGui.fxml"/>
+            </fileset>
+        </jar>
+
+        <jar destfile="out/jar/serverlauncherpatcher.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.gotti.wurmunlimited.patcher.PatchServerJar" />
+                <attribute name="Class-Path" value="javassist.jar" />
+            </manifest>
+            <fileset dir="out/production/Wurm-Unlimited-Server-Launcher">
+                <include name="org/gotti/wurmunlimited/patcher/P*"/>
             </fileset>
         </jar>
 
@@ -77,10 +88,12 @@
 
     <target name="zip" depends="examples">
         <zip destfile="serverlauncher.zip">
-            <zipfileset dir="out/jar/" includes="serverlauncher.jar"/>
+            <zipfileset dir="out/jar/" includes="serverlauncher.jar,serverlauncherpatcher.jar"/>
             <zipfileset dir="locales" prefix="locales/" excludes="**/*fr_FR*" />
             <zipfileset dir="." includes="serverlauncher.bat"/>
             <zipfileset dir="." includes="serverlauncher.sh"/>
+            <fileset dir="." includes="serverlauncherpatcher.bat"/>
+            <fileset dir="." includes="serverlauncherpatcher.sh"/>
             <zipfileset dir="mods" prefix="mods" excludes="example*,example*/**"/>
             <zipfileset dir="." prefix="" includes="javassist.jar"/>
             <zipfileset dir="." prefix="" includes="icu4j-56_1.jar"/>
@@ -88,13 +101,24 @@
         <zip destfile="example_mods.zip">
             <zipfileset dir="mods" prefix="mods" includes="example*,example*/**"/>
         </zip>
-        <zip destfile="serverlauncher_source.zip">
-            <zipfileset dir="src" />
-            <zipfileset dir="locales" prefix="locales/" excludes="**/*fr_FR*" />
-            <zipfileset dir="mods" prefix="mods" includes="*.properties"/>
-            <zipfileset dir="." includes="serverlauncher.bat"/>
-            <zipfileset dir="." includes="serverlauncher.sh"/>
-        </zip>
+    </target>
+
+    <target name="copy" depends="examples">
+        <copy todir="C:/Steam/steamapps/common/Wurm Unlimited/WurmServerLauncher">
+            <fileset dir="out/jar/" includes="serverlauncher.jar,serverlauncherpatcher.jar"/>
+            <fileset dir="." includes="serverlauncher.bat"/>
+            <fileset dir="." includes="serverlauncher.sh"/>
+            <fileset dir="." includes="serverlauncherpatcher.bat"/>
+            <fileset dir="." includes="serverlauncherpatcher.sh"/>
+            <fileset dir="." includes="javassist.jar"/>
+            <fileset dir="." includes="icu4j-56_1.jar"/>
+        </copy>
+        <copy todir="C:/Steam/steamapps/common/Wurm Unlimited/WurmServerLauncher/locales">
+            <fileset dir="locales" excludes="**/*fr_FR*" />
+        </copy>
+        <copy todir="C:/Steam/steamapps/common/Wurm Unlimited/WurmServerLauncher/mods">
+            <fileset dir="mods" />
+        </copy>
     </target>
 
     <target name="copy" depends="examples">

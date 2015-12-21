@@ -1,5 +1,8 @@
 package mod.wurmonline.serverlauncher;
 
+import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.util.ULocale;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,5 +22,9 @@ public class LocaleHelper {
             System.exit(-1);
         }
         return null;
+    }
+
+    public static String getPluralString (ResourceBundle bundle, String string, int count) {
+        return bundle.getString(string + PluralRules.forLocale(ULocale.getDefault()).select(count));
     }
 }

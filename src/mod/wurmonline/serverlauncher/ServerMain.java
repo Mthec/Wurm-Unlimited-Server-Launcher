@@ -1,8 +1,6 @@
 package mod.wurmonline.serverlauncher;
 
 import com.ibm.icu.text.MessageFormat;
-import com.ibm.icu.text.PluralRules;
-import com.ibm.icu.util.ULocale;
 import com.wurmonline.server.Constants;
 import com.wurmonline.server.DbConnector;
 import com.wurmonline.server.ServerDirInfo;
@@ -24,7 +22,6 @@ import org.gotti.wurmunlimited.modloader.interfaces.WurmMod;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Level;
@@ -131,10 +128,8 @@ public class ServerMain extends Application {
                     ACCEPTED_ARGS.addAll(argMod.getArgs());
                 }
             }
-            PluralRules pluralRules = PluralRules.forLocale(ULocale.getDefault());
             int num_of_mods = mods.size();
-            String resourceKey = "number_of_mods." + pluralRules.select(num_of_mods);
-            logger.info(MessageFormat.format(main_messages.getString(resourceKey), num_of_mods));
+            logger.info(MessageFormat.format(LocaleHelper.getPluralString(main_messages, "number_of_mods.", num_of_mods), num_of_mods));
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);

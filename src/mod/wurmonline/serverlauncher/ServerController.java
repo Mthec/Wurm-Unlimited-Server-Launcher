@@ -1,8 +1,6 @@
 package mod.wurmonline.serverlauncher;
 
 import com.ibm.icu.text.MessageFormat;
-import com.ibm.icu.text.PluralRules;
-import com.ibm.icu.util.ULocale;
 import com.wurmonline.server.*;
 import com.wurmonline.server.utils.DbUtilities;
 import com.wurmonline.server.utils.SimpleArgumentParser;
@@ -97,9 +95,7 @@ public abstract class ServerController {
                 return false;
             }
             // TODO - Shutdown messages should be coloured?
-            PluralRules pluralRules = PluralRules.forLocale(ULocale.getDefault());
-            String resourceKey = "shutting_down." + pluralRules.select(time);
-            System.out.println(MessageFormat.format(server_messages.getString(resourceKey), time, reason));
+            System.out.println(MessageFormat.format(LocaleHelper.getPluralString(server_messages, "shutting_down.", time), time, reason));
             currentServer.getServer().startShutdown(time, reason);
         }
         return true;
