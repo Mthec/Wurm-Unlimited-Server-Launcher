@@ -1,6 +1,7 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Menu implements Option {
@@ -35,14 +36,10 @@ public class Menu implements Option {
     }
 
     public String help(String option) throws NoSuchOption {
-        if (option.equals("")) {
-            return "Options - " + options.keySet().toString();
-        } else {
-            try {
-                return options.get(option).help();
-            } catch (NullPointerException ex) {
-                throw new NoSuchOption(option);
-            }
+        try {
+            return options.get(option).help();
+        } catch (NullPointerException ex) {
+            throw new NoSuchOption(option);
         }
     }
 

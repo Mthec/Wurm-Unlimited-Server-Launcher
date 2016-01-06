@@ -1,5 +1,8 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import java.util.List;
+import java.util.Random;
+
 public class TestConsoleReader {
     public static void main (String[] args) {
         Option[] options = {
@@ -29,6 +32,23 @@ public class TestConsoleReader {
                     public String action () {
 
                         return "Done!";
+                    }
+                },
+                new Command("player_info", "Get information about a player.") {
+                    @Override
+                    public String action() {
+                        return "Please provide a player name or id.";
+                    }
+
+                    @Override
+                    public String action(List<String> tokens) {
+                        if (tokens.isEmpty()) {
+                            return action();
+                        } else {
+                            String[] strings = new String[]{"annoying", "happy"};
+                            Random random = new Random();
+                            return String.join(" ", tokens) + " is " + strings[random.nextInt(2)] + ".";
+                        }
                     }
                 },
         };

@@ -3,6 +3,9 @@ package mod.wurmonline.serverlauncher.consolereader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class ConsoleReader implements Runnable {
@@ -36,24 +39,27 @@ public class ConsoleReader implements Runnable {
                     currentMenu = topMenu;
                 }
 
-                if (nextLine.equals("help")) {
-                    System.out.println(currentMenu.help());
+                List<String> tokens = tokenize(nextLine);
+
+                if (tokens.get(0).equals("help")) {
+                    if (tokens.size() == 1) {
+                        System.out.println(currentMenu.help());
+                    } else {
+                        System.out.println(currentMenu.help(tokens.get(1)));
+                    }
                     continue;
-                } else if (nextLine.startsWith("help ")) {
-                    System.out.println(currentMenu.help(nextLine.substring(5)));
-                    continue;
-                } else if (nextLine.equals("menu")) {
+                } else if (tokens.get(0).equals("menu")) {
                     currentMenu = topMenu;
                     currentMenu.action();
                     continue;
                 }
 
-                Option response = currentMenu.ask(nextLine);
+                Option response = currentMenu.ask(tokens.get(0));
                 if (response != null) {
                     if (response instanceof Menu) {
                         currentMenu = (Menu)response;
                     }
-                    System.out.println(response.action());
+                    System.out.println(response.action(tokens.subList(1, tokens.size())));
                     continue;
                 }
                 throw new NoSuchOption(nextLine);
@@ -63,5 +69,9 @@ public class ConsoleReader implements Runnable {
                 System.err.println("Unknown command - " + ex.option);
             }
         } while (nextLine != null);
+    }
+
+    static List<String> tokenize(String input) {
+        return Arrays.asList(input.split(" "));
     }
 }
