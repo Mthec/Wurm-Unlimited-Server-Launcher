@@ -49,13 +49,12 @@ public class ConsoleReader implements Runnable {
                 }
 
                 Option response = currentMenu.ask(nextLine);
-                if (response == null) {
-                    System.err.println("Unknown command - " + nextLine);
-                } else {
+                if (response != null) {
                     if (response instanceof Menu) {
                         currentMenu = (Menu)response;
                     }
                     System.out.println(response.action());
+                    continue;
                 }
                 throw new NoSuchOption(nextLine);
             } catch (IOException ex) {
