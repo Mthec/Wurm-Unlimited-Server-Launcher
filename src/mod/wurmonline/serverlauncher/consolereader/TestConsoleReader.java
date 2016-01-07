@@ -72,5 +72,6 @@ public class TestConsoleReader {
         TestConsoleReader.controller = controller;
         main(args);
         (new Thread(new ConsoleReader(options))).start();
+        System.out.println("Console ready...");
     }
 }

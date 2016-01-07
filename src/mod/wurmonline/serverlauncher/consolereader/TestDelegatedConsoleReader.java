@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class TestDelegatedConsoleReader {
     static String MODS_DIR = "mods";
@@ -31,7 +33,15 @@ public class TestDelegatedConsoleReader {
         }
         ServerConsoleController controller = new ServerConsoleController();
         Servers.argumets = new SimpleArgumentParser(new String[0], new HashSet<>());
-        //controller.startDB("Creative");
+        controller.startDB("Creative");
+        Set<Thread> threads = Thread.getAllStackTraces().keySet();
+        for (Thread t : threads) {
+            if (Objects.equals(t.getName(), "Console Command Reader")) {
+                t.stop();
+                break;
+            }
+        }
+
         TestConsoleReader.start(args, controller);
     }
 }
