@@ -1,10 +1,17 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import mod.wurmonline.serverlauncher.mods.playercount.PlayerCount;
+
 import java.util.List;
 import java.util.Random;
 
 public class TestConsoleReader {
     public static void main (String[] args) {
+        // TODO - Temp
+        PlayerCount count = new PlayerCount();
+
+        Option[] modOptions = count.getOptions();
+
         Option[] options = {
                 new Menu("dostuff", "This is a menu, please type \"hello\"",
                         new Option[] {
@@ -51,6 +58,8 @@ public class TestConsoleReader {
                         }
                     }
                 },
+                new Menu("mods", "Mod Settings",
+                        modOptions),
         };
         (new Thread(new ConsoleReader(options))).start();
     }

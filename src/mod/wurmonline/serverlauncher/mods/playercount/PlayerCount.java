@@ -13,17 +13,21 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import mod.wurmonline.serverlauncher.LocaleHelper;
+import mod.wurmonline.serverlauncher.consolereader.Command;
+import mod.wurmonline.serverlauncher.consolereader.Option;
 import mod.wurmonline.serverlauncher.gui.ServerGuiController;
+import org.gotti.wurmunlimited.modloader.interfaces.WurmCommandLine;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmMod;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmUIMod;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PlayerCount implements WurmMod, WurmUIMod, Initializable {
+public class PlayerCount implements WurmMod, WurmUIMod, Initializable, WurmCommandLine {
     Logger logger = Logger.getLogger(PlayerCount.class.getName());
     static ServerGuiController controller;
     static ResourceBundle count_messages = LocaleHelper.getBundle("PlayerCount");
@@ -84,6 +88,30 @@ public class PlayerCount implements WurmMod, WurmUIMod, Initializable {
         kingdomCol.setCellValueFactory(new PropertyValueFactory<>("kingdom"));
 
         refreshButtonClicked();
+    }
+
+    @Override
+    public Option[] getOptions() {
+        return new Option[] {
+                new Command("player_count", "Count logged in players.") {
+                    @Override
+                    public String action() {
+                        if (controller == null || !controller.serverIsRunning()) {
+                            return count_messages.getString("server_not_running");
+                        }
+                        return String.format("There are %s players logged in.", Players.getInstance().getPlayers().length);
+                    }
+                },
+                new Command("list_players", "List all logged in players.") {
+                    @Override
+                    public String action() {
+                        if (controller == null || !controller.serverIsRunning()) {
+                            return count_messages.getString("server_not_running");
+                        }
+                        return Arrays.toString(Players.getInstance().getPlayers());
+                    }
+                }
+        };
     }
 
     public class PlayerEntry {

@@ -4,7 +4,7 @@ public abstract class Command implements Option {
     String helpText;
     String name;
 
-    Command (String newName, String newHelpText) {
+    public Command (String newName, String newHelpText) {
         name = newName;
         helpText = newHelpText;
     }

@@ -7,7 +7,7 @@ public interface Option {
     String action ();
 
     default String action (List<String> tokens) {
-        return "Does not take any options.";
+        return getName() + " does not take any options.";
     }
 
     Option ask (String input);

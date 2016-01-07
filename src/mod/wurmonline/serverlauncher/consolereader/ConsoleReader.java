@@ -59,7 +59,11 @@ public class ConsoleReader implements Runnable {
                     if (response instanceof Menu) {
                         currentMenu = (Menu)response;
                     }
-                    System.out.println(response.action(tokens.subList(1, tokens.size())));
+                    if (tokens.size() == 1) {
+                        System.out.println(response.action());
+                    } else {
+                        System.out.println(response.action(tokens.subList(1, tokens.size())));
+                    }
                     continue;
                 }
                 throw new NoSuchOption(nextLine);

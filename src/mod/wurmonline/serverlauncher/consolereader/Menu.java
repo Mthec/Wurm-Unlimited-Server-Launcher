@@ -9,7 +9,7 @@ public class Menu implements Option {
     private String name;
     private String text;
 
-    Menu (String name, String text, Option[] options) {
+    public Menu (String name, String text, Option[] options) {
         this.name = name;
         this.text = text;
         for (Option option : options) {
