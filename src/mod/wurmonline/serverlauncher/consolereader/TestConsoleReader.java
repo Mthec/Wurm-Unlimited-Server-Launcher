@@ -1,21 +1,26 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import mod.wurmonline.serverlauncher.ServerController;
 import mod.wurmonline.serverlauncher.mods.playercount.PlayerCount;
 
 import java.util.List;
 import java.util.Random;
 
 public class TestConsoleReader {
+    static Option[] options;
+    static PlayerCount count;
+    static ServerController controller;
+
     public static void main (String[] args) {
         // TODO - Temp
-        PlayerCount count = new PlayerCount();
+        count = new PlayerCount();
 
-        Option[] modOptions = count.getOptions();
+        Option[] modOptions = count.getOptions(controller);
 
-        Option[] options = {
+        options = new Option[] {
                 new Menu("dostuff", "This is a menu, please type \"hello\"",
-                        new Option[] {
-                                new Command("hello", "something"){
+                        new Option[]{
+                                new Command("hello", "something") {
                                     @Override
                                     public String action() {
                                         return "Hi there.";
@@ -28,15 +33,15 @@ public class TestConsoleReader {
                                     }
                                 }
                         }),
-                new Command("status", "Check the status of the server."){
+                new Command("status", "Check the status of the server.") {
                     @Override
-                    public String action () {
+                    public String action() {
                         return "*shrugs*";
                     }
                 },
-                new Command("shutdown", "Shutdown the server."){
+                new Command("shutdown", "Shutdown the server.") {
                     @Override
-                    public String action () {
+                    public String action() {
 
                         return "Done!";
                     }
@@ -61,6 +66,11 @@ public class TestConsoleReader {
                 new Menu("mods", "Mod Settings",
                         modOptions),
         };
+    }
+
+    public static void start(String[] args, ServerController controller) {
+        TestConsoleReader.controller = controller;
+        main(args);
         (new Thread(new ConsoleReader(options))).start();
     }
 }

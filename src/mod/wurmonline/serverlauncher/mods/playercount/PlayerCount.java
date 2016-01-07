@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import mod.wurmonline.serverlauncher.LocaleHelper;
+import mod.wurmonline.serverlauncher.ServerController;
 import mod.wurmonline.serverlauncher.consolereader.Command;
 import mod.wurmonline.serverlauncher.consolereader.Option;
 import mod.wurmonline.serverlauncher.gui.ServerGuiController;
@@ -91,7 +92,7 @@ public class PlayerCount implements WurmMod, WurmUIMod, Initializable, WurmComma
     }
 
     @Override
-    public Option[] getOptions() {
+    public Option[] getOptions(ServerController controller) {
         return new Option[] {
                 new Command("player_count", "Count logged in players.") {
                     @Override
