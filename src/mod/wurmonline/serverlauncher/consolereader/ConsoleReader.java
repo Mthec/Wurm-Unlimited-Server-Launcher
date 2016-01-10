@@ -25,7 +25,12 @@ public class ConsoleReader implements Runnable {
         String nextLine = null;
         do {
             try {
-                nextLine = reader.readLine();
+                try {
+                    nextLine = reader.readLine();
+                } catch (IOException ioEx) {
+                    ioEx.printStackTrace();
+                    return;
+                }
 
                 if (nextLine == null || nextLine.isEmpty()) {
                     continue;
@@ -90,8 +95,6 @@ public class ConsoleReader implements Runnable {
                 if (response == null) {
                     throw new NoSuchOption(nextLine);
                 }
-            } catch (IOException | NullPointerException ex) {
-                ex.printStackTrace();
             } catch (NoSuchOption ex) {
                 System.err.println("Unknown command - " + ex.option);
             }
