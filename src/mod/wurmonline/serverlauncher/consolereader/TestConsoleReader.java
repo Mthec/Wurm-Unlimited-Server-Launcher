@@ -11,7 +11,7 @@ public class TestConsoleReader {
     static PlayerCount count;
     static ServerController controller;
 
-    public static void main (String[] args) {
+    public static void buildMenu() {
         // TODO - Temp
         count = new PlayerCount();
 
@@ -68,10 +68,16 @@ public class TestConsoleReader {
         };
     }
 
-    public static void start(String[] args, ServerController controller) {
+    public static void start(ServerController controller) {
         TestConsoleReader.controller = controller;
-        main(args);
+        buildMenu();
         (new Thread(new ConsoleReader(options))).start();
         // TODO - How to tell when ready to receive commands?
+    }
+
+    public static void main(String[] args) {
+        TestConsoleReader.controller = null;
+        buildMenu();
+        (new Thread(new ConsoleReader(options))).start();
     }
 }

@@ -42,6 +42,6 @@ public class TestDelegatedConsoleReader {
             }
         }
 
-        TestConsoleReader.start(args, controller);
+        TestConsoleReader.start(controller);
     }
 }
