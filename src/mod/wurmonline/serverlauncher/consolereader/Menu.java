@@ -13,7 +13,9 @@ public class Menu implements Option {
         this.name = name;
         this.text = text;
         for (Option option : options) {
-            this.options.put(option.getName(), option);
+            if (option != null) {
+                this.options.put(option.getName(), option);
+            }
         }
     }
 
@@ -23,11 +25,11 @@ public class Menu implements Option {
     }
 
     @Override
-    public Option ask(String input) {
-        if (options.containsKey(input)) {
-            return options.get(input);
+    public Option ask(String input) throws NoSuchOption {
+        if (!options.containsKey(input)) {
+            throw new NoSuchOption(input);
         }
-        return null;
+        return options.get(input);
     }
 
     @Override

@@ -41,6 +41,7 @@ public class ConsoleReader implements Runnable {
 
                 List<String> tokens = tokenize(nextLine);
 
+                // Default commands.
                 if (tokens.get(0).equals("help")) {
                     if (tokens.size() == 1) {
                         System.out.println(currentMenu.help());
@@ -54,6 +55,7 @@ public class ConsoleReader implements Runnable {
                     continue;
                 }
 
+                // Other commands.
                 Option response = currentMenu.ask(tokens.get(0));
                 if (response != null) {
                     if (response instanceof Menu) {

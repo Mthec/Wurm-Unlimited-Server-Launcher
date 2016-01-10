@@ -15,6 +15,7 @@ import javafx.scene.layout.Region;
 import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerController;
 import mod.wurmonline.serverlauncher.consolereader.Command;
+import mod.wurmonline.serverlauncher.consolereader.Menu;
 import mod.wurmonline.serverlauncher.consolereader.Option;
 import mod.wurmonline.serverlauncher.gui.ServerGuiController;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmCommandLine;
@@ -92,8 +93,8 @@ public class PlayerCount implements WurmMod, WurmUIMod, Initializable, WurmComma
     }
 
     @Override
-    public Option[] getOptions(ServerController controller) {
-        return new Option[] {
+    public Option getOptions(ServerController controller) {
+        return new Menu("online_players", "Online Player Information.", new Option[]{
                 new Command("player_count", "Count logged in players.") {
                     @Override
                     public String action() {
@@ -112,7 +113,7 @@ public class PlayerCount implements WurmMod, WurmUIMod, Initializable, WurmComma
                         return Arrays.toString(Players.getInstance().getPlayers());
                     }
                 }
-        };
+        });
     }
 
     public class PlayerEntry {

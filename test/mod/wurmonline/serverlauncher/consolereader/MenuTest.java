@@ -61,9 +61,9 @@ public class MenuTest {
         assertEquals(command, menu.ask(commandName));
     }
 
-    @Test
+    @Test(expected = NoSuchOption.class)
     public void testAskNotFound() throws Exception {
-        assertNull(menu.ask("Not Found"));
+        menu.ask("Not Found");
     }
 
     @Test

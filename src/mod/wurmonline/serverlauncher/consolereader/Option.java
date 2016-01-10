@@ -10,7 +10,7 @@ public interface Option {
         return getName() + " does not take any options.";
     }
 
-    Option ask (String input);
+    Option ask (String input) throws NoSuchOption;
 
     String help ();
 

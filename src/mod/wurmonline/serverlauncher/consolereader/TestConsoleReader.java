@@ -15,7 +15,7 @@ public class TestConsoleReader {
         // TODO - Temp
         count = new PlayerCount();
 
-        Option[] modOptions = count.getOptions(controller);
+        Option[] modOptions =  new Option[] {count.getOptions(controller)};
 
         options = new Option[] {
                 new Menu("dostuff", "This is a menu, please type \"hello\"",
