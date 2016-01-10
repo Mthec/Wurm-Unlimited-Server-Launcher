@@ -21,7 +21,7 @@ public class Menu implements Option {
 
     @Override
     public String action(List<String> tokens) {
-        return text + "\n" + list();
+        return text + System.lineSeparator() + list();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class Menu implements Option {
 
     @Override
     public String help() {
-        return text + "\n" + list();
+        return text + System.lineSeparator() + list();
     }
 
     public String help(String option) throws NoSuchOption {
