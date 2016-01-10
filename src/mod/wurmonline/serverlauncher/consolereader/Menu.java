@@ -20,7 +20,7 @@ public class Menu implements Option {
     }
 
     @Override
-    public String action() {
+    public String action(List<String> tokens) {
         return text + "\n" + list();
     }
 
@@ -34,12 +34,7 @@ public class Menu implements Option {
 
     @Override
     public String help() {
-        return list();
-    }
-
-    public String list() {
-        // TODO - Mark menus vs. commands.
-        return "Options - " + options.keySet().toString();
+        return text + "\n" + list();
     }
 
     public String help(String option) throws NoSuchOption {
@@ -48,6 +43,11 @@ public class Menu implements Option {
         } catch (NullPointerException ex) {
             throw new NoSuchOption(option);
         }
+    }
+
+    public String list() {
+        // TODO - Mark menus vs. commands.
+        return "Options - " + options.keySet().toString();
     }
 
     @Override

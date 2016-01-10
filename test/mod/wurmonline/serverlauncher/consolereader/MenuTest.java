@@ -24,14 +24,14 @@ public class MenuTest {
     public static void setUp() throws Exception {
         command = new Command(commandName, commandHelpText) {
             @Override
-            public String action() {
+            public String action(List<String> tokens) {
                 return null;
             }
         };
 
         subCommand = new Command(null, null) {
             @Override
-            public String action() {
+            public String action(List<String> tokens) {
                 return null;
             }
         };
@@ -53,7 +53,7 @@ public class MenuTest {
 
     @Test
     public void testAction() throws Exception {
-        assertEquals(helpText, menu.action());
+        assertEquals(helpText + "\n" + menu.list(), menu.action(null));
     }
 
     @Test
@@ -69,8 +69,8 @@ public class MenuTest {
     @Test
     public void testHelp() throws Exception {
         List<String> expected = new ArrayList<>();
-        expected.add("Options - [" + subMenuName + ", " + commandName + "]");
-        expected.add("Options - [" + commandName + ", " + subMenuName + "]");
+        expected.add(helpText + "\nOptions - [" + subMenuName + ", " + commandName + "]");
+        expected.add(helpText + "\nOptions - [" + commandName + ", " + subMenuName + "]");
         assertTrue(expected.contains(menu.help()));
     }
 
@@ -82,6 +82,14 @@ public class MenuTest {
     @Test(expected = NoSuchOption.class)
     public void testHelp1NotFound() throws Exception {
         menu.help("Not Found");
+    }
+
+    @Test
+    public void testList() throws Exception {
+        List<String> expected = new ArrayList<>();
+        expected.add("Options - [" + subMenuName + ", " + commandName + "]");
+        expected.add("Options - [" + commandName + ", " + subMenuName + "]");
+        assertTrue(expected.contains(menu.list()));
     }
 
     @Test

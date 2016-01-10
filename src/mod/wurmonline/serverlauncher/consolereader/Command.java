@@ -1,5 +1,7 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import java.util.List;
+
 public abstract class Command implements Option {
     String helpText;
     String name;
@@ -10,7 +12,7 @@ public abstract class Command implements Option {
     }
 
     @Override
-    public abstract String action();
+    public abstract String action(List<String> tokens);
 
     @Override
     public Option ask(String input) {

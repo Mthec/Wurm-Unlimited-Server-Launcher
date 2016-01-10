@@ -22,40 +22,34 @@ public class TestConsoleReader {
                         new Option[]{
                                 new Command("hello", "something") {
                                     @Override
-                                    public String action() {
+                                    public String action(List<String> tokens) {
                                         return "Hi there.";
                                     }
                                 },
                                 new Command("bye", "something else") {
                                     @Override
-                                    public String action() {
+                                    public String action(List<String> tokens) {
                                         return "I SAID TYPE HELLO!";
                                     }
                                 }
                         }),
                 new Command("status", "Check the status of the server.") {
                     @Override
-                    public String action() {
+                    public String action(List<String> tokens) {
                         return "*shrugs*";
                     }
                 },
                 new Command("shutdown", "Shutdown the server.") {
                     @Override
-                    public String action() {
-
+                    public String action(List<String> tokens) {
                         return "Done!";
                     }
                 },
                 new Command("player_info", "Get information about a player.") {
                     @Override
-                    public String action() {
-                        return "Please provide a player name or id.";
-                    }
-
-                    @Override
                     public String action(List<String> tokens) {
                         if (tokens.isEmpty()) {
-                            return action();
+                            return "Please provide a player name or id.";
                         } else {
                             String[] strings = new String[]{"annoying", "happy"};
                             Random random = new Random();
@@ -76,8 +70,6 @@ public class TestConsoleReader {
     }
 
     public static void main(String[] args) {
-        TestConsoleReader.controller = null;
-        buildMenu();
-        (new Thread(new ConsoleReader(options))).start();
+        start(null);
     }
 }

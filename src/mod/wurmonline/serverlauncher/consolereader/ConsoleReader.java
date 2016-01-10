@@ -15,6 +15,7 @@ public class ConsoleReader implements Runnable {
 
     ConsoleReader (Option[] options) {
         topMenu = new Menu("menu", "Wurm Server Controller - Main Menu", options);
+        System.out.println(topMenu.action(null));
     }
 
     @Override
@@ -57,25 +58,34 @@ public class ConsoleReader implements Runnable {
                     continue;
                 } else if (tokens.get(0).equals("menu")) {
                     currentMenu = topMenu;
-                    System.out.println(currentMenu.action());
-                    continue;
+                    if (tokens.size() > 1) {
+                        tokens.remove(0);
+                    } else {
+                        System.out.println(currentMenu.action(tokens));
+                        continue;
+                    }
+
                 }
 
                 // Other commands.
-                Option response = currentMenu.ask(tokens.get(0));
-                if (response != null) {
+                Option response = null;
+                while (!tokens.isEmpty()) {
+                    response = currentMenu.ask(tokens.remove(0));
+
                     if (response instanceof Menu) {
                         currentMenu = (Menu)response;
-                    }
-                    if (tokens.size() == 1) {
-                        System.out.println(response.action());
+                        if (tokens.isEmpty()) {
+                            System.out.println(response.action(tokens));
+                        }
                     } else {
-                        System.out.println(response.action(tokens.subList(1, tokens.size())));
+                        System.out.println(response.action(tokens));
+                        tokens.clear();
                     }
-                    continue;
                 }
-                throw new NoSuchOption(nextLine);
-            } catch (IOException ex) {
+                if (response == null) {
+                    throw new NoSuchOption(nextLine);
+                }
+            } catch (IOException | NullPointerException ex) {
                 ex.printStackTrace();
             } catch (NoSuchOption ex) {
                 System.err.println("Unknown command - " + ex.option);

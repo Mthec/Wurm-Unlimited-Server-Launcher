@@ -4,11 +4,7 @@ import java.util.List;
 
 public interface Option {
 
-    String action ();
-
-    default String action (List<String> tokens) {
-        return getName() + " does not take any options.";
-    }
+    String action (List<String> tokens);
 
     Option ask (String input) throws NoSuchOption;
 

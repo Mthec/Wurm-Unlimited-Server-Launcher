@@ -25,6 +25,7 @@ import org.gotti.wurmunlimited.modloader.interfaces.WurmUIMod;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -97,7 +98,7 @@ public class PlayerCount implements WurmMod, WurmUIMod, Initializable, WurmComma
         return new Menu("online_players", "Online Player Information.", new Option[]{
                 new Command("player_count", "Count logged in players.") {
                     @Override
-                    public String action() {
+                    public String action(List<String> tokens) {
                         if (controller == null || !controller.serverIsRunning()) {
                             return count_messages.getString("server_not_running");
                         }
@@ -106,7 +107,7 @@ public class PlayerCount implements WurmMod, WurmUIMod, Initializable, WurmComma
                 },
                 new Command("list_players", "List all logged in players.") {
                     @Override
-                    public String action() {
+                    public String action(List<String> tokens) {
                         if (controller == null || !controller.serverIsRunning()) {
                             return count_messages.getString("server_not_running");
                         }
