@@ -45,31 +45,36 @@ public class ConsoleReader implements Runnable {
                     continue;
                 }
 
-                // Default commands.
-                if (tokens.get(0).equals("help")) {
-                    if (tokens.size() == 1) {
-                        System.out.println(currentMenu.help());
-                    } else {
-                        System.out.println(currentMenu.help(tokens.get(1)));
-                    }
-                    continue;
-                } else if (tokens.get(0).equals("list")) {
-                    System.out.println(currentMenu.list());
-                    continue;
-                } else if (tokens.get(0).equals("menu")) {
-                    currentMenu = topMenu;
-                    if (tokens.size() > 1) {
-                        tokens.remove(0);
-                    } else {
-                        System.out.println(currentMenu.action(tokens));
-                        continue;
-                    }
-
-                }
-
-                // Other commands.
                 Option response = null;
                 while (!tokens.isEmpty()) {
+                    // Default commands.
+                    if (tokens.get(0).equals("help")) {
+                        if (tokens.size() == 1) {
+                            System.out.println(currentMenu.help());
+                        } else {
+                            System.out.println(currentMenu.help(tokens.get(1)));
+                        }
+                        response = currentMenu;
+                        tokens.clear();
+                        continue;
+                    } else if (tokens.get(0).equals("list")) {
+                        System.out.println(currentMenu.list());
+                        response = currentMenu;
+                        tokens.clear();
+                        continue;
+                    } else if (tokens.get(0).equals("menu")) {
+                        currentMenu = topMenu;
+                        response = currentMenu;
+                        if (tokens.size() > 1) {
+                            tokens.remove(0);
+                            continue;
+                        } else {
+                            System.out.println(currentMenu.action(tokens));
+                            tokens.clear();
+                            continue;
+                        }
+                    }
+
                     response = currentMenu.ask(tokens.remove(0));
 
                     if (response instanceof Menu) {
