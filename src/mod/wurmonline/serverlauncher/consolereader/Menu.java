@@ -21,7 +21,7 @@ public class Menu implements Option {
 
     @Override
     public String action() {
-        return text;
+        return text + "\n" + list();
     }
 
     @Override
@@ -34,6 +34,11 @@ public class Menu implements Option {
 
     @Override
     public String help() {
+        return list();
+    }
+
+    public String list() {
+        // TODO - Mark menus vs. commands.
         return "Options - " + options.keySet().toString();
     }
 

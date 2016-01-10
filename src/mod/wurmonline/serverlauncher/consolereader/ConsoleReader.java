@@ -14,7 +14,7 @@ public class ConsoleReader implements Runnable {
     Menu currentMenu = null;
 
     ConsoleReader (Option[] options) {
-        topMenu = new Menu(null, null, options);
+        topMenu = new Menu("menu", "Wurm Server Controller - Main Menu", options);
     }
 
     @Override
@@ -40,6 +40,9 @@ public class ConsoleReader implements Runnable {
                 }
 
                 List<String> tokens = tokenize(nextLine);
+                if (tokens.size() == 0) {
+                    continue;
+                }
 
                 // Default commands.
                 if (tokens.get(0).equals("help")) {
@@ -49,9 +52,12 @@ public class ConsoleReader implements Runnable {
                         System.out.println(currentMenu.help(tokens.get(1)));
                     }
                     continue;
+                } else if (tokens.get(0).equals("list")) {
+                    System.out.println(currentMenu.list());
+                    continue;
                 } else if (tokens.get(0).equals("menu")) {
                     currentMenu = topMenu;
-                    currentMenu.action();
+                    System.out.println(currentMenu.action());
                     continue;
                 }
 
@@ -78,6 +84,8 @@ public class ConsoleReader implements Runnable {
     }
 
     static List<String> tokenize(String input) {
-        return Arrays.asList(input.split(" "));
+        List<String> list = new ArrayList<>(Arrays.asList(input.split(" ")));
+        list.removeAll(Arrays.asList("", null));
+        return list;
     }
 }
