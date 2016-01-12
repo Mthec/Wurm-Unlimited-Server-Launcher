@@ -39,6 +39,29 @@ public class ConsoleReaderTest {
     }
 
     @Test()
+    public void testRunDefaultCommands() throws Exception {
+        for (String command : new String[] {
+                "help",
+                "list",
+                "menu"
+        }) {
+            ConsoleReader reader = new ConsoleReader(new Option[]{
+                    new Command(command, null) {
+                        @Override
+                        public String action(List<String> tokens) {
+                            return result;
+                        }
+                    }
+            });
+            reader.reader = mock(BufferedReader.class);
+            when(reader.reader.readLine()).thenReturn(command).thenReturn(null);
+            outPut.reset();
+            reader.run();
+            assertNotEquals(result + System.lineSeparator(), outPut.toString());
+        }
+    }
+
+    @Test()
     public void testRunOptionFound() throws Exception {
         ConsoleReader reader = new ConsoleReader(new Option[] {
                 new Command(commandOption, null) {
@@ -76,6 +99,23 @@ public class ConsoleReaderTest {
         outPut.reset();
         reader.run();
         assertEquals(reader.topMenu.list() + System.lineSeparator(), outPut.toString());
+    }
+
+    @Test()
+    public void testRunBlankInput() throws Exception {
+        ConsoleReader reader = new ConsoleReader(new Option[] {
+                new Command(commandOption, null) {
+                    @Override
+                    public String action(List<String> tokens) {
+                        return result;
+                    }
+                }
+        });
+        reader.reader = mock(BufferedReader.class);
+        when(reader.reader.readLine()).thenReturn(" ").thenReturn(null);
+        outPut.reset();
+        reader.run();
+        assertEquals("", outPut.toString());
     }
 
     // TODO - More ConsoleReader.run tests.
