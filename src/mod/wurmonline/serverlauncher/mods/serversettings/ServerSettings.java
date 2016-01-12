@@ -280,8 +280,6 @@ public class ServerSettings implements WurmMod, WurmLoadDumpMod, WurmCommandLine
                         server.saveNewGui(server.id);
                     }
                 },
-        }) {
-            // TODO - Override when server is running?
-        };
+        });
     }
 }
