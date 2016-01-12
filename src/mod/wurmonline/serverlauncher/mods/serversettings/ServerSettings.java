@@ -151,7 +151,7 @@ public class ServerSettings implements WurmMod, WurmLoadDumpMod, WurmCommandLine
 
     @Override
     public Option getOptions(ServerController controller) {
-        return new Menu("settings", "Server Settings", new Option[] {
+        return new Menu("network", "Server Settings", new Option[] {
                 new Value("id", messages.getString("id_help_text"), controller) {
                     @Override
                     protected String get(ServerEntry server) {

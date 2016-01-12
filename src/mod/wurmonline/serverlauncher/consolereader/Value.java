@@ -20,17 +20,22 @@ public abstract class Value extends Command {
 
     @Override
     public String action(List<String> tokens) {
-        // TODO - Change to get server when gui separation is complete.
-        ServerEntry current = Servers.localServer;
-        if (tokens.isEmpty()) {
-            return this.getName() + " is currently - " + this.get(current);
-        } else {
-            if (controller != null && controller.serverIsRunning()) {
-                return "Server is running, values cannot be changed.";
+        try {
+            // TODO - Change to get server when gui separation is complete.
+            ServerEntry current = Servers.localServer;
+            if (tokens.isEmpty()) {
+                return this.getName() + " is currently - " + this.get(current);
+            } else {
+                if (controller != null && controller.serverIsRunning()) {
+                    return "Server is running, values cannot be changed.";
+                }
+                // TODO - Exceptions?
+                this.set(current, tokens);
+                return this.getName() + " set to - " + this.get(current);
             }
-            // TODO - Exceptions?
-            this.set(current, tokens);
-            return this.getName() + " set to - " + this.get(current);
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
+            return "";
         }
     }
 

@@ -1,6 +1,7 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
 import mod.wurmonline.serverlauncher.ServerController;
+import mod.wurmonline.serverlauncher.mods.gameplaytweaks.GameplayTweaks;
 import mod.wurmonline.serverlauncher.mods.playercount.PlayerCount;
 import mod.wurmonline.serverlauncher.mods.serversettings.ServerSettings;
 
@@ -21,6 +22,7 @@ public class TestConsoleReader {
         Option[] modOptions =  new Option[] {
                 count.getOptions(controller),
                 settings.getOptions(controller),
+                new GameplayTweaks().getOptions(controller),
         };
 
         options = new Option[] {

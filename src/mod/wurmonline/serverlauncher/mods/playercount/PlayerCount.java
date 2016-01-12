@@ -96,7 +96,7 @@ public class PlayerCount implements WurmMod, WurmUIMod, Initializable, WurmComma
     @Override
     public Option getOptions(ServerController controller) {
         return new Menu("online_players", "Online Player Information.", new Option[]{
-                new Command("player_count", "Count logged in players.") {
+                new Command("count", "Count logged in players.") {
                     @Override
                     public String action(List<String> tokens) {
                         if (controller == null || !controller.serverIsRunning()) {
@@ -105,7 +105,7 @@ public class PlayerCount implements WurmMod, WurmUIMod, Initializable, WurmComma
                         return String.format("There are %s players logged in.", Players.getInstance().getPlayers().length);
                     }
                 },
-                new Command("list_players", "List all logged in players.") {
+                new Command("list", "List all logged in players.") {
                     @Override
                     public String action(List<String> tokens) {
                         if (controller == null || !controller.serverIsRunning()) {

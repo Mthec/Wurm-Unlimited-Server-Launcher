@@ -53,7 +53,7 @@ public class MenuTest {
 
     @Test
     public void testAction() throws Exception {
-        assertEquals(helpText + "\n" + menu.list(), menu.action(null));
+        assertEquals(helpText + System.lineSeparator() + menu.list(), menu.action(null));
     }
 
     @Test
@@ -69,8 +69,8 @@ public class MenuTest {
     @Test
     public void testHelp() throws Exception {
         List<String> expected = new ArrayList<>();
-        expected.add(helpText + "\nOptions - [" + subMenuName + ", " + commandName + "]");
-        expected.add(helpText + "\nOptions - [" + commandName + ", " + subMenuName + "]");
+        expected.add(helpText + System.lineSeparator() + "Options - [" + subMenuName + ", " + commandName + "]");
+        expected.add(helpText + System.lineSeparator() + "Options - [" + commandName + ", " + subMenuName + "]");
         assertTrue(expected.contains(menu.help()));
     }
 

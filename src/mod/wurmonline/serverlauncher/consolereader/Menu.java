@@ -1,8 +1,7 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Menu implements Option {
     private Map<String, Option> options = new HashMap<>();
@@ -47,7 +46,7 @@ public class Menu implements Option {
 
     public String list() {
         // TODO - Mark menus vs. commands.
-        return "Options - " + options.keySet().toString();
+        return "Options - " + options.keySet().stream().sorted().collect(Collectors.toList()).toString();
     }
 
     @Override

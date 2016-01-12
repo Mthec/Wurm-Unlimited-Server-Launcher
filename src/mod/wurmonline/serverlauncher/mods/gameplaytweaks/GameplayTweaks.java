@@ -13,7 +13,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import mod.wurmonline.serverlauncher.LocaleHelper;
+import mod.wurmonline.serverlauncher.ServerController;
+import mod.wurmonline.serverlauncher.consolereader.Option;
 import mod.wurmonline.serverlauncher.gui.ServerGuiController;
+import org.gotti.wurmunlimited.modloader.interfaces.WurmCommandLine;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmLoadDumpMod;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmMod;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmUIMod;
@@ -26,7 +29,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod {
+public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod, WurmCommandLine {
     static Logger logger = Logger.getLogger(GameplayTweaks.class.getName());
     GameplayPropertySheet gameplayPropertySheet;
     static ServerGuiController controller;
@@ -432,5 +435,10 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod {
             }
         }
         return properties;
+    }
+
+    @Override
+    public Option getOptions(ServerController controller) {
+        return GameplayTweaksConsoleCommands.getOptions(controller, messages);
     }
 }
