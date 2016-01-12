@@ -2,6 +2,7 @@ package mod.wurmonline.serverlauncher.consolereader;
 
 import mod.wurmonline.serverlauncher.ServerController;
 import mod.wurmonline.serverlauncher.mods.playercount.PlayerCount;
+import mod.wurmonline.serverlauncher.mods.serversettings.ServerSettings;
 
 import java.util.List;
 import java.util.Random;
@@ -9,13 +10,18 @@ import java.util.Random;
 public class TestConsoleReader {
     static Option[] options;
     static PlayerCount count;
+    static ServerSettings settings;
     static ServerController controller;
 
     public static void buildMenu() {
         // TODO - Temp
         count = new PlayerCount();
+        settings = new ServerSettings();
 
-        Option[] modOptions =  new Option[] {count.getOptions(controller)};
+        Option[] modOptions =  new Option[] {
+                count.getOptions(controller),
+                settings.getOptions(controller),
+        };
 
         options = new Option[] {
                 new Menu("dostuff", "This is a menu, please type \"hello\"",
