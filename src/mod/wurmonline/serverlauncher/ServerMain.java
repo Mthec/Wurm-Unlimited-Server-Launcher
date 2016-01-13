@@ -78,7 +78,7 @@ public class ServerMain extends Application {
         ACCEPTED_ARGS = acceptedArgs;
     }
 
-    static Properties loadProperties (String currentDir) {
+    static Properties loadProperties(String currentDir) {
         if (!Files.exists(Paths.get(currentDir))) {
             logger.warning(MessageFormat.format(main_messages.getString("db_not_exists"), currentDir));
             System.exit(-1);
@@ -124,7 +124,7 @@ public class ServerMain extends Application {
             ServerHook.createServerHook().addMods(mods);
             for (WurmMod mod : mods) {
                 if (mod instanceof WurmArgsMod) {
-                    WurmArgsMod argMod = (WurmArgsMod)mod;
+                    WurmArgsMod argMod = (WurmArgsMod) mod;
                     ACCEPTED_ARGS.addAll(argMod.getArgs());
                 }
             }
@@ -171,8 +171,7 @@ public class ServerMain extends Application {
             DbConnector.closeAll();
             logger.info(MessageFormat.format(main_messages.getString("dumped_settings"), database, filePath));
             System.exit(1);
-        }
-        else if (parser.hasOption("loadsettings")) {
+        } else if (parser.hasOption("loadsettings")) {
             String database = parser.getOptionValue("loadsettings");
             if (database == null || database.equals("")) {
                 logger.warning(main_messages.getString("database_blank"));
@@ -189,23 +188,22 @@ public class ServerMain extends Application {
                 }
                 DbConnector.closeAll();
                 logger.info(MessageFormat.format(main_messages.getString("loaded_settings"), database, filePath));
-            }
-            else {
+            } else {
                 logger.warning(MessageFormat.format(main_messages.getString("settings_file_not_found"), filePath));
             }
         }
 
         Servers.argumets = parser;
         String dbToStart = "";
-        if(parser.hasOption(ARG_START)) {
+        if (parser.hasOption(ARG_START)) {
             dbToStart = parser.getOptionValue(ARG_START);
-            if(dbToStart == null || dbToStart.isEmpty()) {
+            if (dbToStart == null || dbToStart.isEmpty()) {
                 System.err.println(main_messages.getString("no_start_parameter"));
                 System.exit(1);
             }
         }
 
-        if(!dbToStart.isEmpty()) {
+        if (!dbToStart.isEmpty()) {
             System.out.println(main_messages.getString("no_gui"));
             new ServerConsoleController().startDB(dbToStart);
         } else {

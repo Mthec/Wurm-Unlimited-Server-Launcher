@@ -76,8 +76,8 @@ public class Players implements WurmMod, WurmUIMod, Configurable, WurmCommandLin
         String error = playerPropertySheet.save();
         if (error != null && error.length() > 0 && error.equalsIgnoreCase("ok")) {
             controller.showInformationDialog(players_messages.getString("saved_title"),
-                                            players_messages.getString("saved_header"),
-                                            players_messages.getString("saved_message"));
+                    players_messages.getString("saved_header"),
+                    players_messages.getString("saved_message"));
 
             if (controller.serverIsRunning() && playerPropertySheet != null && playerPropertySheet.getCurrentData() != null) {
                 PlayerInfo info = PlayerInfoFactory.getPlayerInfoWithWurmId(playerPropertySheet.getCurrentData().getWurmid());
@@ -93,8 +93,8 @@ public class Players implements WurmMod, WurmUIMod, Configurable, WurmCommandLin
             }
         } else if (error != null && error.length() > 0) {
             controller.showErrorDialog(players_messages.getString("save_error_title"),
-                                    players_messages.getString("save_error_header"),
-                                    MessageFormat.format(players_messages.getString("save_error_message"), error));
+                    players_messages.getString("save_error_header"),
+                    MessageFormat.format(players_messages.getString("save_error_message"), error));
         }
         populatePlayersList();
     }

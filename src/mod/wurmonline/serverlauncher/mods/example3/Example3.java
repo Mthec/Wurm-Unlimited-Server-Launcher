@@ -22,9 +22,11 @@ public class Example3 implements WurmMod, WurmUIMod, Configurable, WurmArgsMod {
         return name;
     }
 
-    public Set<String> getArgs () { return args; }
+    public Set<String> getArgs() {
+        return args;
+    }
 
-    public void configure (Properties properties) {
+    public void configure(Properties properties) {
         args = new HashSet<>(Arrays.asList(properties.getProperty("args").split(",")));
         name = properties.getProperty("name");
     }

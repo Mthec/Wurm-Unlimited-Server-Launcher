@@ -68,7 +68,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod, Wurm
     Button saveButton;
 
     @FXML
-    void saveButtonClicked () {
+    void saveButtonClicked() {
         logger.info(messages.getString("save_button_clicked"));
         String error = gameplayPropertySheet.save();
         if (error != null && error.length() > 0 && error.equalsIgnoreCase("ok")) {
@@ -84,15 +84,14 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod, Wurm
     }
 
     @FXML
-    void refreshButtonClicked () {
+    void refreshButtonClicked() {
         if (gameplayPropertySheet != null && gameplayPropertySheet.haveChanges()) {
             Optional<ButtonType> result = controller.showYesNoCancel(messages.getString("changes_title"),
                     messages.getString("changes_header"),
                     messages.getString("changes_message"));
             if (result.get() == ButtonType.CANCEL) {
                 return;
-            }
-            else if (result.get() == ButtonType.YES) {
+            } else if (result.get() == ButtonType.YES) {
                 saveButtonClicked();
                 return;
             }
@@ -101,8 +100,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod, Wurm
         if (controller.serverIsRunning()) {
             serverRunning.setText(ui_messages.getString("block_changes_server_running"));
             saveButton.setDisable(true);
-        }
-        else {
+        } else {
             serverRunning.setText("");
             saveButton.setDisable(false);
             gameplayPropertySheet = new GameplayPropertySheet(Servers.localServer);
@@ -112,7 +110,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod, Wurm
     }
 
     @FXML
-    public void initialize () {
+    public void initialize() {
         refreshButtonClicked();
     }
 
@@ -125,7 +123,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod, Wurm
         ServerEntry current = Servers.localServer;
         Enumeration prop = properties.propertyNames();
         while (prop.hasMoreElements()) {
-            String name = (String)prop.nextElement();
+            String name = (String) prop.nextElement();
             if (!name.startsWith(CATEGORY)) {
                 continue;
             }
@@ -279,7 +277,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod, Wurm
         }
 
         current.saveNewGui(current.id);
-        if(current.saveTwitter()) {
+        if (current.saveTwitter()) {
             logger.info(messages.getString("will_tweet"));
         } else {
             logger.info(messages.getString("wont_tweet"));
@@ -292,7 +290,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod, Wurm
         ServerEntry current = Servers.localServer;
         for (GameplayPropertySheet.PropertyType prop : GameplayPropertySheet.PropertyType.values()) {
             try {
-                switch(prop.ordinal()) {
+                switch (prop.ordinal()) {
                     // Message of the Day
                     case 0:
                         properties.setProperty(CATEGORY + prop.name(), current.getMotd());

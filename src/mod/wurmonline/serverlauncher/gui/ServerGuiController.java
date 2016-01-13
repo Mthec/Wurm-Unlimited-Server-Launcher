@@ -1,7 +1,9 @@
 package mod.wurmonline.serverlauncher.gui;
 
 import com.ibm.icu.text.MessageFormat;
-import com.wurmonline.server.*;
+import com.wurmonline.server.ServerEntry;
+import com.wurmonline.server.ServerLauncher;
+import com.wurmonline.server.Servers;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -96,7 +98,9 @@ public class ServerGuiController extends ServerController {
     protected TextField newDatabaseServerName;
 
     // TODO - Is this important?
-    public ServerGuiController() {}
+    public ServerGuiController() {
+    }
+
     public ServerGuiController(ServerLauncher launchInstance) {
         currentServer = launchInstance;
     }
@@ -142,8 +146,7 @@ public class ServerGuiController extends ServerController {
         // TODO - Switching when server is running causes error.
         if (serverIsRunning()) {
             databaseDropdown.setDisable(true);
-        }
-        else {
+        } else {
             databaseDropdown.setDisable(false);
         }
         rebuilding = false;
@@ -161,8 +164,8 @@ public class ServerGuiController extends ServerController {
             } catch (IOException ex) {
                 ex.printStackTrace();
                 showErrorDialog(gui_messages.getString("error"),
-                                gui_messages.getString("error_select_header"),
-                                MessageFormat.format(gui_messages.getString("error_select_message"), ex.getMessage()));
+                        gui_messages.getString("error_select_header"),
+                        MessageFormat.format(gui_messages.getString("error_select_message"), ex.getMessage()));
                 // Try re-populating.
                 populateDatabaseDropdown();
             }
@@ -188,7 +191,7 @@ public class ServerGuiController extends ServerController {
     }
 
     // Run Server tab
-    void updateRunServerTab () {
+    void updateRunServerTab() {
         String serverName = Servers.getLocalServerName();
         if (serverIsRunning() && !serverStartError) {
             statusText.setText(MessageFormat.format(ui_messages.getString("server_running_message"), currentDir, serverName));
@@ -197,12 +200,10 @@ public class ServerGuiController extends ServerController {
             startServerProgress.setVisible(true);
             startServerProgress.setProgress(1.0);
             serverControls.setDisable(false);
-        }
-        else if (localServers.isEmpty()) {
+        } else if (localServers.isEmpty()) {
             statusText.setText(ui_messages.getString("no_local_servers"));
             disableRunServerTab();
-        }
-        else {
+        } else {
             statusText.setText(ui_messages.getString("ready"));
             serverToRun.setText(serverName);
             startServerButton.setDisable(false);
@@ -211,7 +212,7 @@ public class ServerGuiController extends ServerController {
         }
     }
 
-    void disableRunServerTab () {
+    void disableRunServerTab() {
         serverToRun.setText("");
         startServerButton.setDisable(true);
         startServerProgress.setVisible(false);
@@ -239,11 +240,11 @@ public class ServerGuiController extends ServerController {
     // TODO - Move server to new thread?
     @FXML
     void startServerButtonClicked() {
-        if(!serverPropertySheet.checkIfIpIsValid()) {
+        if (!serverPropertySheet.checkIfIpIsValid()) {
             showErrorDialog(gui_messages.getString("error_start_title"), MessageFormat.format(gui_messages.getString("error_ip_header"), serverPropertySheet.getCurrentServerEntry().EXTERNALIP), gui_messages.getString("error_ip_message"), true);
         } else {
-            if(currentServer != null) {
-                if(currentServer.wasStarted()) {
+            if (currentServer != null) {
+                if (currentServer.wasStarted()) {
                     disableAllControls();
                     showErrorDialog(gui_messages.getString("error_start_title"), gui_messages.getString("error_already_started_message"), gui_messages.getString("error_gui_restart"));
                     return;
@@ -282,7 +283,7 @@ public class ServerGuiController extends ServerController {
 
     @FXML
     void shutdownButtonClicked() {
-        if(currentServer != null) {
+        if (currentServer != null) {
             disableAllControls();
             // TODO - Stop Launcher exit.
             shutdown(serverShutdownTime.getValue(), serverShutdownReason.getText());
@@ -293,10 +294,11 @@ public class ServerGuiController extends ServerController {
     }
 
     // Network Settings Tab
-    void updateNetworkSettingsTab () { updateNetworkSettingsTab(true);
+    void updateNetworkSettingsTab() {
+        updateNetworkSettingsTab(true);
     }
 
-    void updateNetworkSettingsTab (boolean reload) {
+    void updateNetworkSettingsTab(boolean reload) {
         if (reload) {
             networkSettingsLocalServerList.getItems().clear();
             networkSettingsRemoteServerList.getItems().clear();
@@ -334,14 +336,13 @@ public class ServerGuiController extends ServerController {
                 serverPropertySheet.setReadOnly();
                 serverPropertySheet.setDisable(true);
                 localServerText.setText(ui_messages.getString("block_changes_server_running"));
-            }
-            else {
+            } else {
                 serverPropertySheet.setDisable(false);
             }
         }
     }
 
-    void disableNetworkSettingsTab () {
+    void disableNetworkSettingsTab() {
         if (serverPropertySheet != null) {
             serverPropertySheet.setDisable(true);
         }
@@ -375,7 +376,7 @@ public class ServerGuiController extends ServerController {
     }
 
     @FXML
-    void saveNetworkSettings () {
+    void saveNetworkSettings() {
         logger.info(gui_messages.getString("saving_network"));
         String error = serverPropertySheet.save();
         if (error != null && error.length() > 0 && !error.toLowerCase().contains("invalid")) {
@@ -447,8 +448,7 @@ public class ServerGuiController extends ServerController {
             neighbourText.setText(ui_messages.getString("block_changes_server_running"));
             neighbourText.getParent().setDisable(true);
             return;
-        }
-        else {
+        } else {
             neighbourText.setText("");
             neighbourText.getParent().setDisable(false);
         }
@@ -510,54 +510,54 @@ public class ServerGuiController extends ServerController {
     void saveNeighboursButtonClicked() {
         int idx = west.getSelectionModel().getSelectedIndex();
         ServerEntry entry;
-        if(idx > 0) {
+        if (idx > 0) {
             entry = remoteServers.get(idx - 1);
-            if(Servers.localServer.serverWest != entry) {
+            if (Servers.localServer.serverWest != entry) {
                 Servers.addServerNeighbour(entry.id, "WEST");
             }
-        } else if(Servers.localServer.serverWest != null) {
+        } else if (Servers.localServer.serverWest != null) {
             Servers.deleteServerNeighbour("WEST");
         }
 
         idx = north.getSelectionModel().getSelectedIndex();
-        if(idx > 0) {
+        if (idx > 0) {
             entry = remoteServers.get(idx - 1);
-            if(Servers.localServer.serverNorth != entry) {
+            if (Servers.localServer.serverNorth != entry) {
                 Servers.addServerNeighbour(entry.id, "NORTH");
             }
-        } else if(Servers.localServer.serverNorth != null) {
+        } else if (Servers.localServer.serverNorth != null) {
             Servers.deleteServerNeighbour("NORTH");
         }
 
         idx = south.getSelectionModel().getSelectedIndex();
-        if(idx > 0) {
+        if (idx > 0) {
             entry = remoteServers.get(idx - 1);
-            if(Servers.localServer.serverSouth != entry) {
+            if (Servers.localServer.serverSouth != entry) {
                 Servers.addServerNeighbour(entry.id, "SOUTH");
             }
-        } else if(Servers.localServer.serverSouth != null) {
+        } else if (Servers.localServer.serverSouth != null) {
             Servers.deleteServerNeighbour("SOUTH");
         }
 
         idx = east.getSelectionModel().getSelectedIndex();
-        if(idx > 0) {
+        if (idx > 0) {
             entry = remoteServers.get(idx - 1);
-            if(Servers.localServer.serverEast != entry) {
+            if (Servers.localServer.serverEast != entry) {
                 Servers.addServerNeighbour(entry.id, "EAST");
             }
-        } else if(Servers.localServer.serverEast != null) {
+        } else if (Servers.localServer.serverEast != null) {
             Servers.deleteServerNeighbour("EAST");
         }
     }
 
     // Server Settings Tab
-    void populateServerSettingsList () {
+    void populateServerSettingsList() {
         regions.clear();
         serverSettingsList.getItems().clear();
 
         for (WurmMod mod : mods) {
             if (mod instanceof WurmUIMod) {
-                WurmUIMod uimod = (WurmUIMod)mod;
+                WurmUIMod uimod = (WurmUIMod) mod;
                 Region region = uimod.getRegion(this);
                 regions.add(region);
                 serverSettingsList.getItems().add(uimod.getName());
@@ -566,7 +566,7 @@ public class ServerGuiController extends ServerController {
     }
 
     @FXML
-    void serverSettingsListChanged () {
+    void serverSettingsListChanged() {
         int idx = serverSettingsList.getSelectionModel().getSelectedIndex();
         serverSettingsPane.getChildren().clear();
         Region region = regions.get(idx);
@@ -579,12 +579,12 @@ public class ServerGuiController extends ServerController {
         serverSettingsPane.setMinHeight(region.getHeight());
     }
 
-    void updateServerSettingsTab () {
+    void updateServerSettingsTab() {
         serverSettingsList.setDisable(false);
         populateServerSettingsList();
     }
 
-    void disableServerSettingsTab () {
+    void disableServerSettingsTab() {
         serverSettingsList.setDisable(true);
         serverSettingsPane.getChildren().clear();
     }
@@ -633,7 +633,7 @@ public class ServerGuiController extends ServerController {
 
     // Start Up
     @FXML
-    void initialize () {
+    void initialize() {
         setup();
 
         EventHandler<InputEvent> checkEvent = ((event) -> {
@@ -688,7 +688,7 @@ public class ServerGuiController extends ServerController {
     }
 
     // Dialogs
-    public void showErrorDialog (String errorTitle, String errorHeader, String errorContent, boolean isResizable) {
+    public void showErrorDialog(String errorTitle, String errorHeader, String errorContent, boolean isResizable) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(errorTitle);
         alert.setHeaderText(errorHeader);
@@ -697,11 +697,11 @@ public class ServerGuiController extends ServerController {
         alert.showAndWait();
     }
 
-    public void showErrorDialog (String errorTitle, String errorHeader, String errorContent) {
+    public void showErrorDialog(String errorTitle, String errorHeader, String errorContent) {
         showErrorDialog(errorTitle, errorHeader, errorContent, false);
     }
 
-    public void showInformationDialog (String title, String header, String content) {
+    public void showInformationDialog(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -709,7 +709,7 @@ public class ServerGuiController extends ServerController {
         alert.showAndWait();
     }
 
-    public Optional<ButtonType> showConfirmationDialog (String title, String header, String content) {
+    public Optional<ButtonType> showConfirmationDialog(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -725,7 +725,7 @@ public class ServerGuiController extends ServerController {
         return alert.showAndWait();
     }
 
-    public Optional<ButtonType> showYesNoCancel (String title, String header, String content) {
+    public Optional<ButtonType> showYesNoCancel(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, content, ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -733,12 +733,12 @@ public class ServerGuiController extends ServerController {
         return alert.showAndWait();
     }
 
-    protected boolean askConfirmation (String title, String header, String content) {
+    protected boolean askConfirmation(String title, String header, String content) {
         Optional<ButtonType> result = showConfirmationDialog(title, header, content);
         return result.get() == ButtonType.OK;
     }
 
-    protected boolean askYesNo (String title, String header, String content) {
+    protected boolean askYesNo(String title, String header, String content) {
         Optional<ButtonType> result = showYesNoDialog(title, header, content);
         return result.get() == ButtonType.YES;
     }

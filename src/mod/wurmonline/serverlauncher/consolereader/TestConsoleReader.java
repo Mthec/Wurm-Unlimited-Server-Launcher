@@ -20,7 +20,7 @@ public class TestConsoleReader {
         count = new PlayerCount();
         settings = new ServerSettings();
 
-        Option[] modOptions =  new Option[] {
+        Option[] modOptions = new Option[] {
                 count.getOptions(controller),
                 settings.getOptions(controller),
                 new GameplayTweaks().getOptions(controller),
@@ -29,7 +29,7 @@ public class TestConsoleReader {
 
         options = new Option[] {
                 new Menu("dostuff", "This is a menu, please type \"hello\"",
-                        new Option[]{
+                        new Option[] {
                                 new Command("hello", "something") {
                                     @Override
                                     public String action(List<String> tokens) {
@@ -61,7 +61,7 @@ public class TestConsoleReader {
                         if (tokens.isEmpty()) {
                             return "Please provide a player name or id.";
                         } else {
-                            String[] strings = new String[]{"annoying", "happy"};
+                            String[] strings = new String[] {"annoying", "happy"};
                             Random random = new Random();
                             return String.join(" ", tokens) + " is " + strings[random.nextInt(2)] + ".";
                         }

@@ -16,7 +16,7 @@ public class ConsoleReader implements Runnable {
     Menu topMenu;
     Menu currentMenu = null;
 
-    ConsoleReader (Option[] options) {
+    ConsoleReader(Option[] options) {
         topMenu = new Menu("menu", "Wurm Server Controller - Main Menu", options);
         System.out.println(topMenu.action(null));
     }
@@ -84,7 +84,7 @@ public class ConsoleReader implements Runnable {
                     option = currentMenu.getOption(tokens.remove(0));
 
                     if (option instanceof Menu) {
-                        currentMenu = (Menu)option;
+                        currentMenu = (Menu) option;
                         if (tokens.isEmpty()) {
                             System.out.println(option.action(tokens));
                         }

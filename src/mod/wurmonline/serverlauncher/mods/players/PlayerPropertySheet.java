@@ -4,6 +4,7 @@ package mod.wurmonline.serverlauncher.mods.players;
 // (powered by Fernflower decompiler)
 // Expanded version of PlayerPropertySheet from Wurm Unlimited by Code Club AB
 //
+
 import com.ibm.icu.text.MessageFormat;
 import com.wurmonline.server.MiscConstants;
 import com.wurmonline.server.Server;
@@ -35,41 +36,41 @@ public class PlayerPropertySheet extends VBox implements MiscConstants {
         current = entry;
         list = FXCollections.observableArrayList();
         list.add(new PlayerPropertySheet.CustomPropertyItem(PlayerPropertySheet.PropertyType.NAME,
-                                                            players_messages.getString("name_category"),
-                                                            players_messages.getString("name_label"),
-                                                            players_messages.getString("name_help_text"),
-                                                            true, entry.getName()));
+                players_messages.getString("name_category"),
+                players_messages.getString("name_label"),
+                players_messages.getString("name_help_text"),
+                true, entry.getName()));
         list.add(new PlayerPropertySheet.CustomPropertyItem(PlayerPropertySheet.PropertyType.POSX,
-                                                            players_messages.getString("position_category"),
-                                                            players_messages.getString("position_x_label"),
-                                                            players_messages.getString("position_x_help_text"),
-                                                            true, entry.getPosx()));
+                players_messages.getString("position_category"),
+                players_messages.getString("position_x_label"),
+                players_messages.getString("position_x_help_text"),
+                true, entry.getPosx()));
         list.add(new PlayerPropertySheet.CustomPropertyItem(PlayerPropertySheet.PropertyType.POSY,
-                                                            players_messages.getString("position_category"),
-                                                            players_messages.getString("position_y_label"),
-                                                            players_messages.getString("position_y_help_text"),
-                                                            true, entry.getPosy()));
+                players_messages.getString("position_category"),
+                players_messages.getString("position_y_label"),
+                players_messages.getString("position_y_help_text"),
+                true, entry.getPosy()));
         list.add(new PlayerPropertySheet.CustomPropertyItem(PlayerPropertySheet.PropertyType.POWER,
-                                                            players_messages.getString("power_category"),
-                                                            players_messages.getString("power_label"),
-                                                            players_messages.getString("power_help_text"),
-                                                            true, entry.getPower()));
+                players_messages.getString("power_category"),
+                players_messages.getString("power_label"),
+                players_messages.getString("power_help_text"),
+                true, entry.getPower()));
         list.add(new PlayerPropertySheet.CustomPropertyItem(PlayerPropertySheet.PropertyType.CURRENTSERVER,
-                                                            players_messages.getString("current_server_category"),
-                                                            players_messages.getString("current_server_label"),
-                                                            players_messages.getString("current_server_help_text"),
-                                                            true, entry.getServer()));
+                players_messages.getString("current_server_category"),
+                players_messages.getString("current_server_label"),
+                players_messages.getString("current_server_help_text"),
+                true, entry.getServer()));
         list.add(new PlayerPropertySheet.CustomPropertyItem(PlayerPropertySheet.PropertyType.UNDEAD,
-                                                            players_messages.getString("undead_category"),
-                                                            players_messages.getString("undead_label"),
-                                                            players_messages.getString("undead_help_text"),
-                                                            true, entry.isUndead()));
+                players_messages.getString("undead_category"),
+                players_messages.getString("undead_label"),
+                players_messages.getString("undead_help_text"),
+                true, entry.isUndead()));
         SimpleObjectProperty<DefaultPropertyEditorFactory> propertyEditorFactory = new SimpleObjectProperty<>(this, "propertyEditor", new DefaultPropertyEditorFactory());
         PropertySheet propertySheet = new PropertySheet(list);
         propertySheet.setPropertyEditorFactory(param -> {
-            if(param instanceof PlayerPropertySheet.CustomPropertyItem) {
-                CustomPropertyItem pi = (CustomPropertyItem)param;
-                if(pi.getValue().getClass() == Float.class) {
+            if (param instanceof PlayerPropertySheet.CustomPropertyItem) {
+                CustomPropertyItem pi = (CustomPropertyItem) param;
+                if (pi.getValue().getClass() == Float.class) {
                     return new FormattedFloatEditor(param);
                 }
             }
@@ -89,16 +90,16 @@ public class PlayerPropertySheet extends VBox implements MiscConstants {
         String toReturn = "";
         boolean saveAtAll = false;
 
-        for(PropertySheet.Item propertyItem : list) {
+        for (PropertySheet.Item propertyItem : list) {
             if (!(propertyItem instanceof CustomPropertyItem)) {
                 continue;
             }
-            CustomPropertyItem item = (CustomPropertyItem)propertyItem;
-            if(changedProperties.contains(item.getPropertyType())) {
+            CustomPropertyItem item = (CustomPropertyItem) propertyItem;
+            if (changedProperties.contains(item.getPropertyType())) {
                 saveAtAll = true;
 
                 try {
-                    switch(item.getPropertyType().ordinal()) {
+                    switch (item.getPropertyType().ordinal()) {
                         case 0:
                             current.setName(item.getValue().toString());
                             break;
@@ -115,10 +116,10 @@ public class PlayerPropertySheet extends VBox implements MiscConstants {
                             current.setServer((Integer) item.getValue());
                             break;
                         case 5:
-                            if(!current.isUndead()) {
-                                current.setUndeadType((byte)(1 + Server.rand.nextInt(3)));
+                            if (!current.isUndead()) {
+                                current.setUndeadType((byte) (1 + Server.rand.nextInt(3)));
                             } else {
-                                current.setUndeadType((byte)0);
+                                current.setUndeadType((byte) 0);
                             }
                     }
                 } catch (Exception ex) {
@@ -149,7 +150,7 @@ public class PlayerPropertySheet extends VBox implements MiscConstants {
         boolean editable = true;
         Object value;
 
-        CustomPropertyItem (PlayerPropertySheet.PropertyType aType, String aCategory, String aName, String aDescription, boolean aEditable, Object aValue) {
+        CustomPropertyItem(PlayerPropertySheet.PropertyType aType, String aCategory, String aName, String aDescription, boolean aEditable, Object aValue) {
             type = aType;
             category = aCategory;
             name = aName;
@@ -187,7 +188,7 @@ public class PlayerPropertySheet extends VBox implements MiscConstants {
         }
 
         public void setValue(Object aValue) {
-            if(!value.equals(aValue)) {
+            if (!value.equals(aValue)) {
                 PlayerPropertySheet.this.changedProperties.add(type);
             }
 

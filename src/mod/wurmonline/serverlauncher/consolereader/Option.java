@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface Option {
 
-    String action (List<String> tokens);
+    String action(List<String> tokens);
 
     Option getOption(String input) throws NoSuchOption;
 
-    String help ();
+    String help();
 
-    String getName ();
+    String getName();
 }

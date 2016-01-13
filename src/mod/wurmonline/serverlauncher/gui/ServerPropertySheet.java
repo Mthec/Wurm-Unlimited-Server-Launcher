@@ -21,7 +21,10 @@ import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.DefaultPropertyEditorFactory;
 
 import java.net.InetAddress;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,15 +46,15 @@ public class ServerPropertySheet extends VBox {
         String toReturn = "";
         boolean saveAtAll = false;
 
-        for(PropertySheet.Item old_item : list) {
-            ServerPropertySheet.CustomPropertyItem item = (ServerPropertySheet.CustomPropertyItem)old_item;
-            if(changedProperties.contains(item.getPropertyType()) || current.isCreating) {
+        for (PropertySheet.Item old_item : list) {
+            ServerPropertySheet.CustomPropertyItem item = (ServerPropertySheet.CustomPropertyItem) old_item;
+            if (changedProperties.contains(item.getPropertyType()) || current.isCreating) {
                 saveAtAll = true;
 
                 try {
-                    switch(item.getPropertyType().ordinal()) {
+                    switch (item.getPropertyType().ordinal()) {
                         case 0:
-                            if(current.isLocal) {
+                            if (current.isLocal) {
                                 changedId = true;
                                 oldId = current.id;
                             }
@@ -96,7 +99,7 @@ public class ServerPropertySheet extends VBox {
                             break;
                         case 10:
                             short sqp = (Short) item.getValue();
-                            if(sqp != ServerProperties.getShort("STEAMQUERYPORT", sqp)) {
+                            if (sqp != ServerProperties.getShort("STEAMQUERYPORT", sqp)) {
                                 ServerProperties.setValue("STEAMQUERYPORT", Short.toString(sqp));
                                 ServerProperties.checkProperties();
                             }
@@ -110,18 +113,18 @@ public class ServerPropertySheet extends VBox {
             }
         }
 
-        if(toReturn.length() == 0 && saveAtAll) {
-            if(current.isCreating) {
+        if (toReturn.length() == 0 && saveAtAll) {
+            if (current.isCreating) {
                 toReturn = messages.getString("new_server_saved");
                 Servers.registerServer(current.id, current.getName(), current.HOMESERVER, current.SPAWNPOINTJENNX, current.SPAWNPOINTJENNY, current.SPAWNPOINTLIBX, current.SPAWNPOINTLIBY, current.SPAWNPOINTMOLX, current.SPAWNPOINTMOLY, current.INTRASERVERADDRESS, current.INTRASERVERPORT, current.INTRASERVERPASSWORD, current.EXTERNALIP, current.EXTERNALPORT, current.LOGINSERVER, current.KINGDOM, current.ISPAYMENT, current.getConsumerKey(), current.getConsumerSecret(), current.getApplicationToken(), current.getApplicationSecret(), false, current.testServer, current.randomSpawns);
             } else {
                 toReturn = messages.getString("properties_saved");
             }
 
-            if(saveNewGui) {
+            if (saveNewGui) {
                 logger.info(messages.getString("saved_using_new"));
                 saveNewGui = false;
-                if(changedId) {
+                if (changedId) {
                     current.saveNewGui(oldId);
                     // TODO - So this is how it's done.  See addServer in ServerController.
                     current.movePlayersFromId(oldId);
@@ -145,7 +148,7 @@ public class ServerPropertySheet extends VBox {
         int length = rand.nextInt(3) + 6;
         char[] password = new char[length];
 
-        for(int i = 0; i < length; ++i) {
+        for (int i = 0; i < length; ++i) {
             int randDecimalAsciiVal = rand.nextInt(PASSWORD_CHARS.length());
             password[i] = PASSWORD_CHARS.charAt(randDecimalAsciiVal);
         }
@@ -156,7 +159,7 @@ public class ServerPropertySheet extends VBox {
     public ServerPropertySheet(ServerEntry entry) {
         current = entry;
         list = FXCollections.observableArrayList();
-        if(entry.isLocal) {
+        if (entry.isLocal) {
             initializeLocalServer(entry);
         } else {
             initializeNonLocalServer(entry);
@@ -167,7 +170,7 @@ public class ServerPropertySheet extends VBox {
     void initializeLocalServer(ServerEntry entry) {
         saveNewGui = false;
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.NAME, categoryServerSettings, messages.getString("name_label"), messages.getString("name_help_text"), true, entry.name));
-        if(entry.id == 0) {
+        if (entry.id == 0) {
             changedId = true;
             oldId = 0;
             entry.id = ServerController.getNewServerId();
@@ -178,7 +181,7 @@ public class ServerPropertySheet extends VBox {
             list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.SERVERID, categoryAdvancedSettings, messages.getString("id_label"), messages.getString("id_help_text"), true, entry.id));
         }
 
-        if((entry.EXTERNALIP == null || entry.EXTERNALIP.equals("")) && entry.isLocal) {
+        if ((entry.EXTERNALIP == null || entry.EXTERNALIP.equals("")) && entry.isLocal) {
             try {
                 entry.EXTERNALIP = InetAddress.getLocalHost().getHostAddress();
                 changedProperties.add(ServerPropertySheet.PropertyType.EXTSERVERIP);
@@ -190,7 +193,7 @@ public class ServerPropertySheet extends VBox {
 
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.EXTSERVERIP, categoryServerSettings, messages.getString("external_ip_address_label"), messages.getString("external_ip_address_help_text"), true, entry.EXTERNALIP));
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.EXTSERVERPORT, categoryServerSettings, messages.getString("external_ip_port_label"), messages.getString("external_ip_port_help_text"), true, entry.EXTERNALPORT));
-        if((entry.INTRASERVERADDRESS == null || entry.INTRASERVERADDRESS.equals("")) && entry.isLocal) {
+        if ((entry.INTRASERVERADDRESS == null || entry.INTRASERVERADDRESS.equals("")) && entry.isLocal) {
             try {
                 entry.INTRASERVERADDRESS = InetAddress.getLocalHost().getHostAddress();
                 changedProperties.add(ServerPropertySheet.PropertyType.INTIP);
@@ -205,7 +208,7 @@ public class ServerPropertySheet extends VBox {
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.RMI_REG_PORT, categoryAdvancedSettings, messages.getString("rmi_registration_port_label"), messages.getString("rmi_registration_port_help_text"), true, entry.REGISTRATION_PORT));
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.RMIPORT, categoryAdvancedSettings, messages.getString("rmi_port_label"), messages.getString("rmi_port_help_text"), true, entry.RMI_PORT));
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.STEAMQUERYPORT, categoryAdvancedSettings, messages.getString("steam_query_port_label"), messages.getString("steam_query_port_help_text"), true, ServerProperties.getShort("STEAMQUERYPORT", SteamHandler.steamQueryPort)));
-        if((entry.INTRASERVERPASSWORD == null || entry.INTRASERVERPASSWORD.equals("")) && entry.isLocal) {
+        if ((entry.INTRASERVERPASSWORD == null || entry.INTRASERVERPASSWORD.equals("")) && entry.isLocal) {
             entry.INTRASERVERPASSWORD = generateRandomPassword();
             changedProperties.add(ServerPropertySheet.PropertyType.INTRASERVERPASSWORD);
             saveNewGui = true;
@@ -215,11 +218,11 @@ public class ServerPropertySheet extends VBox {
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.STEAMPW, categoryServerSettings, messages.getString("server_password_label"), messages.getString("server_password_help_text"), true, entry.getSteamServerPassword()));
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.ADMINPWD, categoryServerSettings, messages.getString("admin_password_label"), messages.getString("admin_password_help_text"), true, ServerProperties.getString("ADMINPWD", "")));
 
-        if(saveNewGui) {
+        if (saveNewGui) {
             saveNewGui = false;
-            if(entry.isCreating) {
+            if (entry.isCreating) {
                 save();
-            } else if(changedId) {
+            } else if (changedId) {
                 current.saveNewGui(oldId);
                 current.movePlayersFromId(oldId);
                 changedId = false;
@@ -236,9 +239,9 @@ public class ServerPropertySheet extends VBox {
         SimpleObjectProperty<DefaultPropertyEditorFactory> propertyEditorFactory = new SimpleObjectProperty<>(this, "propertyEditor", new DefaultPropertyEditorFactory());
         propertySheet = new PropertySheet(list);
         propertySheet.setPropertyEditorFactory(param -> {
-            if(param instanceof CustomPropertyItem) {
-                CustomPropertyItem pi = (CustomPropertyItem)param;
-                if(pi.getValue().getClass() == Float.class) {
+            if (param instanceof CustomPropertyItem) {
+                CustomPropertyItem pi = (CustomPropertyItem) param;
+                if (pi.getValue().getClass() == Float.class) {
                     return new FormattedFloatEditor(param);
                 }
             }
@@ -253,7 +256,7 @@ public class ServerPropertySheet extends VBox {
     void initializeNonLocalServer(ServerEntry entry) {
         saveNewGui = false;
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.NAME, categoryServerSettings, messages.getString("name_label"), messages.getString("name_help_text"), true, entry.name));
-        if(entry.id == 0) {
+        if (entry.id == 0) {
             changedId = true;
             oldId = 0;
             entry.id = ServerController.getNewServerId();
@@ -264,7 +267,7 @@ public class ServerPropertySheet extends VBox {
             list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.SERVERID, categoryServerSettings, messages.getString("id_label"), messages.getString("id_help_text"), true, entry.id));
         }
 
-        if((entry.EXTERNALIP == null || entry.EXTERNALIP.equals("")) && entry.isLocal) {
+        if ((entry.EXTERNALIP == null || entry.EXTERNALIP.equals("")) && entry.isLocal) {
             try {
                 entry.EXTERNALIP = InetAddress.getLocalHost().getHostAddress();
                 changedProperties.add(ServerPropertySheet.PropertyType.EXTSERVERIP);
@@ -276,7 +279,7 @@ public class ServerPropertySheet extends VBox {
 
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.EXTSERVERIP, categoryServerSettings, messages.getString("external_ip_address_label"), messages.getString("external_ip_address_help_text"), true, entry.EXTERNALIP));
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.EXTSERVERPORT, categoryServerSettings, messages.getString("external_ip_port_label"), messages.getString("external_ip_port_help_text"), true, entry.EXTERNALPORT));
-        if((entry.INTRASERVERADDRESS == null || entry.INTRASERVERADDRESS.equals("")) && entry.isLocal) {
+        if ((entry.INTRASERVERADDRESS == null || entry.INTRASERVERADDRESS.equals("")) && entry.isLocal) {
             try {
                 entry.INTRASERVERADDRESS = InetAddress.getLocalHost().getHostAddress();
                 changedProperties.add(ServerPropertySheet.PropertyType.INTIP);
@@ -290,18 +293,18 @@ public class ServerPropertySheet extends VBox {
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.INTPORT, categoryServerSettings, messages.getString("internal_ip_port_label"), messages.getString("internal_ip_port_help_text"), true, entry.INTRASERVERPORT));
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.RMI_REG_PORT, categoryServerSettings, messages.getString("rmi_registration_port_label"), messages.getString("rmi_registration_port_help_text"), true, entry.REGISTRATION_PORT));
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.RMIPORT, categoryServerSettings, messages.getString("rmi_port_label"), messages.getString("rmi_port_help_text"), true, entry.RMI_PORT));
-        if((entry.INTRASERVERPASSWORD == null || entry.INTRASERVERPASSWORD.equals("")) && entry.isLocal) {
+        if ((entry.INTRASERVERPASSWORD == null || entry.INTRASERVERPASSWORD.equals("")) && entry.isLocal) {
             entry.INTRASERVERPASSWORD = generateRandomPassword();
             changedProperties.add(ServerPropertySheet.PropertyType.INTRASERVERPASSWORD);
             saveNewGui = true;
         }
 
         list.add(new ServerPropertySheet.CustomPropertyItem(ServerPropertySheet.PropertyType.INTRASERVERPASSWORD, categoryServerSettings, messages.getString("intra_password_label"), messages.getString("intra_password_help_text"), true, entry.INTRASERVERPASSWORD));
-        if(saveNewGui) {
+        if (saveNewGui) {
             saveNewGui = false;
-            if(entry.isCreating) {
+            if (entry.isCreating) {
                 save();
-            } else if(changedId) {
+            } else if (changedId) {
                 current.saveNewGui(oldId);
                 current.movePlayersFromId(oldId);
                 changedId = false;
@@ -322,7 +325,7 @@ public class ServerPropertySheet extends VBox {
     }
 
     public void setReadOnly() {
-        if(propertySheet != null) {
+        if (propertySheet != null) {
             propertySheet.setMode(PropertySheet.Mode.NAME);
             propertySheet.setDisable(true);
         }
@@ -387,7 +390,7 @@ public class ServerPropertySheet extends VBox {
         }
 
         public void setValue(Object aValue) {
-            if(!value.equals(aValue)) {
+            if (!value.equals(aValue)) {
                 ServerPropertySheet.this.changedProperties.add(type);
             }
             value = aValue;

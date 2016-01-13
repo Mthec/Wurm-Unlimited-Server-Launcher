@@ -27,7 +27,7 @@ public class GameplayTweaksConsoleCommands {
                         server.saveNewGui(server.id);
                     }
                 },
-                new Menu("modes", "Server Modes", new Option[]{
+                new Menu("modes", "Server Modes", new Option[] {
                         new Value("npcs", messages.getString("npcs_help_text"), controller) {
                             @Override
                             protected String get(ServerEntry server) {
@@ -141,7 +141,7 @@ public class GameplayTweaksConsoleCommands {
                             }
                         },
                 }),
-                new Menu("spawns", "Spawn Point Settings", new Option[]{
+                new Menu("spawns", "Spawn Point Settings", new Option[] {
                         new Value("random_spawns", messages.getString("random_spawns_help_text"), controller) {
                             @Override
                             protected String get(ServerEntry server) {
@@ -228,7 +228,7 @@ public class GameplayTweaksConsoleCommands {
                         },
                 }),
                 // Skill
-                new Menu("skill", "Skill Settings", new Option[]{
+                new Menu("skill", "Skill Settings", new Option[] {
                         new Value("skill_multiplier", messages.getString("skill_gain_multiplier_help_text"), controller) {
                             @Override
                             protected String get(ServerEntry server) {
@@ -351,7 +351,7 @@ public class GameplayTweaksConsoleCommands {
                         server.saveNewGui(server.id);
                     }
                 },
-                new Menu("economy", "Economy Settings", new Option[]{
+                new Menu("economy", "Economy Settings", new Option[] {
                         new Value("money_pool", messages.getString("money_pool_help_text"), controller) {
                             @Override
                             protected String get(ServerEntry server) {
@@ -390,7 +390,7 @@ public class GameplayTweaksConsoleCommands {
                         },
                 }),
                 // Environment
-                new Menu("environment", "Environment Settings", new Option[]{
+                new Menu("environment", "Environment Settings", new Option[] {
                         new Value("max_creatures", messages.getString("max_creatures_help_text"), controller) {
                             @Override
                             protected String get(ServerEntry server) {
@@ -477,7 +477,7 @@ public class GameplayTweaksConsoleCommands {
                         },
                 }),
                 // Twitter
-                new Menu("twitter", "Twitter Settings", new Option[]{
+                new Menu("twitter", "Twitter Settings", new Option[] {
                         new Value("consumer_key", messages.getString("consumer_key_help_text"), controller) {
                             @Override
                             protected String get(ServerEntry server) {

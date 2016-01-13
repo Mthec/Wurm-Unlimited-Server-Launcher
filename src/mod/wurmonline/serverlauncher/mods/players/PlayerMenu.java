@@ -21,24 +21,24 @@ public class PlayerMenu extends Menu {
         super(name, text, getPlayerMenus(messages));
     }
 
-        private static Option[] getPlayerMenus(ResourceBundle messages) {
-            players_messages = messages;
-            PlayerDBInterface.loadAllData();
-            PlayerDBInterface.loadAllPositionData();
+    private static Option[] getPlayerMenus(ResourceBundle messages) {
+        players_messages = messages;
+        PlayerDBInterface.loadAllData();
+        PlayerDBInterface.loadAllPositionData();
 
-            PlayerData[] players = PlayerDBInterface.getAllData();
-            Option[] list = new Option[players.length];
+        PlayerData[] players = PlayerDBInterface.getAllData();
+        Option[] list = new Option[players.length];
 
-            PlayerData player;
-            for (int i = 0; i < players.length; ++i) {
-                player = players[i];
-                list[i] = new Menu(player.getName(), "Settings for " + player.getName(), getValues(player));
-            }
-            return list;
+        PlayerData player;
+        for (int i = 0; i < players.length; ++i) {
+            player = players[i];
+            list[i] = new Menu(player.getName(), "Settings for " + player.getName(), getValues(player));
         }
+        return list;
+    }
 
     private static Option[] getValues(PlayerData playerData) {
-        return new Option[]{
+        return new Option[] {
                 new Value("name", players_messages.getString("name_help_text")) {
                     PlayerData player = playerData;
 

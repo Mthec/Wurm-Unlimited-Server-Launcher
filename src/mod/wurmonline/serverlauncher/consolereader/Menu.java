@@ -1,6 +1,8 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -10,7 +12,7 @@ public class Menu implements Option {
     private String text;
     private String listText;
 
-    public Menu (String name, String text, Option[] options) {
+    public Menu(String name, String text, Option[] options) {
         this.name = name;
         this.text = text;
         for (Option option : options) {

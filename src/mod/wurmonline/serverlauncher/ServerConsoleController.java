@@ -44,18 +44,18 @@ public class ServerConsoleController extends ServerController {
             }
         }
 
-        for(ServerEntry entry : Servers.getAllServers()) {
-            if(entry.name.equals(dbName)) {
+        for (ServerEntry entry : Servers.getAllServers()) {
+            if (entry.name.equals(dbName)) {
                 Servers.localServer = entry;
                 break;
             }
         }
 
-        if(Servers.localServer != null && Servers.argumets != null) {
+        if (Servers.localServer != null && Servers.argumets != null) {
             logger.info(server_messages.getString("settings_from_cmd_line"));
             boolean settingChanged = false;
             String settingValue;
-            if(Servers.argumets.hasOption("ip")) {
+            if (Servers.argumets.hasOption("ip")) {
                 settingValue = Servers.argumets.getOptionValue("ip");
                 Servers.localServer.EXTERNALIP = settingValue;
                 Servers.localServer.INTRASERVERADDRESS = settingValue;
@@ -63,14 +63,14 @@ public class ServerConsoleController extends ServerController {
                 logger.info(MessageFormat.format(server_messages.getString("set_ip"), settingValue));
             }
 
-            if(Servers.argumets.hasOption("externalport")) {
+            if (Servers.argumets.hasOption("externalport")) {
                 settingValue = Servers.argumets.getOptionValue("externalport");
                 Servers.localServer.EXTERNALPORT = settingValue;
                 settingChanged = true;
                 logger.info(MessageFormat.format(server_messages.getString("set_external_port"), settingValue));
             }
 
-            if(Servers.argumets.hasOption("internalport")) {
+            if (Servers.argumets.hasOption("internalport")) {
                 settingValue = Servers.argumets.getOptionValue("internalport");
                 Servers.localServer.INTRASERVERPORT = settingValue;
                 settingChanged = true;
@@ -78,7 +78,7 @@ public class ServerConsoleController extends ServerController {
             }
 
             boolean settingBoolean;
-            if(Servers.argumets.hasOption("epicsettings")) {
+            if (Servers.argumets.hasOption("epicsettings")) {
                 settingValue = Servers.argumets.getOptionValue("epicsettings");
                 settingBoolean = Boolean.parseBoolean(settingValue);
                 Servers.localServer.EPIC = settingBoolean;
@@ -86,7 +86,7 @@ public class ServerConsoleController extends ServerController {
                 logger.info(MessageFormat.format(server_messages.getString("set_epic"), settingBoolean));
             }
 
-            if(Servers.argumets.hasOption("homekingdom")) {
+            if (Servers.argumets.hasOption("homekingdom")) {
                 settingValue = Servers.argumets.getOptionValue("homekingdom");
                 byte settingByte = Byte.parseByte(settingValue);
                 Servers.localServer.KINGDOM = settingByte;
@@ -95,7 +95,7 @@ public class ServerConsoleController extends ServerController {
                 logger.info(MessageFormat.format(server_messages.getString("set_homekingdom"), settingByte, kingdomName));
             }
 
-            if(Servers.argumets.hasOption("homeserver")) {
+            if (Servers.argumets.hasOption("homeserver")) {
                 settingValue = Servers.argumets.getOptionValue("homeserver");
                 settingBoolean = Boolean.parseBoolean(settingValue);
                 Servers.localServer.HOMESERVER = settingBoolean;
@@ -103,7 +103,7 @@ public class ServerConsoleController extends ServerController {
                 logger.info(MessageFormat.format(server_messages.getString("set_homeserver"), settingBoolean));
             }
 
-            if(Servers.argumets.hasOption("loginserver")) {
+            if (Servers.argumets.hasOption("loginserver")) {
                 settingValue = Servers.argumets.getOptionValue("loginserver");
                 settingBoolean = Boolean.parseBoolean(settingValue);
                 Servers.localServer.LOGINSERVER = settingBoolean;
@@ -111,7 +111,7 @@ public class ServerConsoleController extends ServerController {
                 logger.info(MessageFormat.format(server_messages.getString("set_loginserver"), settingBoolean));
             }
 
-            if(Servers.argumets.hasOption("maxplayers")) {
+            if (Servers.argumets.hasOption("maxplayers")) {
                 settingValue = Servers.argumets.getOptionValue("maxplayers");
                 _int = Integer.parseInt(settingValue);
                 Servers.localServer.pLimit = _int;
@@ -120,7 +120,7 @@ public class ServerConsoleController extends ServerController {
                 logger.info(MessageFormat.format(server_messages.getString("set_max_players"), _int));
             }
 
-            if(Servers.argumets.hasOption("pvp")) {
+            if (Servers.argumets.hasOption("pvp")) {
                 settingValue = Servers.argumets.getOptionValue("pvp");
                 settingBoolean = Boolean.parseBoolean(settingValue);
                 Servers.localServer.PVPSERVER = settingBoolean;
@@ -128,7 +128,7 @@ public class ServerConsoleController extends ServerController {
                 logger.info(MessageFormat.format(server_messages.getString("set_pvp"), settingBoolean));
             }
 
-            if(Servers.argumets.hasOption("queryport")) {
+            if (Servers.argumets.hasOption("queryport")) {
                 settingValue = Servers.argumets.getOptionValue("queryport");
                 ServerProperties.loadProperties();
                 ServerProperties.setValue("STEAMQUERYPORT", settingValue);
@@ -136,7 +136,7 @@ public class ServerConsoleController extends ServerController {
                 logger.info(MessageFormat.format(server_messages.getString("set_query_port"), settingValue));
             }
 
-            if(Servers.argumets.hasOption("rmiport")) {
+            if (Servers.argumets.hasOption("rmiport")) {
                 settingValue = Servers.argumets.getOptionValue("rmiport");
                 _int = Integer.parseInt(settingValue);
                 Servers.localServer.RMI_PORT = _int;
@@ -144,7 +144,7 @@ public class ServerConsoleController extends ServerController {
                 logger.info(MessageFormat.format(server_messages.getString("set_rmi_port"), _int));
             }
 
-            if(Servers.argumets.hasOption("rmiregport")) {
+            if (Servers.argumets.hasOption("rmiregport")) {
                 settingValue = Servers.argumets.getOptionValue("rmiregport");
                 _int = Integer.parseInt(settingValue);
                 Servers.localServer.REGISTRATION_PORT = _int;
@@ -152,20 +152,20 @@ public class ServerConsoleController extends ServerController {
                 logger.info(MessageFormat.format(server_messages.getString("set_rmi_register_port"), _int));
             }
 
-            if(Servers.argumets.hasOption("servername")) {
+            if (Servers.argumets.hasOption("servername")) {
                 settingValue = Servers.argumets.getOptionValue("servername");
                 Servers.localServer.name = settingValue;
                 settingChanged = true;
                 logger.info(MessageFormat.format(server_messages.getString("set_servername"), settingValue));
             }
 
-            if(Servers.argumets.hasOption("serverpassword")) {
+            if (Servers.argumets.hasOption("serverpassword")) {
                 settingValue = Servers.argumets.getOptionValue("serverpassword");
                 Servers.localServer.setSteamServerPassword(settingValue);
                 settingChanged = true;
             }
 
-            if(settingChanged) {
+            if (settingChanged) {
                 Servers.localServer.saveNewGui(Servers.localServer.id);
             }
         }
@@ -174,6 +174,7 @@ public class ServerConsoleController extends ServerController {
     protected boolean askConfirmation(String title, String header, String content) {
         return false;
     }
+
     protected boolean askYesNo(String title, String header, String content) {
         return false;
     }
