@@ -37,7 +37,7 @@ public class Menu implements Option {
     }
 
     @Override
-    public Option ask(String input) throws NoSuchOption {
+    public Option getOption(String input) throws NoSuchOption {
         if (!options.containsKey(input)) {
             throw new NoSuchOption(input);
         }

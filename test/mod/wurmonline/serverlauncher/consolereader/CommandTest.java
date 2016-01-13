@@ -39,7 +39,7 @@ public class CommandTest {
             public String action(List<String> tokens) {
                 return null;
             }
-        }.ask("");
+        }.getOption("");
     }
 
     @Test

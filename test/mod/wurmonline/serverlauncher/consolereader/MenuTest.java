@@ -4,7 +4,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -58,12 +57,12 @@ public class MenuTest {
 
     @Test
     public void testAsk() throws Exception {
-        assertEquals(command, menu.ask(commandName));
+        assertEquals(command, menu.getOption(commandName));
     }
 
     @Test(expected = NoSuchOption.class)
     public void testAskNotFound() throws Exception {
-        menu.ask("Not Found");
+        menu.getOption("Not Found");
     }
 
     @Test

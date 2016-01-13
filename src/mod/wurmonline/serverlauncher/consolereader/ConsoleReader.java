@@ -49,7 +49,7 @@ public class ConsoleReader implements Runnable {
                     continue;
                 }
 
-                Option response = null;
+                Option option = null;
                 while (!tokens.isEmpty()) {
                     // Default commands.
                     if (tokens.get(0).equals("help")) {
@@ -58,17 +58,17 @@ public class ConsoleReader implements Runnable {
                         } else {
                             System.out.println(currentMenu.help(tokens.get(1)));
                         }
-                        response = currentMenu;
+                        option = currentMenu;
                         tokens.clear();
                         continue;
                     } else if (tokens.get(0).equals("list")) {
                         System.out.println(currentMenu.list());
-                        response = currentMenu;
+                        option = currentMenu;
                         tokens.clear();
                         continue;
                     } else if (tokens.get(0).equals("menu")) {
                         currentMenu = topMenu;
-                        response = currentMenu;
+                        option = currentMenu;
                         if (tokens.size() > 1) {
                             tokens.remove(0);
                             continue;
@@ -79,19 +79,19 @@ public class ConsoleReader implements Runnable {
                         }
                     }
 
-                    response = currentMenu.ask(tokens.remove(0));
+                    option = currentMenu.getOption(tokens.remove(0));
 
-                    if (response instanceof Menu) {
-                        currentMenu = (Menu)response;
+                    if (option instanceof Menu) {
+                        currentMenu = (Menu)option;
                         if (tokens.isEmpty()) {
-                            System.out.println(response.action(tokens));
+                            System.out.println(option.action(tokens));
                         }
                     } else {
-                        System.out.println(response.action(tokens));
+                        System.out.println(option.action(tokens));
                         tokens.clear();
                     }
                 }
-                if (response == null) {
+                if (option == null) {
                     throw new NoSuchOption(nextLine);
                 }
             } catch (NoSuchOption ex) {

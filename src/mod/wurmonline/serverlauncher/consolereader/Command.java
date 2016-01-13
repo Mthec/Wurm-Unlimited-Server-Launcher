@@ -15,7 +15,7 @@ public abstract class Command implements Option {
     public abstract String action(List<String> tokens);
 
     @Override
-    public Option ask(String input) {
+    public Option getOption(String input) {
         throw new UnsupportedOperationException("Command object cannot be asked.");
     }
 

@@ -6,7 +6,7 @@ public interface Option {
 
     String action (List<String> tokens);
 
-    Option ask (String input) throws NoSuchOption;
+    Option getOption(String input) throws NoSuchOption;
 
     String help ();
 
