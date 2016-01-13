@@ -68,10 +68,9 @@ public class MenuTest {
 
     @Test
     public void testHelp() throws Exception {
-        List<String> expected = new ArrayList<>();
-        expected.add(helpText + System.lineSeparator() + "Options - [" + subMenuName + ", " + commandName + "]");
-        expected.add(helpText + System.lineSeparator() + "Options - [" + commandName + ", " + subMenuName + "]");
-        assertTrue(expected.contains(menu.help()));
+        assertEquals(helpText + System.lineSeparator() +
+                "Menu - [" + subMenuName + "]" + System.lineSeparator() + "Options - [" + commandName + "]",
+                menu.help());
     }
 
     @Test
@@ -85,11 +84,29 @@ public class MenuTest {
     }
 
     @Test
-    public void testList() throws Exception {
-        List<String> expected = new ArrayList<>();
-        expected.add("Options - [" + subMenuName + ", " + commandName + "]");
-        expected.add("Options - [" + commandName + ", " + subMenuName + "]");
-        assertTrue(expected.contains(menu.list()));
+    public void testListMenuCommand() throws Exception {
+        assertEquals("Menu - [" + subMenuName + "]" + System.lineSeparator() + "Options - [" + commandName + "]", menu.list());
+    }
+
+    @Test
+    public void testListMenu() throws Exception {
+        Menu newMenu = new Menu(null, null, new Option[] {
+                subMenu,
+        });
+        assertEquals("Menu - [" + subMenuName + "]", newMenu.list());
+    }
+
+    @Test
+    public void testListCommand() throws Exception {
+        Menu newMenu = new Menu(null, null, new Option[] {
+                command,
+        });
+        assertEquals("Options - [" + commandName + "]", newMenu.list());
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testListEmpty() throws Exception {
+        new Menu(null, null, new Option[0]);
     }
 
     @Test

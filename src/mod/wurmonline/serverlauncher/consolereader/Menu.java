@@ -1,12 +1,14 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Menu implements Option {
     private Map<String, Option> options = new HashMap<>();
     private String name;
     private String text;
+    private String listText;
 
     public Menu (String name, String text, Option[] options) {
         this.name = name;
@@ -16,6 +18,17 @@ public class Menu implements Option {
                 this.options.put(option.getName(), option);
             }
         }
+        assert !this.options.isEmpty();
+
+        Predicate<Map.Entry<String, Option>> menusFilter = entry -> entry.getValue() instanceof Menu;
+        String menus = this.options.entrySet().stream().filter(menusFilter).sorted().map(Map.Entry::getKey).collect(Collectors.toList()).toString();
+
+        Predicate<Map.Entry<String, Option>> otherFilter = entry -> !(entry.getValue() instanceof Menu);
+        String other = this.options.entrySet().stream().filter(otherFilter).sorted().map(Map.Entry::getKey).collect(Collectors.toList()).toString();
+
+        listText = String.join(menus.equals("[]") || other.equals("[]") ? "" : System.lineSeparator(),
+                menus.equals("[]") ? "" : "Menu - " + menus,
+                other.equals("[]") ? "" : "Options - " + other);
     }
 
     @Override
@@ -45,8 +58,7 @@ public class Menu implements Option {
     }
 
     public String list() {
-        // TODO - Mark menus vs. commands.
-        return "Options - " + options.keySet().stream().sorted().collect(Collectors.toList()).toString();
+        return listText;
     }
 
     @Override

@@ -80,7 +80,14 @@ public class ConsoleReaderTest {
 
     @Test()
     public void testRunNoSuchOption() throws Exception {
-        ConsoleReader reader = new ConsoleReader(new Option[0]);
+        ConsoleReader reader = new ConsoleReader(new Option[] {
+                new Command(commandOption, null) {
+                    @Override
+                    public String action(List<String> tokens) {
+                        return "";
+                    }
+                }
+        });
         reader.reader = mock(BufferedReader.class);
         when(reader.reader.readLine()).thenReturn(noOption).thenReturn(null);
         reader.run();
@@ -89,7 +96,14 @@ public class ConsoleReaderTest {
 
     @Test()
     public void testRunList() throws Exception {
-        Menu menu = new Menu(menuOption, null, new Option[0]);
+        Menu menu = new Menu(menuOption, null, new Option[] {
+                new Command(menuOption, null) {
+                    @Override
+                    public String action(List<String> tokens) {
+                        return "";
+                    }
+                }
+        });
 
         ConsoleReader reader = new ConsoleReader(new Option[] {
             menu
