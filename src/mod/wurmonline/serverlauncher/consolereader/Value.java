@@ -30,7 +30,11 @@ public abstract class Value extends Command {
                     return "Server is running, values cannot be changed.";
                 }
                 // TODO - Exceptions?
-                this.set(current, tokens);
+                try {
+                    this.set(current, tokens);
+                } catch (InvalidValue ex) {
+                    return "Invalid value - " + ex.value + " " + ex.message;
+                }
                 return this.getName() + " set to - " + this.get(current);
             }
         } catch (NullPointerException ex) {
@@ -41,5 +45,5 @@ public abstract class Value extends Command {
 
     protected abstract String get(ServerEntry server);
 
-    protected abstract void set(ServerEntry server, List<String> tokens);
+    protected abstract void set(ServerEntry server, List<String> tokens) throws InvalidValue;
 }

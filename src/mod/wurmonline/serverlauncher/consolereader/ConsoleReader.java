@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+// TODO - Convert strings to locales.
+// TODO - Add logging.
 public class ConsoleReader implements Runnable {
     private static Logger logger = Logger.getLogger(ConsoleReader.class.getName());
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

@@ -7,12 +7,18 @@ import com.wurmonline.server.players.PlayerInfo;
 import com.wurmonline.server.players.PlayerInfoFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import mod.wurmonline.serverlauncher.LocaleHelper;
+import mod.wurmonline.serverlauncher.ServerController;
+import mod.wurmonline.serverlauncher.consolereader.Option;
 import mod.wurmonline.serverlauncher.gui.ServerGuiController;
 import org.gotti.wurmunlimited.modloader.interfaces.Configurable;
+import org.gotti.wurmunlimited.modloader.interfaces.WurmCommandLine;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmMod;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmUIMod;
 
@@ -22,7 +28,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Players implements WurmMod, WurmUIMod, Configurable {
+public class Players implements WurmMod, WurmUIMod, Configurable, WurmCommandLine {
     Logger logger = Logger.getLogger(Players.class.getName());
     String name;
     PlayerPropertySheet playerPropertySheet;
@@ -129,5 +135,10 @@ public class Players implements WurmMod, WurmUIMod, Configurable {
     void initialize() {
         populatePlayersList();
         playersList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> selectPlayerListChanged());
+    }
+
+    @Override
+    public Option getOptions(ServerController controller) {
+        return new PlayerMenu("players", "Player Entries", players_messages);
     }
 }

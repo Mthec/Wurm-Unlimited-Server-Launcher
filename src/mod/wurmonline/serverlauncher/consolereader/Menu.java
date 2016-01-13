@@ -21,10 +21,10 @@ public class Menu implements Option {
         assert !this.options.isEmpty();
 
         Predicate<Map.Entry<String, Option>> menusFilter = entry -> entry.getValue() instanceof Menu;
-        String menus = this.options.entrySet().stream().filter(menusFilter).sorted().map(Map.Entry::getKey).collect(Collectors.toList()).toString();
+        String menus = this.options.entrySet().stream().filter(menusFilter).map(Map.Entry::getKey).sorted().collect(Collectors.toList()).toString();
 
         Predicate<Map.Entry<String, Option>> otherFilter = entry -> !(entry.getValue() instanceof Menu);
-        String other = this.options.entrySet().stream().filter(otherFilter).sorted().map(Map.Entry::getKey).collect(Collectors.toList()).toString();
+        String other = this.options.entrySet().stream().filter(otherFilter).map(Map.Entry::getKey).sorted().collect(Collectors.toList()).toString();
 
         listText = String.join(menus.equals("[]") || other.equals("[]") ? "" : System.lineSeparator(),
                 menus.equals("[]") ? "" : "Menu - " + menus,

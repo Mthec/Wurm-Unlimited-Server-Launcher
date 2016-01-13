@@ -33,7 +33,7 @@ public class TestDelegatedConsoleReader {
         }
         ServerConsoleController controller = new ServerConsoleController();
         Servers.argumets = new SimpleArgumentParser(new String[0], new HashSet<>());
-        controller.startDB("Creative");
+        controller.startDB("Adventure");
         Set<Thread> threads = Thread.getAllStackTraces().keySet();
         for (Thread t : threads) {
             if (Objects.equals(t.getName(), "Console Command Reader")) {
