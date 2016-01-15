@@ -18,7 +18,7 @@ public class TestDelegatingConsoleReader {
 
             Thread.currentThread().setContextClassLoader(loader);
 
-            loader.run("mod.wurmonline.serverlauncher.consolereader.TestDelegatedConsoleReader", args);
+            loader.run(args[0], args);
         } catch (Throwable e) {
             e.printStackTrace();
             System.exit(-1);

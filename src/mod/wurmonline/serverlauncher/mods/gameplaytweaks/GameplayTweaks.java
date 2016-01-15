@@ -436,7 +436,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod, Wurm
     }
 
     @Override
-    public Option getOptions(ServerController controller) {
+    public Option getOption(ServerController controller) {
         return GameplayTweaksConsoleCommands.getOptions(controller, messages);
     }
 }

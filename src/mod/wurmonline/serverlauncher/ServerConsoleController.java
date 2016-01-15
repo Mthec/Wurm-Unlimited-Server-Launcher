@@ -6,6 +6,7 @@ import com.wurmonline.server.ServerProperties;
 import com.wurmonline.server.Servers;
 import com.wurmonline.server.console.CommandReader;
 import com.wurmonline.server.kingdom.Kingdoms;
+import mod.wurmonline.serverlauncher.consolereader.ConsoleReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class ServerConsoleController extends ServerController {
             setCurrentDir(dbName + (dbName.endsWith(File.separator) ? "" : File.separator));
             initServer(dbName);
             startServer();
-            (new Thread(new CommandReader(currentServer.getServer(), System.in), "Console Command Reader")).start();
+            (new Thread(new ConsoleReader(this), "Console Command Reader")).start();
         } catch (IOException ex) {
             logger.severe(MessageFormat.format(server_messages.getString("cannot_find_db"), dbName));
             ex.printStackTrace();

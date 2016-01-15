@@ -1,6 +1,5 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
-import com.sun.deploy.util.ArrayUtil;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
 import mod.wurmonline.serverlauncher.ServerController;
 import mod.wurmonline.serverlauncher.mods.gameplaytweaks.GameplayTweaks;
@@ -23,10 +22,10 @@ public class TestConsoleReader {
         settings = new ServerSettings();
 
         Option[] modOptions = new Option[] {
-                count.getOptions(controller),
-                settings.getOptions(controller),
-                new GameplayTweaks().getOptions(controller),
-                new Players().getOptions(controller),
+                count.getOption(controller),
+                settings.getOption(controller),
+                new GameplayTweaks().getOption(controller),
+                new Players().getOption(controller),
         };
 
         options = new Option[] {
@@ -74,10 +73,10 @@ public class TestConsoleReader {
         };
     }
 
-    public static void start(ServerController controller) {
+    public static void start(ServerConsoleController controller) {
         TestConsoleReader.controller = controller;
         buildMenu();
-        (new Thread(new ConsoleReader(options))).start();
+        (new Thread(new ConsoleReader(controller, options))).start();
         // TODO - How to tell when ready to receive commands?
     }
 

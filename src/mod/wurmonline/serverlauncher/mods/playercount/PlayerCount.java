@@ -93,7 +93,7 @@ public class PlayerCount implements WurmMod, WurmUIMod, Initializable, WurmComma
     }
 
     @Override
-    public Option getOptions(ServerController controller) {
+    public Option getOption(ServerController controller) {
         return new Menu("online_players", "Online Player Information.", new Option[] {
                 new Command("count", "Count logged in players.") {
                     @Override

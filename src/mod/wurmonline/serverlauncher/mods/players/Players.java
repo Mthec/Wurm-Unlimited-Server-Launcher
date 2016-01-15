@@ -141,7 +141,7 @@ public class Players implements WurmMod, WurmUIMod, Configurable, WurmCommandLin
     }
 
     @Override
-    public Option getOptions(ServerController controller) {
+    public Option getOption(ServerController controller) {
         if (controller != null && controller.isInitialized()) {
             return new PlayerMenu("players", "Player Entries", players_messages);
         } else {
