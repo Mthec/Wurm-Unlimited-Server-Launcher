@@ -15,6 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerController;
+import mod.wurmonline.serverlauncher.consolereader.Command;
 import mod.wurmonline.serverlauncher.consolereader.Option;
 import mod.wurmonline.serverlauncher.gui.ServerGuiController;
 import org.gotti.wurmunlimited.modloader.interfaces.Configurable;
@@ -23,6 +24,7 @@ import org.gotti.wurmunlimited.modloader.interfaces.WurmMod;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmUIMod;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -140,6 +142,15 @@ public class Players implements WurmMod, WurmUIMod, Configurable, WurmCommandLin
 
     @Override
     public Option getOptions(ServerController controller) {
-        return new PlayerMenu("players", "Player Entries", players_messages);
+        if (controller != null && controller.isInitialized()) {
+            return new PlayerMenu("players", "Player Entries", players_messages);
+        } else {
+            return new Command("players", "Player Entries") {
+                @Override
+                public String action(List<String> tokens) {
+                    return "Please select a server first.";
+                }
+            };
+        }
     }
 }

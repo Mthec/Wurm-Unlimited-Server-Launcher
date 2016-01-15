@@ -14,6 +14,11 @@ public class ServerControls {
 
     // TODO - Change to ServerController when gui separation is complete.  Or possibly sooner.
     public static Option[] getOptions(ServerConsoleController controller) {
+        if (controller == null) {
+            // TODO - Temp
+            System.err.println("ServerController shouldn't be null!");
+            System.exit(-1);
+        }
         List<String> servers = getServersTemp();
         Command[] serverOptions = new Command[servers.size()];
         String server;

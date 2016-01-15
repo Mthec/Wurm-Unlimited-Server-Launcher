@@ -26,8 +26,7 @@ public class TestConsoleReader {
                 count.getOptions(controller),
                 settings.getOptions(controller),
                 new GameplayTweaks().getOptions(controller),
-                // TODO - Doesn't like it if the server isn't started.
-                //new Players().getOptions(controller),
+                new Players().getOptions(controller),
         };
 
         options = new Option[] {
