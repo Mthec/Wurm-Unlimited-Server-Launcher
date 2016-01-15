@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// TODO - Add player deletion.
 public class Players implements WurmMod, WurmUIMod, Configurable, WurmCommandLine {
     Logger logger = Logger.getLogger(Players.class.getName());
     String name;

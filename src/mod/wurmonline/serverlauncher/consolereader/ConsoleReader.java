@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 // TODO - Convert strings to locales.
 // TODO - Add logging.
+// TODO - Create ServerControls.
 public class ConsoleReader implements Runnable {
     private static Logger logger = Logger.getLogger(ConsoleReader.class.getName());
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -97,7 +98,6 @@ public class ConsoleReader implements Runnable {
                     throw new NoSuchOption(nextLine);
                 }
             } catch (NoSuchOption ex) {
-                // TODO - Should be in NoSuchOption?
                 System.err.println("Unknown command - " + ex.option);
             }
         } while (nextLine != null);

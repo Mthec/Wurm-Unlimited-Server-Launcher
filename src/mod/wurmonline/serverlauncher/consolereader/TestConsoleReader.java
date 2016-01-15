@@ -1,5 +1,7 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import com.sun.deploy.util.ArrayUtil;
+import mod.wurmonline.serverlauncher.ServerConsoleController;
 import mod.wurmonline.serverlauncher.ServerController;
 import mod.wurmonline.serverlauncher.mods.gameplaytweaks.GameplayTweaks;
 import mod.wurmonline.serverlauncher.mods.playercount.PlayerCount;
@@ -24,7 +26,8 @@ public class TestConsoleReader {
                 count.getOptions(controller),
                 settings.getOptions(controller),
                 new GameplayTweaks().getOptions(controller),
-                new Players().getOptions(controller),
+                // TODO - Doesn't like it if the server isn't started.
+                //new Players().getOptions(controller),
         };
 
         options = new Option[] {
@@ -67,8 +70,8 @@ public class TestConsoleReader {
                         }
                     }
                 },
-                new Menu("mods", "Mod Settings",
-                        modOptions),
+                new Menu("mods", "Mod Settings", modOptions),
+                new Menu("controls", "Server Controls", ServerControls.getOptions((ServerConsoleController) controller))
         };
     }
 
