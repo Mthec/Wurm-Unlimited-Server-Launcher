@@ -77,11 +77,11 @@ public abstract class ServerController {
     }
 
     // Should go in init?
-    public void setMods(List<WurmMod> loadedMods) {
+    public synchronized void setMods(List<WurmMod> loadedMods) {
         mods = loadedMods;
     }
 
-    public void setArguments(SimpleArgumentParser parser) {
+    public synchronized void setArguments(SimpleArgumentParser parser) {
         arguments = parser;
         for (WurmMod mod : mods) {
             if (mod instanceof WurmArgsMod) {
@@ -99,7 +99,7 @@ public abstract class ServerController {
         }
     }
 
-    public boolean shutdown(int time, String reason) {
+    public synchronized boolean shutdown(int time, String reason) {
         if (serverIsRunning()) {
             if (!askConfirmation(server_messages.getString("shutdown_confirm_title"),
                     server_messages.getString("shutdown_confirm_header"),
@@ -449,7 +449,7 @@ public abstract class ServerController {
         return currentServer != null && currentServer.wasStarted();
     }
 
-    public synchronized boolean isInitialized() {
+    public boolean isInitialized() {
         return currentDir.equals("");
     }
 
@@ -465,7 +465,7 @@ public abstract class ServerController {
         }
     }
 
-    boolean locateCurrentDir() {
+    private boolean locateCurrentDir() {
         File startDir = new File(".");
 
         for (File dir : startDir.listFiles()) {
@@ -506,7 +506,7 @@ public abstract class ServerController {
         return false;
     }
 
-    String createStartDirs() {
+    private String createStartDirs() {
         File startDir = new File(".");
         logger.info(server_messages.getString("creating_starting_directories"));
         for (File dir : startDir.listFiles()) {
