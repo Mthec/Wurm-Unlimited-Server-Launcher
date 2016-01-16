@@ -61,7 +61,7 @@ public class ServerControls {
                 new Command("status", "Status of currently selected server.") {
                     @Override
                     public String action(List<String> tokens) {
-                        if (controller.getCurrentDir().equals("")) {
+                        if (!controller.getCurrentDir().equals("")) {
                             // TODO - More information.
                             return String.format(
                                     "Name - %s" + System.lineSeparator() + "%s",

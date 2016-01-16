@@ -449,7 +449,7 @@ public abstract class ServerController {
         return currentServer != null && currentServer.wasStarted();
     }
 
-    public boolean isInitialized() {
+    public synchronized boolean isInitialized() {
         return currentDir.equals("");
     }
 

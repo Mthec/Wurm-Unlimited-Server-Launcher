@@ -4,7 +4,6 @@ import com.ibm.icu.text.MessageFormat;
 import com.wurmonline.server.ServerEntry;
 import com.wurmonline.server.ServerProperties;
 import com.wurmonline.server.Servers;
-import com.wurmonline.server.console.CommandReader;
 import com.wurmonline.server.kingdom.Kingdoms;
 import mod.wurmonline.serverlauncher.consolereader.ConsoleReader;
 
