@@ -173,7 +173,7 @@ public abstract class ServerController {
         return currentDir;
     }
 
-    public void setCurrentDir(String newCurrentDir) throws IOException {
+    public synchronized void setCurrentDir(String newCurrentDir) throws IOException {
         if (newCurrentDir.equals(currentDir)) {
             return;
         }

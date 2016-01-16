@@ -52,9 +52,20 @@ public class ServerControls {
                 new Command("shutdown", "Shutdown currently selected server.") {
                     @Override
                     public String action(List<String> tokens) {
+                        int time = 0;
+                        String reason = "";
+
+                        if (tokens.size() > 1) {
+                            try {
+                                time = Integer.parseInt(tokens.get(0));
+                                reason = String.join(" ", tokens.subList(1, tokens.size()));
+                            } catch (NumberFormatException ex) {
+                                return String.format("%s is not a valid number.", tokens.get(0));
+                            }
+                        }
                         // TODO - Options
                         // TODO - Confirmation
-                        controller.shutdown(0, "");
+                        controller.shutdown(time, reason);
                         return "";
                     }
                 },

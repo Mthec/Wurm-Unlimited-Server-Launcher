@@ -76,7 +76,9 @@ public class TestConsoleReader {
     public static void start(ServerConsoleController controller) {
         TestConsoleReader.controller = controller;
         buildMenu();
-        (new Thread(new ConsoleReader(controller, options))).start();
+        if (controller == null) {
+            (new Thread(new ConsoleReader(options))).start();
+        }
         // TODO - How to tell when ready to receive commands?
     }
 
