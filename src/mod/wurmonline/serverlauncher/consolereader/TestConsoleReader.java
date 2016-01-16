@@ -1,32 +1,18 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+
 import mod.wurmonline.serverlauncher.ServerConsoleController;
 import mod.wurmonline.serverlauncher.ServerController;
-import mod.wurmonline.serverlauncher.mods.gameplaytweaks.GameplayTweaks;
-import mod.wurmonline.serverlauncher.mods.playercount.PlayerCount;
-import mod.wurmonline.serverlauncher.mods.players.Players;
-import mod.wurmonline.serverlauncher.mods.serversettings.ServerSettings;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
 public class TestConsoleReader {
     static Option[] options;
-    static PlayerCount count;
-    static ServerSettings settings;
     static ServerController controller;
 
     public static void buildMenu() {
-        // TODO - Temp
-        count = new PlayerCount();
-        settings = new ServerSettings();
-
-        Option[] modOptions = new Option[] {
-                count.getOption(controller),
-                settings.getOption(controller),
-                new GameplayTweaks().getOption(controller),
-                new Players().getOption(controller),
-        };
 
         options = new Option[] {
                 new Menu("dostuff", "This is a menu, please type \"hello\"",
@@ -68,7 +54,6 @@ public class TestConsoleReader {
                         }
                     }
                 },
-                new Menu("mods", "Mod Settings", modOptions),
                 new Menu("controls", "Server Controls", ServerControls.getOptions((ServerConsoleController) controller))
         };
     }
@@ -76,13 +61,40 @@ public class TestConsoleReader {
     public static void start(ServerConsoleController controller) {
         TestConsoleReader.controller = controller;
         buildMenu();
-        if (controller == null) {
-            (new Thread(new ConsoleReader(options))).start();
-        }
+        (new Thread(new ConsoleReader(controller, options))).start();
         // TODO - How to tell when ready to receive commands?
     }
 
     public static void main(String[] args) {
-        start(null);
+        controller = new FakeController();
+
+        start((ServerConsoleController) controller);
+    }
+
+    static class FakeController extends ServerConsoleController {
+        boolean running = false;
+
+        @Override
+        public void startDB(String dbName) {
+            running = true;
+            System.out.println("Started server!");
+        }
+
+        @Override
+        public synchronized boolean shutdown(int time, String reason) {
+            // TODO - What if server is not running.
+            return true;
+        }
+
+        @Override
+        public synchronized void setCurrentDir(String newCurrentDir) throws IOException {
+            currentDir = newCurrentDir;
+            System.out.println(String.format("Dir set to - %s", newCurrentDir));
+        }
+
+        @Override
+        public boolean serverIsRunning() {
+            return running;
+        }
     }
 }
