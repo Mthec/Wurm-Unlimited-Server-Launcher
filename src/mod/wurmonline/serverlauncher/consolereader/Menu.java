@@ -11,6 +11,7 @@ public class Menu implements Option {
     private String name;
     private String text;
     private String listText;
+    private Menu parent = null;
 
     public Menu(String name, String text, Option[] options) {
         this.name = name;
@@ -18,6 +19,9 @@ public class Menu implements Option {
         for (Option option : options) {
             if (option != null) {
                 this.options.put(option.getName(), option);
+                if (option instanceof Menu) {
+                    ((Menu)option).setParent(this);
+                }
             }
         }
         assert !this.options.isEmpty();
@@ -67,4 +71,8 @@ public class Menu implements Option {
     public String getName() {
         return name;
     }
+
+    public Menu getParent() { return parent; }
+
+    public void setParent(Menu menu) { parent = menu; }
 }

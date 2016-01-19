@@ -43,7 +43,8 @@ public class ConsoleReaderTest {
         for (String command : new String[] {
                 "help",
                 "list",
-                "menu"
+                "menu",
+                "up"
         }) {
             ConsoleReader reader = new ConsoleReader(new Option[]{
                     new Command(command, null) {

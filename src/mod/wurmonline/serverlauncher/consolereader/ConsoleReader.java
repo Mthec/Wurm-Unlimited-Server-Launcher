@@ -96,6 +96,26 @@ public class ConsoleReader implements Runnable {
                             tokens.clear();
                             continue;
                         }
+                    } else if (tokens.get(0).equals("up")) {
+                        Menu nextMenu = currentMenu.getParent();
+                        if (nextMenu == null) {
+                            option = currentMenu;
+                            // TODO - Reword;
+                            System.err.println("Cannot go up a level.");
+                            tokens.clear();
+                            break;
+                        } else {
+                            currentMenu = nextMenu;
+                        }
+                        option = currentMenu;
+                        if (tokens.size() > 1) {
+                            tokens.remove(0);
+                            continue;
+                        } else {
+                            System.out.println(currentMenu.action(tokens));
+                            tokens.clear();
+                            continue;
+                        }
                     }
 
                     option = currentMenu.getOption(tokens.remove(0));
