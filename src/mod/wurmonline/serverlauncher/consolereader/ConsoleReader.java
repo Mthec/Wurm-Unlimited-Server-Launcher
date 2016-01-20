@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 // TODO - Convert strings to locales.
 // TODO - Add logging.
-// TODO - Create ServerControls.
 public class ConsoleReader implements Runnable {
     private static Logger logger = Logger.getLogger(ConsoleReader.class.getName());
     ServerController controller;
@@ -21,6 +20,7 @@ public class ConsoleReader implements Runnable {
     Menu topMenu;
     Menu currentMenu = null;
 
+    // TODO - Decide which constructors are necessary.
     public ConsoleReader(ServerConsoleController controller) {
         this.controller = controller;
         buildMenu();
@@ -152,6 +152,7 @@ public class ConsoleReader implements Runnable {
         Set<String> set = new HashSet<>();
         for (Option option : options) {
             if (!set.add(option.getName())) {
+                // TODO - Reserved words.
                 logger.severe(String.format("Duplicate menu item found - %s.", option.getName()));
                 System.exit(-1);
             }

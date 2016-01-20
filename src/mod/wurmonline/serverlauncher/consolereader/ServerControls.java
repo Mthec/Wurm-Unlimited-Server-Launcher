@@ -65,7 +65,6 @@ public class ServerControls {
                                 return String.format("%s is not a valid number.", tokens.get(0));
                             }
                         }
-                        // TODO - Options
                         // TODO - Confirmation
                         controller.shutdown(time, reason);
                         return "";
