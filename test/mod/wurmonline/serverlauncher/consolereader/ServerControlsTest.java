@@ -1,15 +1,19 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
 import static org.mockito.Mockito.*;
+
+import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static org.junit.Assert.*;
 
 public class ServerControlsTest {
+    ResourceBundle messages = LocaleHelper.getBundle("ConsoleReader");
     String name = "name";
 
     @Test
@@ -46,7 +50,7 @@ public class ServerControlsTest {
         ServerConsoleController fakeController = mock(ServerConsoleController.class);
         Command option = (Command)new ServerControls().getOptions(fakeController)[3].getOption("Adventure");
 
-        assertEquals("Adventure selected", option.action(new ArrayList<>()));
+        assertEquals("Adventure " + messages.getString("selected_folder").split(" ")[1], option.action(new ArrayList<>()));
         verify(fakeController).setCurrentDir("Adventure");
     }
 

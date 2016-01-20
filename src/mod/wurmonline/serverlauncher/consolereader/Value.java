@@ -1,5 +1,6 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import com.ibm.icu.text.MessageFormat;
 import com.wurmonline.server.ServerEntry;
 import com.wurmonline.server.Servers;
 import mod.wurmonline.serverlauncher.ServerController;
@@ -24,18 +25,18 @@ public abstract class Value extends Command {
             // TODO - Change to get server when gui separation is complete.
             ServerEntry current = Servers.localServer;
             if (tokens.isEmpty()) {
-                return this.getName() + " is currently - " + this.get(current);
+                return MessageFormat.format(messages.getString("current_value"), this.getName(), this.get(current));
             } else {
                 if (controller != null && controller.serverIsRunning()) {
-                    return "Server is running, values cannot be changed.";
+                    return messages.getString("server_running");
                 }
                 // TODO - Exceptions?
                 try {
                     this.set(current, tokens);
                 } catch (InvalidValue ex) {
-                    return "Invalid value - " + ex.value + " " + ex.message;
+                    return MessageFormat.format(messages.getString("invalid_value"), ex.value, ex.message);
                 }
-                return this.getName() + " set to - " + this.get(current);
+                return MessageFormat.format(messages.getString("set_value"), this.getName(), this.get(current));
             }
         } catch (NullPointerException ex) {
             ex.printStackTrace();

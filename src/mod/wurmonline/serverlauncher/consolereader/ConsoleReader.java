@@ -1,5 +1,7 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import com.ibm.icu.text.MessageFormat;
+import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
 import mod.wurmonline.serverlauncher.ServerController;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmCommandLine;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 // TODO - Add logging.
 public class ConsoleReader implements Runnable {
     private static Logger logger = Logger.getLogger(ConsoleReader.class.getName());
+    static ResourceBundle messages = LocaleHelper.getBundle("ConsoleReader");
     ServerController controller;
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     Menu topMenu;
@@ -28,13 +31,13 @@ public class ConsoleReader implements Runnable {
 
     ConsoleReader(ServerConsoleController controller, Option[] options) {
         this.controller = controller;
-        topMenu = new Menu("menu", "Wurm Server Controller - Main Menu", options);
+        topMenu = new Menu("menu", messages.getString("top_menu_text"), options);
         System.out.println(topMenu.action(null));
     }
 
     // For testing.
     ConsoleReader(Option[] options) {
-        topMenu = new Menu("menu", "Wurm Server Controller - Main Menu", options);
+        topMenu = new Menu("menu", messages.getString("top_menu_text"), options);
         System.out.println(topMenu.action(null));
     }
 
@@ -101,7 +104,7 @@ public class ConsoleReader implements Runnable {
                         if (nextMenu == null) {
                             option = currentMenu;
                             // TODO - Reword;
-                            System.err.println("Cannot go up a level.");
+                            System.err.println(messages.getString("top_menu_reached"));
                             tokens.clear();
                             break;
                         } else {
@@ -134,7 +137,7 @@ public class ConsoleReader implements Runnable {
                     throw new NoSuchOption(nextLine);
                 }
             } catch (NoSuchOption ex) {
-                System.err.println("Unknown command - " + ex.option);
+                System.err.println(MessageFormat.format(messages.getString("option_not_found"), ex.option));
             }
         } while (nextLine != null);
     }
@@ -153,12 +156,12 @@ public class ConsoleReader implements Runnable {
         for (Option option : options) {
             if (!set.add(option.getName())) {
                 // TODO - Reserved words.
-                logger.severe(String.format("Duplicate menu item found - %s.", option.getName()));
+                logger.severe(MessageFormat.format(messages.getString("duplicate_option"), option.getName()));
                 System.exit(-1);
             }
         }
 
-        topMenu = new Menu("menu", "Wurm Server Controller - Main Menu", options.toArray(new Option[options.size()]));
+        topMenu = new Menu("menu", messages.getString("top_menu_text"), options.toArray(new Option[options.size()]));
         System.out.println(topMenu.action(null));
     }
 

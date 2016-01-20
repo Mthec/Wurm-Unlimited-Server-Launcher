@@ -1,8 +1,12 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import mod.wurmonline.serverlauncher.LocaleHelper;
+
 import java.util.List;
+import java.util.ResourceBundle;
 
 public abstract class Command implements Option {
+    static ResourceBundle messages = LocaleHelper.getBundle("ConsoleReader");
     String helpText;
     String name;
 
@@ -16,7 +20,8 @@ public abstract class Command implements Option {
 
     @Override
     public Option getOption(String input) {
-        throw new UnsupportedOperationException("Command object cannot be asked.");
+        assert messages != null;
+        throw new UnsupportedOperationException(messages.getString("command_has_no_options"));
     }
 
     @Override

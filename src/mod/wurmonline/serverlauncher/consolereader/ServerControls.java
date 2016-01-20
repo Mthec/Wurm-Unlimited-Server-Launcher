@@ -1,5 +1,7 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import com.ibm.icu.text.MessageFormat;
+import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
 
 import java.io.File;
@@ -8,8 +10,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class ServerControls {
+    static ResourceBundle messages = LocaleHelper.getBundle("ConsoleReader");
     List<String> names = new ArrayList<>();
 
     // TODO - Change to ServerController when gui separation is complete.  Or possibly sooner.
@@ -38,20 +42,21 @@ public class ServerControls {
                         // HELP!
                     }
                     // Should this respond at all?
-                    return folderName + " selected";
+                    // TODO - Fix null.
+                    return MessageFormat.format(messages.getString("selected_folder"), folderName);
                 }
             };
         }
 
         return new Option[] {
-                new Command("start", "Start the currently selected server.") {
+                new Command("start", messages.getString("start_text")) {
                     @Override
                     public String action(List<String> tokens) {
                         controller.startDB(controller.getCurrentDir());
                         return "";
                     }
                 },
-                new Command("shutdown", "Shutdown currently selected server.") {
+                new Command("shutdown", messages.getString("shutdown_text")) {
                     @Override
                     public String action(List<String> tokens) {
                         int time = 0;
@@ -62,7 +67,7 @@ public class ServerControls {
                                 time = Integer.parseInt(tokens.get(0));
                                 reason = String.join(" ", tokens.subList(1, tokens.size()));
                             } catch (NumberFormatException ex) {
-                                return String.format("%s is not a valid number.", tokens.get(0));
+                                return MessageFormat.format(messages.getString("shutdown_time_invalid_number"), tokens.get(0));
                             }
                         }
                         // TODO - Confirmation
@@ -70,21 +75,24 @@ public class ServerControls {
                         return "";
                     }
                 },
-                new Command("status", "Status of currently selected server.") {
+                new Command("status", messages.getString("status_text")) {
                     @Override
                     public String action(List<String> tokens) {
                         if (!controller.getCurrentDir().equals("")) {
                             // TODO - More information.
-                            return String.format(
-                                    "Name - %s" + System.lineSeparator() + "%s",
+                            // FIXME - How to add os independent newline in .properties file.
+                            return MessageFormat.format(messages.getString("status_result"),
                                     controller.getCurrentDir(),
-                                    controller.serverIsRunning() ? "Server is running." : "Server is not running.");
+                                    System.lineSeparator(),
+                                    controller.serverIsRunning() ?
+                                            messages.getString("status_running") :
+                                            messages.getString("status_not_running"));
                         } else {
-                            return "No server selected.";
+                            return messages.getString("no_server_selected");
                         }
                     }
                 },
-                new Menu("select", "Select a server.", serverOptions),
+                new Menu("select", messages.getString("select_text"), serverOptions),
         };
     }
 

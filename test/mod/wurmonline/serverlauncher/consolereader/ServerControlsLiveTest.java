@@ -32,7 +32,7 @@ public class ServerControlsLiveTest {
         controller = null;
     }
 
-    @Test
+    //@Test
     public void testGetOptionsStart() throws Exception {
         ServerControls controls = new ServerControls();
         controls.getOptions(controller)[3].getOption("Adventure").action(null);

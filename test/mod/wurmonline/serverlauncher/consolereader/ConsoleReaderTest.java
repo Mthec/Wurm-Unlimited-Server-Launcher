@@ -92,7 +92,7 @@ public class ConsoleReaderTest {
         reader.reader = mock(BufferedReader.class);
         when(reader.reader.readLine()).thenReturn(noOption).thenReturn(null);
         reader.run();
-        assertEquals("Unknown command - " + noOption + System.lineSeparator(), errPut.toString());
+        assertEquals("Unknown option - " + noOption + System.lineSeparator(), errPut.toString());
     }
 
     @Test()

@@ -1,12 +1,16 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import mod.wurmonline.serverlauncher.LocaleHelper;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Menu implements Option {
+    static ResourceBundle messages = LocaleHelper.getBundle("ConsoleReader");
     private Map<String, Option> options = new HashMap<>();
     private String name;
     private String text;
@@ -16,25 +20,7 @@ public class Menu implements Option {
     public Menu(String name, String text, Option[] options) {
         this.name = name;
         this.text = text;
-        for (Option option : options) {
-            if (option != null) {
-                this.options.put(option.getName(), option);
-                if (option instanceof Menu) {
-                    ((Menu)option).setParent(this);
-                }
-            }
-        }
-        assert !this.options.isEmpty();
-
-        Predicate<Map.Entry<String, Option>> menusFilter = entry -> entry.getValue() instanceof Menu;
-        String menus = this.options.entrySet().stream().filter(menusFilter).map(Map.Entry::getKey).sorted().collect(Collectors.toList()).toString();
-
-        Predicate<Map.Entry<String, Option>> otherFilter = entry -> !(entry.getValue() instanceof Menu);
-        String other = this.options.entrySet().stream().filter(otherFilter).map(Map.Entry::getKey).sorted().collect(Collectors.toList()).toString();
-
-        listText = String.join(menus.equals("[]") || other.equals("[]") ? "" : System.lineSeparator(),
-                menus.equals("[]") ? "" : "Menu - " + menus,
-                other.equals("[]") ? "" : "Options - " + other);
+        this.setOptions(options);
     }
 
     @Override
@@ -75,4 +61,26 @@ public class Menu implements Option {
     public Menu getParent() { return parent; }
 
     public void setParent(Menu menu) { parent = menu; }
+
+    protected void setOptions(Option[] options) {
+        for (Option option : options) {
+            if (option != null) {
+                this.options.put(option.getName(), option);
+                if (option instanceof Menu) {
+                    ((Menu)option).setParent(this);
+                }
+            }
+        }
+        assert !this.options.isEmpty();
+
+        Predicate<Map.Entry<String, Option>> menusFilter = entry -> entry.getValue() instanceof Menu;
+        String menus = this.options.entrySet().stream().filter(menusFilter).map(Map.Entry::getKey).sorted().collect(Collectors.toList()).toString();
+
+        Predicate<Map.Entry<String, Option>> otherFilter = entry -> !(entry.getValue() instanceof Menu);
+        String other = this.options.entrySet().stream().filter(otherFilter).map(Map.Entry::getKey).sorted().collect(Collectors.toList()).toString();
+
+        listText = String.join(menus.equals("[]") || other.equals("[]") ? "" : System.lineSeparator(),
+                menus.equals("[]") ? "" : messages.getString("menu_prefix") + " " + menus,
+                other.equals("[]") ? "" : messages.getString("other_prefix") + " " + other);
+    }
 }
