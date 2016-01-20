@@ -1,11 +1,14 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import com.wurmonline.server.Servers;
+import com.wurmonline.server.utils.SimpleArgumentParser;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -18,6 +21,7 @@ public class ServerControlsLiveTest {
     @Before
     public void setUp() throws Exception {
         controller = new ServerConsoleController();
+        Servers.argumets = new SimpleArgumentParser(new String[0], new HashSet<>());
     }
 
     @After
@@ -30,25 +34,24 @@ public class ServerControlsLiveTest {
 
     @Test
     public void testGetOptionsStart() throws Exception {
-        new ServerControls().getOptions(controller)[3].getOption("Adventure").action(null);
-        new ServerControls().getOptions(controller)[0].action(null);
-
-        wait(5000);
+        ServerControls controls = new ServerControls();
+        controls.getOptions(controller)[3].getOption("Adventure").action(null);
+        controls.getOptions(controller)[0].action(null);
 
         assertTrue(controller.serverIsRunning());
     }
 
     // TODO - Test parameters.
+    // FIXME - Fix problem with running servers when testing.
     @Test
     public void testGetOptionsShutdown() throws Exception {
-        new ServerControls().getOptions(controller)[3].getOption("Adventure").action(null);
-        new ServerControls().getOptions(controller)[0].action(null);
-
-        wait(5000);
+        ServerControls controls = new ServerControls();
+        controls.getOptions(controller)[3].getOption("Adventure").action(null);
+        controls.getOptions(controller)[0].action(null);
 
         assertTrue(controller.serverIsRunning());
 
-        new ServerControls().getOptions(controller)[3].getOption("Adventure").action(null);
-        new ServerControls().getOptions(controller)[1].action(null);
+        controls.getOptions(controller)[3].getOption("Adventure").action(null);
+        controls.getOptions(controller)[1].action(new ArrayList<>());
     }
 }

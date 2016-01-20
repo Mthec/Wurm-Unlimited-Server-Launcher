@@ -19,6 +19,8 @@ public class ServerControls {
             System.err.println("ServerController shouldn't be null!");
             System.exit(-1);
         }
+        names.clear();
+
         List<String> servers = getServersTemp();
         Command[] serverOptions = new Command[servers.size()];
         String server;

@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 public abstract class ServerController {
     protected Logger logger = Logger.getLogger(ServerController.class.getName());
-    public List<WurmMod> mods;
+    public List<WurmMod> mods = new ArrayList<>();
     public SimpleArgumentParser arguments;
     protected List<ServerEntry> localServers = new ArrayList<>();
     protected List<ServerEntry> remoteServers = new ArrayList<>();
