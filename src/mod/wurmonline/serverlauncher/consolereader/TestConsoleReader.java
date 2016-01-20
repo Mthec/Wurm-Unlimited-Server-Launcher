@@ -54,7 +54,7 @@ public class TestConsoleReader {
                         }
                     }
                 },
-                new Menu("controls", "Server Controls", ServerControls.getOptions((ServerConsoleController) controller))
+                new Menu("controls", "Server Controls", new ServerControls().getOptions((ServerConsoleController) controller))
         };
     }
 

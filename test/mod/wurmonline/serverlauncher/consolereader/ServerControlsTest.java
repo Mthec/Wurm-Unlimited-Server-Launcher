@@ -2,8 +2,6 @@ package mod.wurmonline.serverlauncher.consolereader;
 
 import static org.mockito.Mockito.*;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ public class ServerControlsTest {
     public void testGetOptionsStatusNone() throws Exception {
         ServerConsoleController fakeController = mock(ServerConsoleController.class);
         when(fakeController.getCurrentDir()).thenReturn("");
-        assertEquals("No server selected.", ServerControls.getOptions(fakeController)[2].action(null));
+        assertEquals("No server selected.", new ServerControls().getOptions(fakeController)[2].action(null));
 
         verify(fakeController).getCurrentDir();
     }
@@ -29,7 +27,7 @@ public class ServerControlsTest {
         when(fakeController.getCurrentDir()).thenReturn("Adventure");
         when(fakeController.serverIsRunning()).thenReturn(true);
         assertEquals("Name - Adventure" + System.lineSeparator() + "Server is running.",
-                ServerControls.getOptions(fakeController)[2].action(null));
+                new ServerControls().getOptions(fakeController)[2].action(null));
         verify(fakeController, times(2)).getCurrentDir();
     }
 
@@ -39,14 +37,14 @@ public class ServerControlsTest {
         when(fakeController.getCurrentDir()).thenReturn("Adventure");
         when(fakeController.serverIsRunning()).thenReturn(false);
         assertEquals("Name - Adventure" + System.lineSeparator() + "Server is not running.",
-                ServerControls.getOptions(fakeController)[2].action(null));
+                new ServerControls().getOptions(fakeController)[2].action(null));
         verify(fakeController, times(2)).getCurrentDir();
     }
 
     @Test
     public void testGetOptionsSelect() throws Exception {
         ServerConsoleController fakeController = mock(ServerConsoleController.class);
-        Command option = (Command)ServerControls.getOptions(fakeController)[3].getOption("Adventure");
+        Command option = (Command)new ServerControls().getOptions(fakeController)[3].getOption("Adventure");
 
         assertEquals("Adventure selected", option.action(new ArrayList<>()));
         verify(fakeController).setCurrentDir("Adventure");
@@ -54,14 +52,15 @@ public class ServerControlsTest {
 
     @Test
     public void testGetShortenedName() throws Exception {
-        assertEquals("Thisisatest", ServerControls.getShortenedName("This is a test"));
+        assertEquals("Thisisatest", new ServerControls().getShortenedName("This is a test"));
     }
 
     @Test
     public void testGetShortenedNameDuplicates() throws Exception {
-        ServerControls.getShortenedName(name);
-        ServerControls.getShortenedName(name);
-        assertEquals(name + "2", ServerControls.getShortenedName(name));
+        ServerControls controls = new ServerControls();
+        controls.getShortenedName(name);
+        controls.getShortenedName(name);
+        assertEquals(name + "2", controls.getShortenedName(name));
     }
 
     @Test
@@ -69,6 +68,6 @@ public class ServerControlsTest {
         List<String> servers = new ArrayList<>();
         servers.add("Adventure");
         servers.add("Creative");
-        assertEquals(servers, ServerControls.getServersTemp());
+        assertEquals(servers, new ServerControls().getServersTemp());
     }
 }

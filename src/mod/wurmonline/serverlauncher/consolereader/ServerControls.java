@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServerControls {
-    static List<String> names = new ArrayList<>();
+    List<String> names = new ArrayList<>();
 
     // TODO - Change to ServerController when gui separation is complete.  Or possibly sooner.
-    public static Option[] getOptions(ServerConsoleController controller) {
+    public Option[] getOptions(ServerConsoleController controller) {
         if (controller == null) {
             // TODO - Temp
             System.err.println("ServerController shouldn't be null!");
@@ -87,7 +87,7 @@ public class ServerControls {
         };
     }
 
-    public static String getShortenedName(String serverName) {
+    public String getShortenedName(String serverName) {
         String name = serverName.replace(" ", "");
         if (names.contains(name)) {
             int num = 1;
@@ -103,7 +103,7 @@ public class ServerControls {
     }
 
     // TODO - Replace with servers from controller once gui separation is complete.
-    public static List<String> getServersTemp() {
+    public List<String> getServersTemp() {
         List<String> servers = new ArrayList<>();
         Path currentRelativePath = Paths.get("");
         File currentDirectory = new File(currentRelativePath.toAbsolutePath().toString());

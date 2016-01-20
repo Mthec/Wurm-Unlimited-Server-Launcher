@@ -30,8 +30,8 @@ public class ServerControlsLiveTest {
 
     @Test
     public void testGetOptionsStart() throws Exception {
-        ServerControls.getOptions(controller)[3].getOption("Adventure").action(null);
-        ServerControls.getOptions(controller)[0].action(null);
+        new ServerControls().getOptions(controller)[3].getOption("Adventure").action(null);
+        new ServerControls().getOptions(controller)[0].action(null);
 
         wait(5000);
 
@@ -41,14 +41,14 @@ public class ServerControlsLiveTest {
     // TODO - Test parameters.
     @Test
     public void testGetOptionsShutdown() throws Exception {
-        ServerControls.getOptions(controller)[3].getOption("Adventure").action(null);
-        ServerControls.getOptions(controller)[0].action(null);
+        new ServerControls().getOptions(controller)[3].getOption("Adventure").action(null);
+        new ServerControls().getOptions(controller)[0].action(null);
 
         wait(5000);
 
         assertTrue(controller.serverIsRunning());
 
-        ServerControls.getOptions(controller)[3].getOption("Adventure").action(null);
-        ServerControls.getOptions(controller)[1].action(null);
+        new ServerControls().getOptions(controller)[3].getOption("Adventure").action(null);
+        new ServerControls().getOptions(controller)[1].action(null);
     }
 }

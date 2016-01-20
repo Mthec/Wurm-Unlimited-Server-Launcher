@@ -147,7 +147,7 @@ public class ConsoleReader implements Runnable {
 
     void buildMenu() {
         List<Option> options = new ArrayList<>();
-        Collections.addAll(options, ServerControls.getOptions((ServerConsoleController) controller));
+        Collections.addAll(options, new ServerControls().getOptions((ServerConsoleController) controller));
         options.addAll(controller.mods.stream().filter(mod -> mod instanceof WurmCommandLine).map(mod -> ((WurmCommandLine) mod).getOption(controller)).collect(Collectors.toList()));
         Set<String> set = new HashSet<>();
         for (Option option : options) {
