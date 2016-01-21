@@ -12,6 +12,7 @@ public class TestConsoleReader {
     static Option[] options;
     static ServerController controller;
 
+    @Deprecated
     public static void buildMenu() {
 
         options = new Option[] {
@@ -53,15 +54,15 @@ public class TestConsoleReader {
                             return String.join(" ", tokens) + " is " + strings[random.nextInt(2)] + ".";
                         }
                     }
-                },
-                new Menu("controls", "Server Controls", new ServerControls().getOptions((ServerConsoleController) controller))
+                }
         };
     }
 
     public static void start(ServerConsoleController controller) {
         TestConsoleReader.controller = controller;
-        buildMenu();
-        (new Thread(new ConsoleReader(controller, options))).start();
+        //buildMenu();
+        //(new Thread(new ConsoleReader(controller, options))).start();
+        (new Thread(new ConsoleReader(controller))).start();
         // TODO - How to tell when ready to receive commands?
     }
 
