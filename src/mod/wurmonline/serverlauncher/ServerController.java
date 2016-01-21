@@ -424,6 +424,10 @@ public abstract class ServerController {
         return confirm;
     }
 
+    public void loadAllServers() {
+        loadAllServers(true);
+    }
+
     protected void loadAllServers(boolean reload) {
         localServers.clear();
         remoteServers.clear();
@@ -441,7 +445,10 @@ public abstract class ServerController {
                 remoteServers.add(server);
             }
         }
+    }
 
+    public ServerEntry getLocalServer() {
+        return Servers.localServer;
     }
 
     public boolean serverIsRunning() {

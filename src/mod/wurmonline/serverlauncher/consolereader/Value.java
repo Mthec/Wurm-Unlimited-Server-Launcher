@@ -2,7 +2,6 @@ package mod.wurmonline.serverlauncher.consolereader;
 
 import com.ibm.icu.text.MessageFormat;
 import com.wurmonline.server.ServerEntry;
-import com.wurmonline.server.Servers;
 import mod.wurmonline.serverlauncher.ServerController;
 
 import java.util.List;
@@ -23,12 +22,15 @@ public abstract class Value extends Command {
     public String action(List<String> tokens) {
         try {
             // TODO - Change to get server when gui separation is complete.
-            if (!controller.isInitialized()) {
-                return messages.getString("no_server_selected");
-            }
-            ServerEntry current = Servers.localServer;
-            if (current == null) {
-                return messages.getString("server_not_found");
+            ServerEntry current = null;
+            if (controller != null) {
+                if (!controller.isInitialized()) {
+                    return messages.getString("no_server_selected");
+                }
+                current = controller.getLocalServer();
+                if (current == null) {
+                    return messages.getString("no_server_found");
+                }
             }
             if (tokens.isEmpty()) {
                 return MessageFormat.format(messages.getString("current_value"), this.getName(), this.get(current));

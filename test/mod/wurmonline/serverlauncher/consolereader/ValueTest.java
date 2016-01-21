@@ -1,7 +1,7 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
-import static org.mockito.Mockito.*;
 import com.wurmonline.server.ServerEntry;
+import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerController;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,10 +10,13 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class ValueTest {
+    ResourceBundle messages = LocaleHelper.getBundle("ConsoleReader");
     String name = "name";
     String aValue = "value";
     String newValue = "not a value";
@@ -75,8 +78,28 @@ public class ValueTest {
     }
 
     @Test
+    public void testActionServerNotInitialized() throws Exception {
+        ServerController fakeServer = mock(ServerController.class);
+        when(fakeServer.isInitialized()).thenReturn(false);
+        Value value = new Value(name, "", fakeServer) {
+            @Override
+            protected String get(ServerEntry server) { return ""; }
+
+            @Override
+            protected void set(ServerEntry server, List<String> tokens) throws InvalidValue {}
+        };
+        List<String> newTokens = new ArrayList<>();
+        newTokens.add(newValue);
+        assertEquals(messages.getString("no_server_selected"), value.action(newTokens));
+
+        verify(fakeServer).isInitialized();
+    }
+
+    @Test
     public void testActionServerRunning() throws Exception {
         ServerController fakeServer = mock(ServerController.class);
+        when(fakeServer.isInitialized()).thenReturn(true);
+        when(fakeServer.getLocalServer()).thenReturn(new ServerEntry());
         when(fakeServer.serverIsRunning()).thenReturn(true);
         Value value = new Value(name, "", fakeServer) {
             @Override
@@ -87,7 +110,7 @@ public class ValueTest {
         };
         List<String> newTokens = new ArrayList<>();
         newTokens.add(newValue);
-        assertEquals("Server is running, values cannot be changed.", value.action(newTokens));
+        assertEquals(messages.getString("server_running"), value.action(newTokens));
     }
 
     @Test
