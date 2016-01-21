@@ -1,6 +1,7 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
 import com.ibm.icu.text.MessageFormat;
+import com.wurmonline.server.Servers;
 import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
 
@@ -38,6 +39,8 @@ public class ServerControls {
                 public String action(List<String> tokens) throws RebuildRequired {
                     try {
                         controller.setCurrentDir(folderName);
+                        // TODO - How to wait, only possible when gui separation and rewrite are done?
+                        Servers.loadAllServers(true);
                         throw new RebuildRequired();
                     } catch (IOException ex) {
                         ex.printStackTrace();
