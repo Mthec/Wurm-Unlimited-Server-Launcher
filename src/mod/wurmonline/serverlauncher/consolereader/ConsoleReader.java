@@ -125,7 +125,7 @@ public class ConsoleReader implements Runnable {
                     option = currentMenu.getOption(tokens.remove(0));
 
                     if (option instanceof Menu) {
-                        currentMenu = (Menu) option;
+                        currentMenu = ((Menu)option).get();
                         if (tokens.isEmpty()) {
                             System.out.println(option.action(tokens));
                         }

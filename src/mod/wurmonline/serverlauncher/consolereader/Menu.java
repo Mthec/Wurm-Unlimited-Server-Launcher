@@ -83,4 +83,8 @@ public class Menu implements Option {
                 menus.equals("[]") ? "" : messages.getString("menu_prefix") + " " + menus,
                 other.equals("[]") ? "" : messages.getString("other_prefix") + " " + other);
     }
+
+    public Menu get() {
+        return this;
+    }
 }
