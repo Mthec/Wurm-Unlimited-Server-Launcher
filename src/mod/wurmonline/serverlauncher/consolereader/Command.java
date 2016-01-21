@@ -21,7 +21,7 @@ public abstract class Command implements Option {
     @Override
     public Option getOption(String input) {
         assert messages != null;
-        throw new UnsupportedOperationException(messages.getString("command_has_no_options"));
+        throw new UnsupportedOperationException("Command object does not have any options to get.");
     }
 
     @Override
