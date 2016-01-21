@@ -450,7 +450,7 @@ public abstract class ServerController {
     }
 
     public boolean isInitialized() {
-        return currentDir.equals("");
+        return !currentDir.equals("");
     }
 
     protected void setup() {

@@ -2,6 +2,7 @@ package mod.wurmonline.serverlauncher.consolereader;
 
 import static org.mockito.Mockito.*;
 
+import com.ibm.icu.text.MessageFormat;
 import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
 import org.junit.Test;
@@ -17,40 +18,71 @@ public class ServerControlsTest {
     String name = "name";
 
     @Test
-    public void testGetOptionsStatusNone() throws Exception {
+    public void testGetOptionsStartNotSelected() throws Exception {
         ServerConsoleController fakeController = mock(ServerConsoleController.class);
         when(fakeController.getCurrentDir()).thenReturn("");
-        assertEquals("No server selected.", new ServerControls().getOptions(fakeController)[2].action(null));
+        Command start = (Command)new ServerControls().getOptions(fakeController)[0];
+        assert start.getName().equals("start");
 
-        verify(fakeController).getCurrentDir();
+        assertEquals("No server selected.", start.action(null));
+        // Choose between start and shutdown.
+        verify(fakeController).serverIsRunning();
+        // start
+        verify(fakeController).isInitialized();
+    }
+
+    @Test
+    public void testGetOptionsStatusNone() throws Exception {
+        ServerConsoleController fakeController = mock(ServerConsoleController.class);
+        when(fakeController.isInitialized()).thenReturn(false);
+        Command status = (Command)new ServerControls().getOptions(fakeController)[1];
+        assert status.getName().equals("status");
+
+        assertEquals("No server selected.", status.action(null));
+
+        verify(fakeController).isInitialized();
     }
 
     @Test
     public void testGetOptionsStatusRunning() throws Exception {
         ServerConsoleController fakeController = mock(ServerConsoleController.class);
-        when(fakeController.getCurrentDir()).thenReturn("Adventure");
+        when(fakeController.isInitialized()).thenReturn(true);
         when(fakeController.serverIsRunning()).thenReturn(true);
-        assertEquals("Name - Adventure" + System.lineSeparator() + "Server is running.",
-                new ServerControls().getOptions(fakeController)[2].action(null));
-        verify(fakeController, times(2)).getCurrentDir();
+        when(fakeController.getCurrentDir()).thenReturn("Adventure");
+        Command status = (Command)new ServerControls().getOptions(fakeController)[1];
+        assert status.getName().equals("status");
+
+        assertEquals(MessageFormat.format(messages.getString("status_result"), "Adventure", System.lineSeparator(), messages.getString("status_running")), status.action(null));
+
+        // Once for start/shutdown check, once for actual test.
+        verify(fakeController, times(2)).serverIsRunning();
+        verify(fakeController).isInitialized();
+        verify(fakeController).getCurrentDir();
     }
 
     @Test
     public void testGetOptionsStatusNotRunning() throws Exception {
         ServerConsoleController fakeController = mock(ServerConsoleController.class);
-        when(fakeController.getCurrentDir()).thenReturn("Adventure");
+        when(fakeController.isInitialized()).thenReturn(true);
         when(fakeController.serverIsRunning()).thenReturn(false);
-        assertEquals("Name - Adventure" + System.lineSeparator() + "Server is not running.",
-                new ServerControls().getOptions(fakeController)[2].action(null));
-        verify(fakeController, times(2)).getCurrentDir();
+        when(fakeController.getCurrentDir()).thenReturn("Adventure");
+        Command status = (Command)new ServerControls().getOptions(fakeController)[1];
+        assert status.getName().equals("status");
+
+        assertEquals(MessageFormat.format(messages.getString("status_result"), "Adventure", System.lineSeparator(), messages.getString("status_not_running")), status.action(null));
+
+        // Once for start/shutdown check, once for actual test.
+        verify(fakeController, times(2)).serverIsRunning();
+        verify(fakeController).isInitialized();
+        verify(fakeController).getCurrentDir();
     }
 
-    @Test
+    @Test(expected = RebuildRequired.class)
     public void testGetOptionsSelect() throws Exception {
         ServerConsoleController fakeController = mock(ServerConsoleController.class);
-        Command option = (Command)new ServerControls().getOptions(fakeController)[3].getOption("Adventure");
+        Command option = (Command)new ServerControls().getOptions(fakeController)[2].getOption("Adventure");
 
-        assertEquals("Adventure " + messages.getString("selected_folder").split(" ")[1], option.action(new ArrayList<>()));
+        option.action(new ArrayList<>());
         verify(fakeController).setCurrentDir("Adventure");
     }
 

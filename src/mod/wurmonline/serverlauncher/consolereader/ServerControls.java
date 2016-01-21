@@ -33,6 +33,7 @@ public class ServerControls {
             // TODO - server.getName(), String.format("Name - %s, id - %s", server.getName(), server.getId())
             serverOptions[i] = new Command(getShortenedName(server), server) {
                 String folderName = this.help();
+
                 @Override
                 public String action(List<String> tokens) throws RebuildRequired {
                     try {
@@ -49,52 +50,59 @@ public class ServerControls {
             };
         }
 
-        return new Option[] {
-                new Command("start", messages.getString("start_text")) {
-                    @Override
-                    public String action(List<String> tokens) {
+        Option[] options = new Option[3];
+        if (!controller.serverIsRunning()) {
+            options[0] = new Command("start", messages.getString("start_text")) {
+                @Override
+                public String action(List<String> tokens) throws RebuildRequired {
+                    if (controller.isInitialized()) {
                         controller.startDB(controller.getCurrentDir());
-                        return "";
+                        throw new RebuildRequired();
                     }
-                },
-                new Command("shutdown", messages.getString("shutdown_text")) {
-                    @Override
-                    public String action(List<String> tokens) {
-                        int time = 0;
-                        String reason = "";
+                    return messages.getString("no_server_selected");
+                }
+            };
+        } else {
+            options[0] = new Command("shutdown", messages.getString("shutdown_text")) {
+                @Override
+                public String action(List<String> tokens) throws RebuildRequired {
+                    int time = 0;
+                    String reason = "";
 
-                        if (tokens.size() > 1) {
-                            try {
-                                time = Integer.parseInt(tokens.get(0));
-                                reason = String.join(" ", tokens.subList(1, tokens.size()));
-                            } catch (NumberFormatException ex) {
-                                return MessageFormat.format(messages.getString("shutdown_time_invalid_number"), tokens.get(0));
-                            }
-                        }
-                        // TODO - Confirmation
-                        controller.shutdown(time, reason);
-                        return "";
-                    }
-                },
-                new Command("status", messages.getString("status_text")) {
-                    @Override
-                    public String action(List<String> tokens) {
-                        if (!controller.getCurrentDir().equals("")) {
-                            // TODO - More information.
-                            // FIXME - How to add os independent newline in .properties file.
-                            return MessageFormat.format(messages.getString("status_result"),
-                                    controller.getCurrentDir(),
-                                    System.lineSeparator(),
-                                    controller.serverIsRunning() ?
-                                            messages.getString("status_running") :
-                                            messages.getString("status_not_running"));
-                        } else {
-                            return messages.getString("no_server_selected");
+                    if (tokens.size() > 1) {
+                        try {
+                            time = Integer.parseInt(tokens.get(0));
+                            reason = String.join(" ", tokens.subList(1, tokens.size()));
+                        } catch (NumberFormatException ex) {
+                            return MessageFormat.format(messages.getString("shutdown_time_invalid_number"), tokens.get(0));
                         }
                     }
-                },
-                new Menu("select", messages.getString("select_text"), serverOptions),
+                    // TODO - Confirmation
+                    controller.shutdown(time, reason);
+                    // TODO - How to handle shutdown until gui separation is completed?
+                    throw new RebuildRequired();
+                }
+            };
+        }
+        options[1] = new Command("status", messages.getString("status_text")) {
+            @Override
+            public String action(List<String> tokens) {
+                if (controller.isInitialized()) {
+                    // TODO - More information.
+                    // FIXME - How to add os independent newline in .properties file.
+                    return MessageFormat.format(messages.getString("status_result"),
+                            controller.getCurrentDir(),
+                            System.lineSeparator(),
+                            controller.serverIsRunning() ?
+                                    messages.getString("status_running") :
+                                    messages.getString("status_not_running"));
+                } else {
+                    return messages.getString("no_server_selected");
+                }
+            }
         };
+        options[2] = new Menu("select", messages.getString("select_text"), serverOptions);
+        return options;
     }
 
     public String getShortenedName(String serverName) {
