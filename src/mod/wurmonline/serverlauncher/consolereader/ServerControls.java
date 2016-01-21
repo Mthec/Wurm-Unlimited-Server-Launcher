@@ -34,16 +34,17 @@ public class ServerControls {
             serverOptions[i] = new Command(getShortenedName(server), server) {
                 String folderName = this.help();
                 @Override
-                public String action(List<String> tokens) {
+                public String action(List<String> tokens) throws RebuildRequired {
                     try {
                         controller.setCurrentDir(folderName);
+                        throw new RebuildRequired();
                     } catch (IOException ex) {
                         ex.printStackTrace();
-                        // HELP!
+                        // TODO - HELP!
+                        // Would happen if folder was deleted after menu creation?
+                        // Should rebuild?
+                        return "Uh-oh, why did this happen?";
                     }
-                    // Should this respond at all?
-                    // TODO - Fix null.
-                    return MessageFormat.format(messages.getString("selected_folder"), folderName);
                 }
             };
         }

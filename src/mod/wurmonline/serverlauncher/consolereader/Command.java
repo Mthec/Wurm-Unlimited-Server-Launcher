@@ -16,7 +16,7 @@ public abstract class Command implements Option {
     }
 
     @Override
-    public abstract String action(List<String> tokens);
+    public abstract String action(List<String> tokens) throws RebuildRequired;
 
     @Override
     public Option getOption(String input) {

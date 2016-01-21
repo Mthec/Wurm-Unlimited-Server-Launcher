@@ -13,8 +13,8 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-// TODO - Convert strings to locales.
 // TODO - Add logging.
+// TODO - Database controls.
 public class ConsoleReader implements Runnable {
     private static Logger logger = Logger.getLogger(ConsoleReader.class.getName());
     static ResourceBundle messages = LocaleHelper.getBundle("ConsoleReader");
@@ -62,6 +62,7 @@ public class ConsoleReader implements Runnable {
                     System.exit(1);
                 }
 
+                // TODO - Is this needed?
                 if (currentMenu == null) {
                     currentMenu = topMenu;
                 }
@@ -138,6 +139,9 @@ public class ConsoleReader implements Runnable {
                 }
             } catch (NoSuchOption ex) {
                 System.err.println(MessageFormat.format(messages.getString("option_not_found"), ex.option));
+            } catch (RebuildRequired ex) {
+                System.out.println(messages.getString("rebuilding"));
+                buildMenu();
             }
         } while (nextLine != null);
     }
@@ -162,6 +166,7 @@ public class ConsoleReader implements Runnable {
         }
 
         topMenu = new Menu("menu", messages.getString("top_menu_text"), options.toArray(new Option[options.size()]));
+        currentMenu = topMenu;
         System.out.println(topMenu.action(null));
     }
 
