@@ -3,6 +3,7 @@ package mod.wurmonline.serverlauncher.consolereader;
 import com.wurmonline.server.ServerEntry;
 import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerController;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.InvalidValue;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

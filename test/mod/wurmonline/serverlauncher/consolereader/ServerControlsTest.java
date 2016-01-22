@@ -1,17 +1,17 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
-import static org.mockito.Mockito.*;
-
 import com.ibm.icu.text.MessageFormat;
 import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.RebuildRequired;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class ServerControlsTest {
     ResourceBundle messages = LocaleHelper.getBundle("ConsoleReader");

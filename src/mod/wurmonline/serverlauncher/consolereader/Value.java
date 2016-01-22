@@ -3,6 +3,7 @@ package mod.wurmonline.serverlauncher.consolereader;
 import com.ibm.icu.text.MessageFormat;
 import com.wurmonline.server.ServerEntry;
 import mod.wurmonline.serverlauncher.ServerController;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.InvalidValue;
 
 import java.util.List;
 

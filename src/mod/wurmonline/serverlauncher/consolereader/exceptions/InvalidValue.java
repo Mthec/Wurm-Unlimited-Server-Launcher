@@ -1,8 +1,8 @@
-package mod.wurmonline.serverlauncher.consolereader;
+package mod.wurmonline.serverlauncher.consolereader.exceptions;
 
 public class InvalidValue extends Exception {
-    String value;
-    String message;
+    public String value;
+    public String message;
 
     public InvalidValue(String value, String message) {
         this.value = value;

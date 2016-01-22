@@ -1,6 +1,12 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
 import mod.wurmonline.serverlauncher.ServerConsoleController;
+import mod.wurmonline.serverlauncher.ServerController;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.DuplicateOptionException;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.RebuildRequired;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.ReservedOptionException;
+import org.gotti.wurmunlimited.modloader.interfaces.WurmCommandLine;
+import org.gotti.wurmunlimited.modloader.interfaces.WurmMod;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,6 +55,49 @@ public class ConsoleReaderTest {
         when(reader.reader.readLine()).thenReturn(null);
         reader.run();
         assertEquals(reader.topMenu.help() + System.lineSeparator(), outPut.toString());
+    }
+
+    @Test(expected = ReservedOptionException.class)
+    public void testReservedOptions() throws Exception {
+        ServerConsoleController controller = mock(ServerConsoleController.class);
+        controller.mods = new ArrayList<>();
+
+        class TestMod implements WurmMod, WurmCommandLine {
+            @Override
+            public Option getOption(ServerController controller) {
+                return new Command("help", null) {
+                    @Override
+                    public String action(List<String> tokens) throws RebuildRequired {
+                        return null;
+                    }
+                };
+            }
+        }
+
+        controller.mods.add(new TestMod());
+        new ConsoleReader(controller);
+    }
+
+    @Test(expected = DuplicateOptionException.class)
+    public void testDuplicateOption() throws Exception {
+        ServerConsoleController controller = mock(ServerConsoleController.class);
+        controller.mods = new ArrayList<>();
+
+        class TestMod implements WurmMod, WurmCommandLine {
+            @Override
+            public Option getOption(ServerController controller) {
+                return new Command(commandOption, null) {
+                    @Override
+                    public String action(List<String> tokens) throws RebuildRequired {
+                        return null;
+                    }
+                };
+            }
+        }
+
+        controller.mods.add(new TestMod());
+        controller.mods.add(new TestMod());
+        new ConsoleReader(controller);
     }
 
     @Test()

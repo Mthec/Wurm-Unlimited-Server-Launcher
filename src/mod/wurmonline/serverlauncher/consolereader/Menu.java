@@ -1,6 +1,7 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
 import mod.wurmonline.serverlauncher.LocaleHelper;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.NoSuchOption;
 
 import java.util.HashMap;
 import java.util.List;

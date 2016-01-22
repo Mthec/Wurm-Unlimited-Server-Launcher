@@ -1,5 +1,6 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import mod.wurmonline.serverlauncher.consolereader.exceptions.NoSuchOption;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

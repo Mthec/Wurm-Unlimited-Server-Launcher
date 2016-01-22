@@ -4,6 +4,10 @@ import com.ibm.icu.text.MessageFormat;
 import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
 import mod.wurmonline.serverlauncher.ServerController;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.DuplicateOptionException;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.NoSuchOption;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.RebuildRequired;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.ReservedOptionException;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmCommandLine;
 
 import java.io.BufferedReader;
@@ -18,18 +22,21 @@ import java.util.stream.Collectors;
 public class ConsoleReader implements Runnable {
     private static Logger logger = Logger.getLogger(ConsoleReader.class.getName());
     static ResourceBundle messages = LocaleHelper.getBundle("ConsoleReader");
+    List<String> RESERVED_OPTIONS;
     ServerController controller;
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     Menu topMenu;
     Menu currentMenu = null;
 
     public ConsoleReader(ServerConsoleController controller) {
+        RESERVED_OPTIONS = Arrays.asList("help", "list", "menu", "up");
         this.controller = controller;
         buildMenu();
     }
 
     // For testing.
     ConsoleReader(Option[] options) {
+        RESERVED_OPTIONS = Arrays.asList("help", "list", "menu", "up");
         topMenu = new Menu("menu", messages.getString("top_menu_text"), options);
         System.out.println(topMenu.action(null));
     }
@@ -151,10 +158,11 @@ public class ConsoleReader implements Runnable {
         options.addAll(controller.mods.stream().filter(mod -> mod instanceof WurmCommandLine).map(mod -> ((WurmCommandLine) mod).getOption(controller)).collect(Collectors.toList()));
         Set<String> set = new HashSet<>();
         for (Option option : options) {
+            if (RESERVED_OPTIONS.contains(option.getName())) {
+                throw new ReservedOptionException(option);
+            }
             if (!set.add(option.getName())) {
-                // TODO - Reserved words.
-                logger.severe(MessageFormat.format(messages.getString("duplicate_option"), option.getName()));
-                System.exit(-1);
+                throw new DuplicateOptionException(option);
             }
         }
 

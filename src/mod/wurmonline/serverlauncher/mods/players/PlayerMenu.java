@@ -5,10 +5,10 @@ import com.wurmonline.server.ServerEntry;
 import com.wurmonline.server.Servers;
 import com.wurmonline.server.gui.PlayerDBInterface;
 import com.wurmonline.server.gui.PlayerData;
-import mod.wurmonline.serverlauncher.consolereader.InvalidValue;
 import mod.wurmonline.serverlauncher.consolereader.Menu;
 import mod.wurmonline.serverlauncher.consolereader.Option;
 import mod.wurmonline.serverlauncher.consolereader.Value;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.InvalidValue;
 
 import java.sql.SQLException;
 import java.util.List;

@@ -1,5 +1,8 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import mod.wurmonline.serverlauncher.consolereader.exceptions.NoSuchOption;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.RebuildRequired;
+
 import java.util.List;
 
 public interface Option {

@@ -1,6 +1,7 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
 import mod.wurmonline.serverlauncher.LocaleHelper;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.RebuildRequired;
 
 import java.util.List;
 import java.util.ResourceBundle;

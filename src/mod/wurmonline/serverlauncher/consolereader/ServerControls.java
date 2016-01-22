@@ -3,6 +3,7 @@ package mod.wurmonline.serverlauncher.consolereader;
 import com.ibm.icu.text.MessageFormat;
 import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
+import mod.wurmonline.serverlauncher.consolereader.exceptions.RebuildRequired;
 
 import java.io.File;
 import java.io.IOException;
