@@ -169,8 +169,4 @@ public class ConsoleReader implements Runnable {
         currentMenu = topMenu;
         System.out.println(topMenu.action(null));
     }
-
-    public void rebuildMenu() {
-        buildMenu();
-    }
 }

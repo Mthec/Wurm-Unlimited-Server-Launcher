@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class MenuTest {
     static Menu menu;
@@ -111,5 +111,10 @@ public class MenuTest {
     @Test
     public void testGetName() throws Exception {
         assertEquals(name, menu.getName());
+    }
+
+    @Test
+    public void testGetReturnsMenu() throws Exception {
+        assertEquals(menu, menu.get());
     }
 }

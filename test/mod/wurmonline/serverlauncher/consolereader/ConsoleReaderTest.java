@@ -1,7 +1,5 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
-import static org.mockito.Mockito.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +10,10 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ConsoleReaderTest {
     PrintStream oldOut;
@@ -131,6 +132,23 @@ public class ConsoleReaderTest {
         outPut.reset();
         reader.run();
         assertEquals("", outPut.toString());
+    }
+
+    @Test()
+    public void testRunGoToMenu() throws Exception {
+        Menu menu = new Menu(menuOption, null, new Option[] {
+                new Command("", "") {
+                    @Override
+                    public String action(List<String> tokens) throws RebuildRequired {
+                        return null;
+                    }
+        }});
+        ConsoleReader reader = new ConsoleReader(new Option[] { menu });
+        reader.reader = mock(BufferedReader.class);
+        when(reader.reader.readLine()).thenReturn(menuOption).thenReturn(null);
+        outPut.reset();
+        reader.run();
+        assertEquals(menu.help() + System.lineSeparator(), outPut.toString());
     }
 
     // TODO - More ConsoleReader.run tests.
