@@ -1,5 +1,6 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
+import mod.wurmonline.serverlauncher.ServerConsoleController;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +38,17 @@ public class ConsoleReaderTest {
     public void tearDown() throws Exception {
         System.setOut(oldOut);
         System.setErr(oldErr);
+    }
+
+    @Test()
+    public void testMainConstructor() throws Exception {
+        ServerConsoleController controller = mock(ServerConsoleController.class);
+        controller.mods = new ArrayList<>();
+        ConsoleReader reader = new ConsoleReader(controller);
+        reader.reader = mock(BufferedReader.class);
+        when(reader.reader.readLine()).thenReturn(null);
+        reader.run();
+        assertEquals(reader.topMenu.help() + System.lineSeparator(), outPut.toString());
     }
 
     @Test()

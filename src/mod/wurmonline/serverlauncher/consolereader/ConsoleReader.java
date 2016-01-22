@@ -23,16 +23,9 @@ public class ConsoleReader implements Runnable {
     Menu topMenu;
     Menu currentMenu = null;
 
-    // TODO - Decide which constructors are necessary.
     public ConsoleReader(ServerConsoleController controller) {
         this.controller = controller;
         buildMenu();
-    }
-
-    ConsoleReader(ServerConsoleController controller, Option[] options) {
-        this.controller = controller;
-        topMenu = new Menu("menu", messages.getString("top_menu_text"), options);
-        System.out.println(topMenu.action(null));
     }
 
     // For testing.
