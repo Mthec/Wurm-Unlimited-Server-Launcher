@@ -3,15 +3,16 @@ package mod.wurmonline.serverlauncher.consolereader;
 import com.ibm.icu.text.MessageFormat;
 import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
+import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationCallback;
+import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationFinished;
+import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationRequired;
 import mod.wurmonline.serverlauncher.consolereader.exceptions.RebuildRequired;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ServerControls {
     static ResourceBundle messages = LocaleHelper.getBundle("ConsoleReader");
@@ -59,9 +60,9 @@ public class ServerControls {
         } else {
             options[0] = new Command("shutdown", messages.getString("shutdown_text")) {
                 @Override
-                public String action(List<String> tokens) throws RebuildRequired {
-                    int time = 0;
-                    String reason = "";
+                public String action(List<String> tokens) throws ConfirmationRequired {
+                    final int time;
+                    final String reason;
 
                     if (tokens.size() > 1) {
                         try {
@@ -70,13 +71,34 @@ public class ServerControls {
                         } catch (NumberFormatException ex) {
                             return MessageFormat.format(messages.getString("shutdown_time_invalid_number"), tokens.get(0));
                         }
+                    } else {
+                        time = 0;
+                        reason = "";
                     }
-                    // TODO - Confirmation
-                    controller.shutdown(time, reason);
-                    // TODO - Replace when gui separation rewrite is complete.
-                    System.exit(1);
-                    return "";
-                    //throw new RebuildRequired();
+
+                    Map<String, ConfirmationCallback> answers = new HashMap<>();
+
+                    ConfirmationCallback yes = new ConfirmationCallback() {
+                        @Override
+                        public void call() throws ConfirmationFinished {
+                            controller.shutdown(time, reason);
+                            // TODO - Replace when gui separation rewrite is complete.
+                            System.exit(1);
+                            throw new ConfirmationFinished(messages.getString("shutdown_confirm_yes"));
+                        }
+                    };
+
+                    ConfirmationCallback no = new ConfirmationCallback() {
+                        @Override
+                        public void call() throws ConfirmationFinished {
+                            throw new ConfirmationFinished(messages.getString("shutdown_confirm_no"));
+                        }
+                    };
+
+                    answers.put("yes", yes);
+                    answers.put("no", no);
+                    throw new ConfirmationRequired(messages.getString("shutdown_confirm"), answers);
+
                 }
             };
         }

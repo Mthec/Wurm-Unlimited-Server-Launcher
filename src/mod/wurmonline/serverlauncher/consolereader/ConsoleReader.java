@@ -4,6 +4,9 @@ import com.ibm.icu.text.MessageFormat;
 import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
 import mod.wurmonline.serverlauncher.ServerController;
+import mod.wurmonline.serverlauncher.consolereader.confirmation.Confirmation;
+import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationFinished;
+import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationRequired;
 import mod.wurmonline.serverlauncher.consolereader.exceptions.DuplicateOptionException;
 import mod.wurmonline.serverlauncher.consolereader.exceptions.NoSuchOption;
 import mod.wurmonline.serverlauncher.consolereader.exceptions.RebuildRequired;
@@ -27,6 +30,7 @@ public class ConsoleReader implements Runnable {
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     Menu topMenu;
     Menu currentMenu = null;
+    Confirmation awaitingConfirmation = null;
 
     public ConsoleReader(ServerConsoleController controller) {
         RESERVED_OPTIONS = Arrays.asList("help", "list", "menu", "up");
@@ -43,104 +47,117 @@ public class ConsoleReader implements Runnable {
 
     @Override
     public void run() {
-        String nextLine = null;
+        String nextLine;
         do {
             try {
+                nextLine = reader.readLine();
+            } catch (IOException ioEx) {
+                ioEx.printStackTrace();
+                return;
+            }
+
+            if (nextLine == null || nextLine.isEmpty()) {
+                continue;
+            }
+
+            // TODO - Help.
+            if (awaitingConfirmation != null) {
                 try {
-                    nextLine = reader.readLine();
-                } catch (IOException ioEx) {
-                    ioEx.printStackTrace();
-                    return;
+                    System.out.println(awaitingConfirmation.action(nextLine));
+                } catch (ConfirmationFinished confirmation) {
+                    System.out.println(confirmation.message);
+                    awaitingConfirmation = null;
                 }
+            } else {
+                try {
+                    // TODO - Remove.
+                    if (nextLine.equals("exit")) {
+                        System.exit(1);
+                    }
 
-                if (nextLine == null || nextLine.isEmpty()) {
-                    continue;
-                }
-
-                // TODO - Remove.
-                if (nextLine.equals("exit")) {
-                    System.exit(1);
-                }
-
-                // TODO - Is this needed?
-                if (currentMenu == null) {
-                    currentMenu = topMenu;
-                }
-
-                List<String> tokens = tokenize(nextLine);
-                if (tokens.size() == 0) {
-                    continue;
-                }
-
-                Option option = null;
-                while (!tokens.isEmpty()) {
-                    // Default commands.
-                    if (tokens.get(0).equals("help")) {
-                        if (tokens.size() == 1) {
-                            System.out.println(currentMenu.help());
-                        } else {
-                            System.out.println(currentMenu.help(tokens.get(1)));
-                        }
-                        option = currentMenu;
-                        tokens.clear();
-                        continue;
-                    } else if (tokens.get(0).equals("list")) {
-                        System.out.println(currentMenu.list());
-                        option = currentMenu;
-                        tokens.clear();
-                        continue;
-                    } else if (tokens.get(0).equals("menu")) {
+                    // TODO - Is this needed?
+                    if (currentMenu == null) {
                         currentMenu = topMenu;
-                        option = currentMenu;
-                        if (tokens.size() > 1) {
-                            tokens.remove(0);
-                            continue;
-                        } else {
-                            System.out.println(currentMenu.action(tokens));
-                            tokens.clear();
-                            continue;
-                        }
-                    } else if (tokens.get(0).equals("up")) {
-                        Menu nextMenu = currentMenu.getParent();
-                        if (nextMenu == null) {
+                    }
+
+                    List<String> tokens = tokenize(nextLine);
+                    if (tokens.size() == 0) {
+                        continue;
+                    }
+
+                    Option option = null;
+                    while (!tokens.isEmpty()) {
+                        // Default commands.
+                        if (tokens.get(0).equals("help")) {
+                            if (tokens.size() == 1) {
+                                System.out.println(currentMenu.help());
+                            } else {
+                                System.out.println(currentMenu.help(tokens.get(1)));
+                            }
                             option = currentMenu;
-                            System.err.println(messages.getString("top_menu_reached"));
-                            tokens.clear();
-                            break;
-                        } else {
-                            currentMenu = nextMenu;
-                        }
-                        option = currentMenu;
-                        if (tokens.size() > 1) {
-                            tokens.remove(0);
-                            continue;
-                        } else {
-                            System.out.println(currentMenu.action(tokens));
                             tokens.clear();
                             continue;
+                        } else if (tokens.get(0).equals("list")) {
+                            System.out.println(currentMenu.list());
+                            option = currentMenu;
+                            tokens.clear();
+                            continue;
+                        } else if (tokens.get(0).equals("menu")) {
+                            currentMenu = topMenu;
+                            option = currentMenu;
+                            if (tokens.size() > 1) {
+                                tokens.remove(0);
+                                continue;
+                            } else {
+                                System.out.println(currentMenu.action(tokens));
+                                tokens.clear();
+                                continue;
+                            }
+                        } else if (tokens.get(0).equals("up")) {
+                            Menu nextMenu = currentMenu.getParent();
+                            if (nextMenu == null) {
+                                option = currentMenu;
+                                System.err.println(messages.getString("top_menu_reached"));
+                                tokens.clear();
+                                break;
+                            } else {
+                                currentMenu = nextMenu;
+                            }
+                            option = currentMenu;
+                            if (tokens.size() > 1) {
+                                tokens.remove(0);
+                                continue;
+                            } else {
+                                System.out.println(currentMenu.action(tokens));
+                                tokens.clear();
+                                continue;
+                            }
                         }
-                    }
 
-                    option = currentMenu.getOption(tokens.remove(0));
+                        option = currentMenu.getOption(tokens.remove(0));
 
-                    if (option instanceof Menu) {
-                        currentMenu = ((Menu)option).get();
-                        if (tokens.isEmpty()) {
+                        if (option instanceof Menu) {
+                            currentMenu = ((Menu) option).get();
+                            if (tokens.isEmpty()) {
+                                System.out.println(option.action(tokens));
+                            }
+                        } else {
                             System.out.println(option.action(tokens));
+                            tokens.clear();
                         }
-                    } else {
-                        System.out.println(option.action(tokens));
-                        tokens.clear();
                     }
+                    if (option == null) {
+                        throw new NoSuchOption(nextLine);
+                    }
+                } catch (NoSuchOption ex) {
+                    System.err.println(MessageFormat.format(messages.getString("option_not_found"), ex.option));
+                } catch (ConfirmationRequired ex) {
+                    awaitingConfirmation = ex.confirmation;
+                    System.out.println(awaitingConfirmation.getText());
+                } catch (RebuildRequired ex) {
+                    System.out.println(messages.getString("rebuilding"));
+                    buildMenu();
                 }
-                if (option == null) {
-                    throw new NoSuchOption(nextLine);
-                }
-            } catch (NoSuchOption ex) {
-                System.err.println(MessageFormat.format(messages.getString("option_not_found"), ex.option));
-            } catch (RebuildRequired ex) {
-                System.out.println(messages.getString("rebuilding"));
-                buildMenu();
             }
         } while (nextLine != null);
     }

@@ -1,6 +1,7 @@
 package mod.wurmonline.serverlauncher.consolereader;
 
 import mod.wurmonline.serverlauncher.LocaleHelper;
+import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationRequired;
 import mod.wurmonline.serverlauncher.consolereader.exceptions.RebuildRequired;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public abstract class Command implements Option {
     }
 
     @Override
-    public abstract String action(List<String> tokens) throws RebuildRequired;
+    public abstract String action(List<String> tokens) throws RebuildRequired, ConfirmationRequired;
 
     @Override
     public Option getOption(String input) {
