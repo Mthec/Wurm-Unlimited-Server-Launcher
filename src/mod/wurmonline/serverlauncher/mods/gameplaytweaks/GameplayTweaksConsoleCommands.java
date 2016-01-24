@@ -487,7 +487,7 @@ public class GameplayTweaksConsoleCommands {
                             @Override
                             protected void set(ServerEntry server, List<String> tokens) {
                                 server.setConsumerKeyToUse(String.join(" ", tokens));
-                                server.saveNewGui(server.id);
+                                server.saveTwitter();
                             }
                         },
                         new Value("consumer_secret", messages.getString("consumer_secret_help_text"), controller) {
@@ -499,7 +499,7 @@ public class GameplayTweaksConsoleCommands {
                             @Override
                             protected void set(ServerEntry server, List<String> tokens) {
                                 server.setConsumerSecret(String.join(" ", tokens));
-                                server.saveNewGui(server.id);
+                                server.saveTwitter();
                             }
                         },
                         new Value("application_token", messages.getString("application_token_help_text"), controller) {
@@ -511,7 +511,7 @@ public class GameplayTweaksConsoleCommands {
                             @Override
                             protected void set(ServerEntry server, List<String> tokens) {
                                 server.setApplicationToken(String.join(" ", tokens));
-                                server.saveNewGui(server.id);
+                                server.saveTwitter();
                             }
                         },
                         new Value("application_secret", messages.getString("application_secret_help_text"), controller) {
@@ -523,14 +523,14 @@ public class GameplayTweaksConsoleCommands {
                             @Override
                             protected void set(ServerEntry server, List<String> tokens) {
                                 server.setApplicationSecret(String.join(" ", tokens));
-                                server.saveNewGui(server.id);
+                                server.saveTwitter();
                             }
                         },
                         new Command("status", "Tweet status") {
                             @Override
                             public String action(List<String> tokens) {
                                 // TODO - Change when gui separation is complete.
-                                if (Servers.localServer.saveTwitter()) {
+                                if (Servers.localServer.canTwit()) {
                                     return messages.getString("will_tweet");
                                 } else {
                                     return messages.getString("wont_tweet");

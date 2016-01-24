@@ -255,9 +255,9 @@ public class GameplayPropertySheet extends VBox {
 
             if (saveTwitter && !current.isCreating) {
                 if (current.saveTwitter()) {
-                    logger.info(messages.getString("will_tweet"));
+                    logger.info(messages.getString("saved_twitter") + messages.getString("will_tweet"));
                 } else {
-                    logger.info(messages.getString("wont_tweet"));
+                    logger.info(messages.getString("saved_twitter") + messages.getString("wont_tweet"));
                 }
 
                 saveTwitter = false;
