@@ -39,9 +39,8 @@ public abstract class Value extends Command {
                 if (controller != null && controller.serverIsRunning()) {
                     return messages.getString("server_running");
                 }
-                // TODO - Exceptions?
                 try {
-                    // TODO - Tests and user documentation.
+                    // TODO - User documentation.
                     if (tokens.get(0).equals("set")) {
                         tokens.remove(0);
                         if (tokens.isEmpty()) {
@@ -54,6 +53,7 @@ public abstract class Value extends Command {
                 }
                 return MessageFormat.format(messages.getString("set_value"), this.getName(), this.get(current));
             }
+        // TODO - Should this be caught?
         } catch (NullPointerException ex) {
             ex.printStackTrace();
             return "";
