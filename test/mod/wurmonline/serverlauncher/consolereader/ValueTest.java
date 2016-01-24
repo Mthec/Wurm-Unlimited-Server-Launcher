@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -146,5 +147,45 @@ public class ValueTest {
         value.set(null, fakeTokens);
         assertEquals(aValue, value.get(null));
         verify(fakeTokens).get(0);
+    }
+
+    @Test
+    public void testSetCommand() throws Exception {
+        Value value = new Value(aValue, "") {
+            String storedValue;
+            @Override
+            protected String get(ServerEntry server) {
+                return storedValue;
+            }
+
+            @Override
+            protected void set(ServerEntry server, List<String> tokens) throws InvalidValue {
+                storedValue = tokens.get(0);
+            }
+        };
+        when(fakeTokens.get(0)).thenReturn("set").thenReturn(newValue);
+        value.action(fakeTokens);
+        assertEquals(newValue, value.get(null));
+        verify(fakeTokens, times(2)).get(0);
+    }
+
+    @Test
+    public void testSetCommandMultipleTokens() throws Exception {
+        Value value = new Value(aValue, "") {
+            String storedValue;
+            @Override
+            protected String get(ServerEntry server) {
+                return storedValue;
+            }
+
+            @Override
+            protected void set(ServerEntry server, List<String> tokens) throws InvalidValue {
+                storedValue = String.join(" ", tokens);
+            }
+        };
+        List<String> tokens = new ArrayList<>();
+        Collections.addAll(tokens, "set", newValue, newValue, newValue);
+        value.action(tokens);
+        assertEquals(String.join(" ", newValue, newValue, newValue), value.get(null));
     }
 }

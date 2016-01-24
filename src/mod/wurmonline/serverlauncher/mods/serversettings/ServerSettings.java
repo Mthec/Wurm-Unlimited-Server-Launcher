@@ -272,6 +272,7 @@ public class ServerSettings implements WurmMod, WurmLoadDumpMod, WurmCommandLine
 
                     @Override
                     protected void set(ServerEntry server, List<String> tokens) {
+                        // TODO - Multiple tokens.
                         server.setSteamServerPassword(tokens.get(0));
                         server.saveNewGui(server.id);
                     }
