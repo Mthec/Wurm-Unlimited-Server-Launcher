@@ -104,7 +104,6 @@ public class ConsoleReader implements Runnable {
                         Menu nextMenu = currentMenu.getParent();
                         if (nextMenu == null) {
                             option = currentMenu;
-                            // TODO - Reword;
                             System.err.println(messages.getString("top_menu_reached"));
                             tokens.clear();
                             break;
