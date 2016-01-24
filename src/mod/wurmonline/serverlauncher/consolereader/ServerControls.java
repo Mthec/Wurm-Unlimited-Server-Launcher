@@ -82,8 +82,10 @@ public class ServerControls {
                     }
                     // TODO - Confirmation
                     controller.shutdown(time, reason);
-                    // TODO - How to handle shutdown until gui separation is completed?
-                    throw new RebuildRequired();
+                    // TODO - Replace when gui separation rewrite is complete.
+                    System.exit(1);
+                    return "";
+                    //throw new RebuildRequired();
                 }
             };
         }

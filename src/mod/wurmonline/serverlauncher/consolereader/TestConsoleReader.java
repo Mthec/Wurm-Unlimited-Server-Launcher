@@ -32,7 +32,12 @@ public class TestConsoleReader {
         @Override
         public synchronized boolean shutdown(int time, String reason) {
             // TODO - What if server is not running.
+            System.out.println("Shutdown server!");
             return true;
+        }
+
+        @Override
+        public void loadAllServers() {
         }
 
         @Override
