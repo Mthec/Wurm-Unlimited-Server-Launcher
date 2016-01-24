@@ -6,7 +6,6 @@ package mod.wurmonline.serverlauncher.mods.players;
 //
 
 import com.ibm.icu.text.MessageFormat;
-import com.wurmonline.server.MiscConstants;
 import com.wurmonline.server.Server;
 import com.wurmonline.server.gui.PlayerData;
 import javafx.beans.property.SimpleObjectProperty;
@@ -24,7 +23,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PlayerPropertySheet extends VBox implements MiscConstants {
+public class PlayerPropertySheet extends VBox {
     static Logger logger = Logger.getLogger(PlayerPropertySheet.class.getName());
     PlayerData current;
     ObservableList<PropertySheet.Item> list;
