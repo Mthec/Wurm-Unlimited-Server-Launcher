@@ -19,11 +19,6 @@ public class ServerControls {
 
     // TODO - Change to ServerController when gui separation is complete.  Or possibly sooner.
     public Option[] getOptions(ServerConsoleController controller) {
-        if (controller == null) {
-            // TODO - Temp
-            System.err.println("ServerController shouldn't be null!");
-            System.exit(-1);
-        }
         names.clear();
 
         List<String> servers = getServersTemp();
@@ -43,11 +38,7 @@ public class ServerControls {
                         controller.loadAllServers();
                         throw new RebuildRequired();
                     } catch (IOException ex) {
-                        ex.printStackTrace();
-                        // TODO - HELP!
-                        // Would happen if folder was deleted after menu creation?
-                        // Should rebuild?
-                        return "Uh-oh, why did this happen?";
+                        return MessageFormat.format(messages.getString("unknown_error"), ex.getMessage());
                     }
                 }
             };
