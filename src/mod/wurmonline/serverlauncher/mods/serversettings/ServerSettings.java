@@ -248,7 +248,7 @@ public class ServerSettings implements WurmMod, WurmLoadDumpMod, WurmCommandLine
 
                     @Override
                     protected void set(ServerEntry server, List<String> tokens) {
-                        server.INTRASERVERPASSWORD = tokens.get(0);
+                        server.INTRASERVERPASSWORD = String.join(" ", tokens);
                         server.saveNewGui(server.id);
                     }
                 },
@@ -272,8 +272,7 @@ public class ServerSettings implements WurmMod, WurmLoadDumpMod, WurmCommandLine
 
                     @Override
                     protected void set(ServerEntry server, List<String> tokens) {
-                        // TODO - Multiple tokens.
-                        server.setSteamServerPassword(tokens.get(0));
+                        server.setSteamServerPassword(String.join(" ", tokens));
                         server.saveNewGui(server.id);
                     }
                 },
