@@ -52,7 +52,7 @@ public class ServerControlsTest {
         Command status = (Command)new ServerControls().getOptions(fakeController)[1];
         assert status.getName().equals("status");
 
-        assertEquals(MessageFormat.format(messages.getString("status_result"), "Adventure", System.lineSeparator(), messages.getString("status_running")), status.action(null));
+        assertEquals(MessageFormat.format(messages.getString("status_result"), "Adventure", messages.getString("status_running")), status.action(null));
 
         // Once for start/shutdown check, once for actual test.
         verify(fakeController, times(2)).serverIsRunning();
@@ -69,7 +69,7 @@ public class ServerControlsTest {
         Command status = (Command)new ServerControls().getOptions(fakeController)[1];
         assert status.getName().equals("status");
 
-        assertEquals(MessageFormat.format(messages.getString("status_result"), "Adventure", System.lineSeparator(), messages.getString("status_not_running")), status.action(null));
+        assertEquals(MessageFormat.format(messages.getString("status_result"), "Adventure", messages.getString("status_not_running")), status.action(null));
 
         // Once for start/shutdown check, once for actual test.
         verify(fakeController, times(2)).serverIsRunning();

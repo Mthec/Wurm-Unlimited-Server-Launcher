@@ -85,10 +85,8 @@ public class ServerControls {
             public String action(List<String> tokens) {
                 if (controller.isInitialized()) {
                     // TODO - More information.
-                    // FIXME - How to add os independent newline in .properties file.
                     return MessageFormat.format(messages.getString("status_result"),
                             controller.getCurrentDir(),
-                            System.lineSeparator(),
                             controller.serverIsRunning() ?
                                     messages.getString("status_running") :
                                     messages.getString("status_not_running"));
