@@ -41,6 +41,13 @@ public abstract class Value extends Command {
                 }
                 // TODO - Exceptions?
                 try {
+                    // TODO - Tests and user documentation.
+                    if (tokens.get(0).equals("set")) {
+                        tokens.remove(0);
+                        if (tokens.isEmpty()) {
+                            tokens.add("");
+                        }
+                    }
                     this.set(current, tokens);
                 } catch (InvalidValue ex) {
                     return MessageFormat.format(messages.getString("invalid_value"), ex.value, ex.message);
