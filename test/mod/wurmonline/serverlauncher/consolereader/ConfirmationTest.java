@@ -2,7 +2,7 @@ package mod.wurmonline.serverlauncher.consolereader;
 
 import mod.wurmonline.serverlauncher.consolereader.confirmation.Confirmation;
 import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationCallback;
-import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationFinished;
+import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationEnd;
 import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationRequired;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -18,10 +18,10 @@ public class ConfirmationTest {
     String yes = "yes";
     String no = "no";
 
-    @Test(expected = ConfirmationFinished.class)
+    @Test(expected = ConfirmationEnd.class)
     public void testActionHasKey() throws Exception {
         ConfirmationCallback callback = mock(ConfirmationCallback.class);
-        Mockito.doThrow(new ConfirmationFinished("")).when(callback).call();
+        Mockito.doThrow(new ConfirmationEnd("")).when(callback).call();
         Map<String, ConfirmationCallback> answers = new HashMap<>();
         answers.put(yes, callback);
         Confirmation confirmation = new Confirmation(text, answers);
@@ -31,7 +31,7 @@ public class ConfirmationTest {
     @Test
     public void testActionNotHaveKey() throws Exception {
         ConfirmationCallback callback = mock(ConfirmationCallback.class);
-        Mockito.doThrow(new ConfirmationFinished("")).when(callback).call();
+        Mockito.doThrow(new ConfirmationEnd("")).when(callback).call();
         Map<String, ConfirmationCallback> answers = new HashMap<>();
         answers.put(yes, callback);
         Confirmation confirmation = new Confirmation(text, answers);

@@ -17,7 +17,7 @@ public class Confirmation {
     }
 
     // TODO - y, yes, etc.
-    public String action(String input) throws ConfirmationFinished {
+    public String action(String input) throws ConfirmationEnd {
         // TODO - Feedback.
         if (answers.containsKey(input)) {
             answers.get(input).call();

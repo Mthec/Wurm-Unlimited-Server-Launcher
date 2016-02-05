@@ -1,11 +1,10 @@
 package mod.wurmonline.serverlauncher.consolereader.confirmation;
 
 
-// TODO - Rename.
-public class ConfirmationFinished extends Exception {
+public class ConfirmationEnd extends Exception {
     public String message;
 
-    public ConfirmationFinished(String message) {
+    public ConfirmationEnd(String message) {
         this.message = message;
     }
 }

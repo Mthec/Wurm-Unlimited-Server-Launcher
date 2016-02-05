@@ -4,7 +4,7 @@ import com.ibm.icu.text.MessageFormat;
 import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
 import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationCallback;
-import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationFinished;
+import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationEnd;
 import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationRequired;
 import mod.wurmonline.serverlauncher.consolereader.exceptions.RebuildRequired;
 
@@ -80,18 +80,18 @@ public class ServerControls {
 
                     ConfirmationCallback yes = new ConfirmationCallback() {
                         @Override
-                        public void call() throws ConfirmationFinished {
+                        public void call() throws ConfirmationEnd {
                             controller.shutdown(time, reason);
                             // TODO - Replace when gui separation rewrite is complete.
                             System.exit(1);
-                            throw new ConfirmationFinished(messages.getString("shutdown_confirm_yes"));
+                            throw new ConfirmationEnd(messages.getString("shutdown_confirm_yes"));
                         }
                     };
 
                     ConfirmationCallback no = new ConfirmationCallback() {
                         @Override
-                        public void call() throws ConfirmationFinished {
-                            throw new ConfirmationFinished(messages.getString("shutdown_confirm_no"));
+                        public void call() throws ConfirmationEnd {
+                            throw new ConfirmationEnd(messages.getString("shutdown_confirm_no"));
                         }
                     };
 

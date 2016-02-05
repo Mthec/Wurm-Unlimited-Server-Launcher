@@ -5,7 +5,7 @@ import mod.wurmonline.serverlauncher.LocaleHelper;
 import mod.wurmonline.serverlauncher.ServerConsoleController;
 import mod.wurmonline.serverlauncher.ServerController;
 import mod.wurmonline.serverlauncher.consolereader.confirmation.Confirmation;
-import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationFinished;
+import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationEnd;
 import mod.wurmonline.serverlauncher.consolereader.confirmation.ConfirmationRequired;
 import mod.wurmonline.serverlauncher.consolereader.exceptions.DuplicateOptionException;
 import mod.wurmonline.serverlauncher.consolereader.exceptions.NoSuchOption;
@@ -64,7 +64,7 @@ public class ConsoleReader implements Runnable {
             if (awaitingConfirmation != null) {
                 try {
                     System.out.println(awaitingConfirmation.action(nextLine));
-                } catch (ConfirmationFinished confirmation) {
+                } catch (ConfirmationEnd confirmation) {
                     System.out.println(confirmation.message);
                     awaitingConfirmation = null;
                 }
