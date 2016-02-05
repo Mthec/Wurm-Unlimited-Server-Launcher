@@ -33,13 +33,18 @@ public class ServerControls {
 
                 @Override
                 public String action(List<String> tokens) throws RebuildRequired {
-                    try {
-                        controller.setCurrentDir(folderName);
-                        // TODO - How to wait, only possible when gui separation and rewrite are done?
-                        controller.loadAllServers();
-                        throw new RebuildRequired();
-                    } catch (IOException ex) {
-                        return MessageFormat.format(messages.getString("unknown_error"), ex.getMessage());
+                    // TODO - Cannot currently select another server when one is running.
+                    if (controller.serverIsRunning()) {
+                        return messages.getString("select_when_server_running");
+                    } else {
+                        try {
+                            controller.setCurrentDir(folderName);
+                            // TODO - How to wait, only possible when gui separation and rewrite are done?
+                            controller.loadAllServers();
+                            throw new RebuildRequired();
+                        } catch (IOException ex) {
+                            return MessageFormat.format(messages.getString("unknown_error"), ex.getMessage());
+                        }
                     }
                 }
             };
