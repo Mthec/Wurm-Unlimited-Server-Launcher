@@ -205,7 +205,10 @@ public class ServerMain extends Application {
 
         if (!dbToStart.isEmpty()) {
             System.out.println(main_messages.getString("no_gui"));
-            new ServerConsoleController().startDB(dbToStart);
+            ServerConsoleController controller = new ServerConsoleController();
+            controller.setMods(mods);
+            controller.setArguments(parser);
+            controller.startDB(dbToStart);
         } else {
             launch(args);
         }
