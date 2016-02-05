@@ -5,7 +5,6 @@ import com.wurmonline.server.ServerEntry;
 import com.wurmonline.server.ServerProperties;
 import com.wurmonline.server.Servers;
 import com.wurmonline.server.kingdom.Kingdoms;
-import mod.wurmonline.serverlauncher.consolereader.ConsoleReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,8 +20,6 @@ public class ServerConsoleController extends ServerController {
             setCurrentDir(dbName + (dbName.endsWith(File.separator) ? "" : File.separator));
             initServer(dbName);
             startServer();
-            (new Thread(new ConsoleReader(this))).start();
-            // TODO - How to tell when ready to receive commands?
         } catch (IOException ex) {
             logger.severe(MessageFormat.format(server_messages.getString("cannot_find_db"), dbName));
             ex.printStackTrace();

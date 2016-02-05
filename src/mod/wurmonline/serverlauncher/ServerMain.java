@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import mod.wurmonline.serverlauncher.consolereader.ConsoleReader;
 import mod.wurmonline.serverlauncher.gui.ServerGuiController;
 import org.gotti.wurmunlimited.modloader.ModLoader;
 import org.gotti.wurmunlimited.modloader.ServerHook;
@@ -32,6 +33,7 @@ public class ServerMain extends Application {
     static String MODS_DIR = "";
     static List<WurmMod> mods;
     static Set<String> ACCEPTED_ARGS;
+    public static String ARG_CONSOLE = "console";
     public static String ARG_START = "start";
     public static String ARG_QUERY_PORT = "queryport";
     public static String ARG_INTERNAL_PORT = "internalport";
@@ -57,6 +59,7 @@ public class ServerMain extends Application {
     static {
         MODS_DIR = "mods";
         HashSet<String> acceptedArgs = new HashSet<>(1);
+        acceptedArgs.add(ARG_CONSOLE);
         acceptedArgs.add(ARG_START);
         acceptedArgs.add(ARG_QUERY_PORT);
         acceptedArgs.add(ARG_INTERNAL_PORT);
@@ -203,12 +206,19 @@ public class ServerMain extends Application {
             }
         }
 
-        if (!dbToStart.isEmpty()) {
+        if (parser.hasOption(ARG_CONSOLE)) {
+            ServerConsoleController controller = new ServerConsoleController();
+            controller.setMods(mods);
+            controller.setArguments(parser);
+            // TODO - How to tell when ready to take commands.
+            (new Thread(new ConsoleReader(controller))).start();
+        } else if (!dbToStart.isEmpty()) {
             System.out.println(main_messages.getString("no_gui"));
             ServerConsoleController controller = new ServerConsoleController();
             controller.setMods(mods);
             controller.setArguments(parser);
             controller.startDB(dbToStart);
+            (new Thread(new ConsoleReader(controller))).start();
         } else {
             launch(args);
         }
