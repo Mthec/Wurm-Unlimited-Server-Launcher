@@ -1,5 +1,6 @@
 package mod.wurmonline.serverlauncher.mods.players;
 
+import com.ibm.icu.text.MessageFormat;
 import com.wurmonline.server.Server;
 import com.wurmonline.server.ServerEntry;
 import com.wurmonline.server.Servers;
@@ -17,8 +18,8 @@ import java.util.ResourceBundle;
 public class PlayerMenu extends Menu {
     static ResourceBundle players_messages;
 
-    public PlayerMenu(String name, String text, ResourceBundle messages) {
-        super(name, text, getPlayerMenus(messages));
+    public PlayerMenu(String name, String text, String help, ResourceBundle messages) {
+        super(name, text, help, getPlayerMenus(messages));
     }
 
     private static Option[] getPlayerMenus(ResourceBundle messages) {
@@ -32,7 +33,9 @@ public class PlayerMenu extends Menu {
         PlayerData player;
         for (int i = 0; i < players.length; ++i) {
             player = players[i];
-            list[i] = new Menu(player.getName(), "Settings for " + player.getName(), getValues(player));
+            list[i] = new Menu(player.getName(), "Settings for " + player.getName(),
+                    MessageFormat.format(players_messages.getString("player_console_help"), player.getName()),
+                    getValues(player));
         }
         return list;
     }

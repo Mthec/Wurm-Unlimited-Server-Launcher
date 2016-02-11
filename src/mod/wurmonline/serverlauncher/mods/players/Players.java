@@ -143,9 +143,9 @@ public class Players implements WurmMod, WurmUIMod, Configurable, WurmCommandLin
     @Override
     public Option getOption(ServerController controller) {
         if (controller != null && controller.isInitialized()) {
-            return new PlayerMenu("players", "Player Entries", players_messages);
+            return new PlayerMenu("players", "Player Entries", players_messages.getString("players_console_help"), players_messages);
         } else {
-            return new Menu("players", "Player Entries", new Option[0]) {
+            return new Menu("players", "Player Entries", players_messages.getString("players_console_help"), new Option[0]) {
                 @Override
                 public String action(List<String> tokens) {
                     return "Please select a server first.";

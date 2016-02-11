@@ -54,7 +54,7 @@ public class ConsoleReaderTest {
         reader.reader = mock(BufferedReader.class);
         when(reader.reader.readLine()).thenReturn(null);
         reader.run();
-        assertEquals(reader.topMenu.help() + System.lineSeparator(), outPut.toString());
+        assertEquals(reader.topMenu.getText() + System.lineSeparator(), outPut.toString());
     }
 
     @Test(expected = ReservedOptionException.class)
@@ -159,7 +159,7 @@ public class ConsoleReaderTest {
 
     @Test()
     public void testRunList() throws Exception {
-        Menu menu = new Menu(menuOption, null, new Option[] {
+        Menu menu = new Menu(menuOption, null, null, new Option[] {
                 new Command(menuOption, null) {
                     @Override
                     public String action(List<String> tokens) {
@@ -197,7 +197,7 @@ public class ConsoleReaderTest {
 
     @Test()
     public void testRunGoToMenu() throws Exception {
-        Menu menu = new Menu(menuOption, null, new Option[] {
+        Menu menu = new Menu(menuOption, null, null, new Option[] {
                 new Command("", "") {
                     @Override
                     public String action(List<String> tokens) throws RebuildRequired {
@@ -209,7 +209,7 @@ public class ConsoleReaderTest {
         when(reader.reader.readLine()).thenReturn(menuOption).thenReturn(null);
         outPut.reset();
         reader.run();
-        assertEquals(menu.help() + System.lineSeparator(), outPut.toString());
+        assertEquals(menu.getText() + System.lineSeparator(), outPut.toString());
     }
 
     // TODO - More ConsoleReader.run tests.

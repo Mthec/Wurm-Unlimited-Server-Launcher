@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class MenuTest {
     static Menu menu;
     static String name = "Name";
+    static String text = "Text";
     static String helpText = "Help";
     static Menu subMenu;
     static String subMenuName = "Sub Name";
@@ -36,11 +37,11 @@ public class MenuTest {
             }
         };
 
-        subMenu = new Menu(subMenuName, null, new Option[] {
+        subMenu = new Menu(subMenuName, null, null, new Option[] {
                 subCommand
         });
 
-        menu = new Menu(name, helpText, new Option[] {
+        menu = new Menu(name, text, helpText, new Option[] {
                 subMenu,
                 command,
         });
@@ -53,7 +54,7 @@ public class MenuTest {
 
     @Test
     public void testAction() throws Exception {
-        assertEquals(helpText + System.lineSeparator() + menu.list(), menu.action(null));
+        assertEquals(text + System.lineSeparator() + menu.list(), menu.action(null));
     }
 
     @Test
@@ -68,9 +69,7 @@ public class MenuTest {
 
     @Test
     public void testHelp() throws Exception {
-        assertEquals(helpText + System.lineSeparator() +
-                "Menu - [" + subMenuName + "]" + System.lineSeparator() + "Options - [" + commandName + "]",
-                menu.help());
+        assertEquals(helpText, menu.help());
     }
 
     @Test
@@ -84,13 +83,20 @@ public class MenuTest {
     }
 
     @Test
+    public void testGetText() throws Exception {
+        assertEquals(text + System.lineSeparator() +
+                "Menu - [" + subMenuName + "]" + System.lineSeparator() + "Options - [" + commandName + "]",
+                menu.getText());
+    }
+
+    @Test
     public void testListMenuCommand() throws Exception {
         assertEquals("Menu - [" + subMenuName + "]" + System.lineSeparator() + "Options - [" + commandName + "]", menu.list());
     }
 
     @Test
     public void testListMenu() throws Exception {
-        Menu newMenu = new Menu(null, null, new Option[] {
+        Menu newMenu = new Menu(null, null, null, new Option[] {
                 subMenu,
         });
         assertEquals("Menu - [" + subMenuName + "]", newMenu.list());
@@ -98,7 +104,7 @@ public class MenuTest {
 
     @Test
     public void testListCommand() throws Exception {
-        Menu newMenu = new Menu(null, null, new Option[] {
+        Menu newMenu = new Menu(null, null, null, new Option[] {
                 command,
         });
         assertEquals("Options - [" + commandName + "]", newMenu.list());
@@ -106,7 +112,7 @@ public class MenuTest {
 
     @Test(expected = AssertionError.class)
     public void testListEmpty() throws Exception {
-        new Menu(null, null, new Option[0]);
+        new Menu(null, null, null, new Option[0]);
     }
 
     @Test

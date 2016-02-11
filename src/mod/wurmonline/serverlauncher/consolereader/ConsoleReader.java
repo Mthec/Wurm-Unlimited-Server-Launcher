@@ -41,7 +41,7 @@ public class ConsoleReader implements Runnable {
     // For testing.
     ConsoleReader(Option[] options) {
         RESERVED_OPTIONS = Arrays.asList("help", "list", "menu", "up");
-        topMenu = new Menu("menu", messages.getString("top_menu_text"), options);
+        topMenu = new Menu("menu", messages.getString("top_menu_text"), messages.getString("top_menu_help"), options);
         System.out.println(topMenu.action(null));
     }
 
@@ -183,7 +183,10 @@ public class ConsoleReader implements Runnable {
             }
         }
 
-        topMenu = new Menu("menu", messages.getString("top_menu_text"), options.toArray(new Option[options.size()]));
+        topMenu = new Menu("menu",
+                messages.getString("top_menu_text"),
+                messages.getString("top_menu_help"),
+                options.toArray(new Option[options.size()]));
         currentMenu = topMenu;
         System.out.println(topMenu.action(null));
     }

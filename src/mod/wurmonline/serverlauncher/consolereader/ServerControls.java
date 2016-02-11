@@ -122,7 +122,7 @@ public class ServerControls {
                 }
             }
         };
-        options[2] = new Menu("select", messages.getString("select_text"), serverOptions);
+        options[2] = new Menu("select", messages.getString("select_text"), messages.getString("select_text"), serverOptions);
         return options;
     }
 

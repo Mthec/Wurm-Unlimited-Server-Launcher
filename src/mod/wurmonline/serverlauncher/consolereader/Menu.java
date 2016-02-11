@@ -15,12 +15,14 @@ public class Menu implements Option {
     private Map<String, Option> options = new HashMap<>();
     private String name;
     private String text;
+    private String help;
     private String listText;
     private Menu parent = null;
 
-    public Menu(String name, String text, Option[] options) {
+    public Menu(String name, String text, String help, Option[] options) {
         this.name = name;
         this.text = text;
+        this.help = help;
         this.setOptions(options);
     }
 
@@ -37,9 +39,13 @@ public class Menu implements Option {
         return options.get(input);
     }
 
+    public String getText() {
+        return text + System.lineSeparator() + list();
+    }
+
     @Override
     public String help() {
-        return text + System.lineSeparator() + list();
+        return help;
     }
 
     public String help(String option) throws NoSuchOption {
