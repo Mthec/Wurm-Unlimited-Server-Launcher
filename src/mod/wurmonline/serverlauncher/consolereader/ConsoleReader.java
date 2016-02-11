@@ -90,6 +90,7 @@ public class ConsoleReader implements Runnable {
                         // Default commands.
                         if (tokens.get(0).equals("help")) {
                             if (tokens.size() == 1) {
+                                System.out.println(messages.getString("help"));
                                 System.out.println(currentMenu.help());
                             } else {
                                 System.out.println(currentMenu.help(tokens.get(1)));
