@@ -12,6 +12,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class ConfirmationTest {
     String text = "Confirmation text";
@@ -46,6 +47,16 @@ public class ConfirmationTest {
         } catch (ConfirmationRequired confirmation) {
             assertTrue(confirmation.confirmation.getText().equals(text));
         }
+    }
+
+    @Test
+    public void testConfirmationCallback() throws Exception {
+        ConfirmationCallback callback = mock(ConfirmationCallback.class);
+        Map<String, ConfirmationCallback> answers = new HashMap<>();
+        answers.put(yes, callback);
+        Confirmation confirmation = new Confirmation(text, answers);
+        confirmation.action(yes);
+        verify(callback).call();
     }
 
     // TODO - More tests.
