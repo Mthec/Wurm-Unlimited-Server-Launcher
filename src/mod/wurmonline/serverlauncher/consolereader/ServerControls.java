@@ -88,7 +88,7 @@ public class ServerControls {
                         public void call() throws ConfirmationEnd {
                             controller.shutdown(time, reason);
                             // TODO - Replace when gui separation rewrite is complete.
-                            System.exit(1);
+                            //System.exit(1);
                             throw new ConfirmationEnd(messages.getString("shutdown_confirm_yes"));
                         }
                     };

@@ -170,10 +170,10 @@ public class ServerConsoleController extends ServerController {
     }
 
     protected boolean askConfirmation(String title, String header, String content) {
-        return false;
+        return true;
     }
 
     protected boolean askYesNo(String title, String header, String content) {
-        return false;
+        return true;
     }
 }
