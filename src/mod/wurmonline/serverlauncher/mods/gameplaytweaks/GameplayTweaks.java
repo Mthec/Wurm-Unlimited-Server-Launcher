@@ -13,7 +13,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import mod.wurmonline.serverlauncher.LocaleHelper;
+import mod.wurmonline.serverlauncher.ServerController;
+import mod.wurmonline.serverlauncher.consolereader.Option;
 import mod.wurmonline.serverlauncher.gui.ServerGuiController;
+import org.gotti.wurmunlimited.modloader.interfaces.WurmCommandLine;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmLoadDumpMod;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmMod;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmUIMod;
@@ -26,7 +29,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod {
+public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod, WurmCommandLine {
     static Logger logger = Logger.getLogger(GameplayTweaks.class.getName());
     GameplayPropertySheet gameplayPropertySheet;
     static ServerGuiController controller;
@@ -65,7 +68,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod {
     Button saveButton;
 
     @FXML
-    void saveButtonClicked () {
+    void saveButtonClicked() {
         logger.info(messages.getString("save_button_clicked"));
         String error = gameplayPropertySheet.save();
         if (error != null && error.length() > 0 && error.equalsIgnoreCase("ok")) {
@@ -81,15 +84,14 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod {
     }
 
     @FXML
-    void refreshButtonClicked () {
+    void refreshButtonClicked() {
         if (gameplayPropertySheet != null && gameplayPropertySheet.haveChanges()) {
             Optional<ButtonType> result = controller.showYesNoCancel(messages.getString("changes_title"),
                     messages.getString("changes_header"),
                     messages.getString("changes_message"));
             if (result.get() == ButtonType.CANCEL) {
                 return;
-            }
-            else if (result.get() == ButtonType.YES) {
+            } else if (result.get() == ButtonType.YES) {
                 saveButtonClicked();
                 return;
             }
@@ -98,8 +100,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod {
         if (controller.serverIsRunning()) {
             serverRunning.setText(ui_messages.getString("block_changes_server_running"));
             saveButton.setDisable(true);
-        }
-        else {
+        } else {
             serverRunning.setText("");
             saveButton.setDisable(false);
             gameplayPropertySheet = new GameplayPropertySheet(Servers.localServer);
@@ -109,7 +110,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod {
     }
 
     @FXML
-    public void initialize () {
+    public void initialize() {
         refreshButtonClicked();
     }
 
@@ -122,7 +123,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod {
         ServerEntry current = Servers.localServer;
         Enumeration prop = properties.propertyNames();
         while (prop.hasMoreElements()) {
-            String name = (String)prop.nextElement();
+            String name = (String) prop.nextElement();
             if (!name.startsWith(CATEGORY)) {
                 continue;
             }
@@ -276,7 +277,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod {
         }
 
         current.saveNewGui(current.id);
-        if(current.saveTwitter()) {
+        if (current.saveTwitter()) {
             logger.info(messages.getString("will_tweet"));
         } else {
             logger.info(messages.getString("wont_tweet"));
@@ -289,7 +290,7 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod {
         ServerEntry current = Servers.localServer;
         for (GameplayPropertySheet.PropertyType prop : GameplayPropertySheet.PropertyType.values()) {
             try {
-                switch(prop.ordinal()) {
+                switch (prop.ordinal()) {
                     // Message of the Day
                     case 0:
                         properties.setProperty(CATEGORY + prop.name(), current.getMotd());
@@ -432,5 +433,10 @@ public class GameplayTweaks implements WurmMod, WurmUIMod, WurmLoadDumpMod {
             }
         }
         return properties;
+    }
+
+    @Override
+    public Option getOption(ServerController controller) {
+        return GameplayTweaksConsoleCommands.getOptions(controller, messages);
     }
 }

@@ -10,10 +10,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import mod.wurmonline.serverlauncher.LocaleHelper;
+import mod.wurmonline.serverlauncher.gui.FormattedFloatEditor;
 import mod.wurmonline.serverlauncher.gui.MinMax;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.property.editor.DefaultPropertyEditorFactory;
-import mod.wurmonline.serverlauncher.gui.FormattedFloatEditor;
 
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -44,13 +44,13 @@ public class GameplayPropertySheet extends VBox {
         String toReturn = "";
         boolean saveAtAll = false;
 
-        for(PropertySheet.Item old_item : list) {
-            GameplayPropertySheet.CustomPropertyItem item = (GameplayPropertySheet.CustomPropertyItem)old_item;
-            if(changedProperties.contains(item.getPropertyType()) || current.isCreating) {
+        for (PropertySheet.Item old_item : list) {
+            GameplayPropertySheet.CustomPropertyItem item = (GameplayPropertySheet.CustomPropertyItem) old_item;
+            if (changedProperties.contains(item.getPropertyType()) || current.isCreating) {
                 saveAtAll = true;
 
                 try {
-                    switch(item.getPropertyType().ordinal()) {
+                    switch (item.getPropertyType().ordinal()) {
                         // Message of the Day
                         case 0:
                             current.setMotd(item.getValue().toString());
@@ -59,7 +59,7 @@ public class GameplayPropertySheet extends VBox {
                         // Mode
                         case 1:
                             boolean npcs = (Boolean) item.getValue();
-                            if(npcs != ServerProperties.getBoolean("NPCS", Constants.loadNpcs)) {
+                            if (npcs != ServerProperties.getBoolean("NPCS", Constants.loadNpcs)) {
                                 ServerProperties.setValue("NPCS", Boolean.toString(npcs));
                                 ServerProperties.checkProperties();
                             }
@@ -204,7 +204,7 @@ public class GameplayPropertySheet extends VBox {
                             saveNewGui = true;
                             break;
                         case 36:
-                            current.setFieldGrowthTime((long)((Float) item.getValue() * 3600.0F * 1000.0F));
+                            current.setFieldGrowthTime((long) ((Float) item.getValue() * 3600.0F * 1000.0F));
                             saveNewGui = true;
                             break;
                         case 37:
@@ -233,7 +233,7 @@ public class GameplayPropertySheet extends VBox {
                             break;
                         case 43:
                             boolean loadEGI = (Boolean) item.getValue();
-                            if(loadEGI != ServerProperties.getBoolean("ENDGAMEITEMS", Constants.loadEndGameItems)) {
+                            if (loadEGI != ServerProperties.getBoolean("ENDGAMEITEMS", Constants.loadEndGameItems)) {
                                 ServerProperties.setValue("ENDGAMEITEMS", Boolean.toString(loadEGI));
                                 ServerProperties.checkProperties();
                             }
@@ -252,24 +252,24 @@ public class GameplayPropertySheet extends VBox {
             }
         }
 
-        if(toReturn.length() == 0 && saveAtAll) {
-            if(saveNewGui) {
+        if (toReturn.length() == 0 && saveAtAll) {
+            if (saveNewGui) {
                 logger.info(messages.getString("saved_settings"));
                 saveNewGui = false;
                 current.saveNewGui(current.id);
             }
 
-            if(saveTwitter && !current.isCreating) {
-                if(current.saveTwitter()) {
-                    logger.info(messages.getString("will_tweet"));
+            if (saveTwitter && !current.isCreating) {
+                if (current.saveTwitter()) {
+                    logger.info(messages.getString("saved_twitter") + messages.getString("will_tweet"));
                 } else {
-                    logger.info(messages.getString("wont_tweet"));
+                    logger.info(messages.getString("saved_twitter") + messages.getString("wont_tweet"));
                 }
 
                 saveTwitter = false;
             }
 
-            if(saveSpawns) {
+            if (saveSpawns) {
                 current.updateSpawns();
                 logger.info(messages.getString("saved_spawns"));
                 saveSpawns = false;
@@ -283,7 +283,7 @@ public class GameplayPropertySheet extends VBox {
     }
 
     public GameplayPropertySheet(ServerEntry entry) {
-        if(!entry.isLocal) {
+        if (!entry.isLocal) {
             setReadOnly();
             return;
         }
@@ -346,9 +346,9 @@ public class GameplayPropertySheet extends VBox {
         SimpleObjectProperty<DefaultPropertyEditorFactory> propertyEditorFactory = new SimpleObjectProperty<>(this, "propertyEditor", new DefaultPropertyEditorFactory());
         propertySheet = new PropertySheet(list);
         propertySheet.setPropertyEditorFactory(param -> {
-            if(param instanceof CustomPropertyItem) {
-                CustomPropertyItem pi = (CustomPropertyItem)param;
-                if(pi.getValue().getClass() == Float.class) {
+            if (param instanceof CustomPropertyItem) {
+                CustomPropertyItem pi = (CustomPropertyItem) param;
+                if (pi.getValue().getClass() == Float.class) {
                     return new FormattedFloatEditor(param);
                 }
             }
@@ -361,7 +361,7 @@ public class GameplayPropertySheet extends VBox {
     }
 
     public void setReadOnly() {
-        if(propertySheet != null) {
+        if (propertySheet != null) {
             propertySheet.setMode(PropertySheet.Mode.NAME);
             propertySheet.setDisable(true);
         }
@@ -430,15 +430,15 @@ public class GameplayPropertySheet extends VBox {
         }
 
         public Float getMinValue() {
-            return (Float)minValue;
+            return (Float) minValue;
         }
 
         public Float getMaxValue() {
-            return (Float)maxValue;
+            return (Float) maxValue;
         }
 
         public void setValue(Object aValue) {
-            if(!value.equals(aValue)) {
+            if (!value.equals(aValue)) {
                 GameplayPropertySheet.this.changedProperties.add(type);
             }
             value = aValue;

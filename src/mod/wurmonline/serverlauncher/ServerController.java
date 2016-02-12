@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 public abstract class ServerController {
     protected Logger logger = Logger.getLogger(ServerController.class.getName());
-    public List<WurmMod> mods;
+    public List<WurmMod> mods = new ArrayList<>();
     public SimpleArgumentParser arguments;
     protected List<ServerEntry> localServers = new ArrayList<>();
     protected List<ServerEntry> remoteServers = new ArrayList<>();
@@ -43,33 +43,45 @@ public abstract class ServerController {
     public class CreateServerException extends Exception {
         String errorReason;
         String errorMessage;
-        CreateServerException (String newReason, String newMessage) {
+
+        CreateServerException(String newReason, String newMessage) {
             errorMessage = newMessage;
             errorReason = newReason;
         }
 
-        public String getErrorMessage () { return errorMessage; }
+        public String getErrorMessage() {
+            return errorMessage;
+        }
 
-        public String getErrorReason () { return errorReason; }
+        public String getErrorReason() {
+            return errorReason;
+        }
     }
 
     public class DeleteServerException extends Exception {
         String errorReason;
         String errorMessage;
-        DeleteServerException (String newReason, String newMessage) {
+
+        DeleteServerException(String newReason, String newMessage) {
             errorMessage = newMessage;
             errorReason = newReason;
         }
 
-        public String getErrorMessage () { return errorMessage; }
+        public String getErrorMessage() {
+            return errorMessage;
+        }
 
-        public String getErrorReason () { return errorReason; }
+        public String getErrorReason() {
+            return errorReason;
+        }
     }
 
     // Should go in init?
-    public void setMods(List<WurmMod> loadedMods) { mods = loadedMods; }
+    public synchronized void setMods(List<WurmMod> loadedMods) {
+        mods = loadedMods;
+    }
 
-    public void setArguments(SimpleArgumentParser parser) {
+    public synchronized void setArguments(SimpleArgumentParser parser) {
         arguments = parser;
         for (WurmMod mod : mods) {
             if (mod instanceof WurmArgsMod) {
@@ -87,11 +99,11 @@ public abstract class ServerController {
         }
     }
 
-    public boolean shutdown (int time, String reason) {
+    public synchronized boolean shutdown(int time, String reason) {
         if (serverIsRunning()) {
             if (!askConfirmation(server_messages.getString("shutdown_confirm_title"),
-                                server_messages.getString("shutdown_confirm_header"),
-                                server_messages.getString("shutdown_confirm_message"))) {
+                    server_messages.getString("shutdown_confirm_header"),
+                    server_messages.getString("shutdown_confirm_message"))) {
                 return false;
             }
             // TODO - Shutdown messages should be coloured?
@@ -107,7 +119,7 @@ public abstract class ServerController {
             RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
             Field jvm = runtime.getClass().getDeclaredField("jvm");
             jvm.setAccessible(true);
-            VMManagement management = (VMManagement)jvm.get(runtime);
+            VMManagement management = (VMManagement) jvm.get(runtime);
             Method pid_method = management.getClass().getDeclaredMethod("getProcessId");
             pid_method.setAccessible(true);
             return (int) (Integer) pid_method.invoke(management);
@@ -145,7 +157,7 @@ public abstract class ServerController {
 
     }
 
-    void delete (File fileName) throws IOException {
+    void delete(File fileName) throws IOException {
         if (fileName.isDirectory()) {
             for (File file : fileName.listFiles()) {
                 delete(file);
@@ -161,7 +173,7 @@ public abstract class ServerController {
         return currentDir;
     }
 
-    public void setCurrentDir(String newCurrentDir) throws IOException {
+    public synchronized void setCurrentDir(String newCurrentDir) throws IOException {
         if (newCurrentDir.equals(currentDir)) {
             return;
         }
@@ -215,9 +227,9 @@ public abstract class ServerController {
         logger.warning(MessageFormat.format(server_messages.getString("current_dir_set_fail"), currentDir));
     }
 
-    public void startServer () throws IOException {
-        if(currentServer != null) {
-            if(currentServer.wasStarted()) {
+    public void startServer() throws IOException {
+        if (currentServer != null) {
+            if (currentServer.wasStarted()) {
                 logger.info(server_messages.getString("already_started"));
                 return;
             }
@@ -260,14 +272,14 @@ public abstract class ServerController {
             ++min;
         }
 
-        return (short)newRand;
+        return (short) newRand;
     }
 
-    public void addDatabase (String dbName, String serverName) throws CreateServerException {
+    public void addDatabase(String dbName, String serverName) throws CreateServerException {
         File orig = new File(currentDir);
-        if(orig.exists()) {
+        if (orig.exists()) {
             File newFile = new File(dbName);
-            if(!newFile.exists()) {
+            if (!newFile.exists()) {
                 newFile.mkdir();
                 try {
                     copyFolder(orig, newFile);
@@ -291,10 +303,10 @@ public abstract class ServerController {
         }
     }
 
-    public boolean deleteDatabase () throws DeleteServerException {
+    public boolean deleteDatabase() throws DeleteServerException {
         boolean confirm = askConfirmation(server_messages.getString("delete_db_confirm_title"),
-                                        server_messages.getString("delete_db_confirm_header"),
-                                        server_messages.getString("delete_db_confirm_message"));
+                server_messages.getString("delete_db_confirm_header"),
+                server_messages.getString("delete_db_confirm_message"));
         if (confirm) {
             File orig = new File(currentDir);
             if (orig.exists()) {
@@ -303,7 +315,7 @@ public abstract class ServerController {
                 for (String fileName : orig.list()) {
                     if (fileName.equalsIgnoreCase(ORIGINALDIR)) {
                         throw new DeleteServerException(server_messages.getString("error_delete_db_protected_header"),
-                                                        server_messages.getString("error_delete_db_protected_message"));
+                                server_messages.getString("error_delete_db_protected_message"));
                     }
                 }
                 try {
@@ -320,9 +332,9 @@ public abstract class ServerController {
 
     public void copyCurrentDatabase(String dbName) throws CreateServerException {
         File orig = new File(currentDir);
-        if(orig.exists()) {
+        if (orig.exists()) {
             File newFile = new File(dbName);
-            if(!newFile.exists()) {
+            if (!newFile.exists()) {
                 newFile.mkdir();
                 try {
                     copyFolder(orig, newFile);
@@ -333,15 +345,15 @@ public abstract class ServerController {
                 }
             } else {
                 throw new CreateServerException(server_messages.getString("error_copy_db_exists_header"),
-                                                server_messages.getString("error_copy_db_exists_message"));
+                        server_messages.getString("error_copy_db_exists_message"));
             }
         } else {
             throw new CreateServerException(server_messages.getString("error_copy_db_not_exists_header"),
-                                            server_messages.getString("error_copy_db_not_exists_message"));
+                    server_messages.getString("error_copy_db_not_exists_message"));
         }
     }
 
-    public ServerEntry addServer (String name) throws CreateServerException {
+    public ServerEntry addServer(String name) throws CreateServerException {
         // TODO - Remove/replace - Why is it random?
         short newRand = getNewServerId();
         if (newRand > 0) {
@@ -379,14 +391,16 @@ public abstract class ServerController {
     }
 
     @FXML
-    public boolean deleteServer (ServerEntry server) { return deleteServer(server, true); }
+    public boolean deleteServer(ServerEntry server) {
+        return deleteServer(server, true);
+    }
 
-    public boolean deleteServer (ServerEntry server, boolean askConfirm) {
+    public boolean deleteServer(ServerEntry server, boolean askConfirm) {
         boolean confirm = true;
         if (askConfirm) {
             confirm = askConfirmation(server_messages.getString("delete_server_confirm_title"),
-                                    server_messages.getString("delete_server_confirm_header"),
-                                    server_messages.getString("delete_server_confirm_message"));
+                    server_messages.getString("delete_server_confirm_header"),
+                    server_messages.getString("delete_server_confirm_message"));
         }
         if (confirm) {
             Servers.deleteServerEntry(server.getId());
@@ -410,15 +424,18 @@ public abstract class ServerController {
         return confirm;
     }
 
-    protected void loadAllServers (boolean reload) {
+    public void loadAllServers() {
+        loadAllServers(true);
+    }
+
+    protected void loadAllServers(boolean reload) {
         localServers.clear();
         remoteServers.clear();
         if (!serverIsRunning()) {
             // TODO - Not sure why this doesn't happen in loadAllServers.  Maybe I've misunderstood the Servers class?
             Servers.localServer = null;
             Servers.loadAllServers(reload);
-        }
-        else {
+        } else {
             Servers.loadAllServers(false);
         }
         for (ServerEntry server : Servers.getAllServers()) {
@@ -428,15 +445,22 @@ public abstract class ServerController {
                 remoteServers.add(server);
             }
         }
-
     }
 
-    public boolean serverIsRunning () {
+    public ServerEntry getLocalServer() {
+        return Servers.localServer;
+    }
+
+    public boolean serverIsRunning() {
         // TODO - Is there not a better way to do this?
         return currentServer != null && currentServer.wasStarted();
     }
 
-    protected void setup () {
+    public boolean isInitialized() {
+        return !currentDir.equals("");
+    }
+
+    protected void setup() {
         DbConnector.setSqlite(true);
         if (!locateCurrentDir()) {
             String error = createStartDirs();
@@ -448,7 +472,7 @@ public abstract class ServerController {
         }
     }
 
-    boolean locateCurrentDir () {
+    private boolean locateCurrentDir() {
         File startDir = new File(".");
 
         for (File dir : startDir.listFiles()) {
@@ -489,7 +513,7 @@ public abstract class ServerController {
         return false;
     }
 
-    String createStartDirs () {
+    private String createStartDirs() {
         File startDir = new File(".");
         logger.info(server_messages.getString("creating_starting_directories"));
         for (File dir : startDir.listFiles()) {
@@ -511,8 +535,8 @@ public abstract class ServerController {
                     if (newFile.exists()) {
                         if (newFile.isFile()) {
                             if (askYesNo(server_messages.getString("overwrite_confirm_title"),
-                                        server_messages.getString("overwrite_confirm_header"),
-                                        MessageFormat.format(server_messages.getString("overwrite_confirm_message"), newFile.getName()))) {
+                                    server_messages.getString("overwrite_confirm_header"),
+                                    MessageFormat.format(server_messages.getString("overwrite_confirm_message"), newFile.getName()))) {
                                 continue;
                             }
 
@@ -521,8 +545,8 @@ public abstract class ServerController {
                             }
                         } else {
                             if (askYesNo(server_messages.getString("overwrite_dir_confirm_title"),
-                                        server_messages.getString("overwrite_dir_confirm_header"),
-                                        MessageFormat.format(server_messages.getString("overwrite_dir_confirm_message"), newFile.getName()))) {
+                                    server_messages.getString("overwrite_dir_confirm_header"),
+                                    MessageFormat.format(server_messages.getString("overwrite_dir_confirm_message"), newFile.getName()))) {
                                 continue;
                             }
 

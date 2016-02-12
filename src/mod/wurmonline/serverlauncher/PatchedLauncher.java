@@ -16,8 +16,8 @@ public class PatchedLauncher {
             };
             try (URLClassLoader urlClassLoader = new URLClassLoader(urls)) {
                 Class<?> launcher = urlClassLoader.loadClass("org.gotti.wurmunlimited.serverlauncher.ServerLauncher2");
-                Method method = launcher.getDeclaredMethod("main", new Class[] { String[].class });
-                method.invoke(launcher, new Object[] { args });
+                Method method = launcher.getDeclaredMethod("main", new Class[] {String[].class});
+                method.invoke(launcher, new Object[] {args});
             }
         } catch (Exception e) {
             e.printStackTrace();

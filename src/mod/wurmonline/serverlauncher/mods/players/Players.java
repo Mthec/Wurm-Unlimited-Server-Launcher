@@ -7,22 +7,31 @@ import com.wurmonline.server.players.PlayerInfo;
 import com.wurmonline.server.players.PlayerInfoFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import mod.wurmonline.serverlauncher.LocaleHelper;
+import mod.wurmonline.serverlauncher.ServerController;
+import mod.wurmonline.serverlauncher.consolereader.Menu;
+import mod.wurmonline.serverlauncher.consolereader.Option;
 import mod.wurmonline.serverlauncher.gui.ServerGuiController;
 import org.gotti.wurmunlimited.modloader.interfaces.Configurable;
+import org.gotti.wurmunlimited.modloader.interfaces.WurmCommandLine;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmMod;
 import org.gotti.wurmunlimited.modloader.interfaces.WurmUIMod;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Players implements WurmMod, WurmUIMod, Configurable {
+// TODO - Add player deletion.
+public class Players implements WurmMod, WurmUIMod, Configurable, WurmCommandLine {
     Logger logger = Logger.getLogger(Players.class.getName());
     String name;
     PlayerPropertySheet playerPropertySheet;
@@ -70,8 +79,8 @@ public class Players implements WurmMod, WurmUIMod, Configurable {
         String error = playerPropertySheet.save();
         if (error != null && error.length() > 0 && error.equalsIgnoreCase("ok")) {
             controller.showInformationDialog(players_messages.getString("saved_title"),
-                                            players_messages.getString("saved_header"),
-                                            players_messages.getString("saved_message"));
+                    players_messages.getString("saved_header"),
+                    players_messages.getString("saved_message"));
 
             if (controller.serverIsRunning() && playerPropertySheet != null && playerPropertySheet.getCurrentData() != null) {
                 PlayerInfo info = PlayerInfoFactory.getPlayerInfoWithWurmId(playerPropertySheet.getCurrentData().getWurmid());
@@ -87,8 +96,8 @@ public class Players implements WurmMod, WurmUIMod, Configurable {
             }
         } else if (error != null && error.length() > 0) {
             controller.showErrorDialog(players_messages.getString("save_error_title"),
-                                    players_messages.getString("save_error_header"),
-                                    MessageFormat.format(players_messages.getString("save_error_message"), error));
+                    players_messages.getString("save_error_header"),
+                    MessageFormat.format(players_messages.getString("save_error_message"), error));
         }
         populatePlayersList();
     }
@@ -129,5 +138,24 @@ public class Players implements WurmMod, WurmUIMod, Configurable {
     void initialize() {
         populatePlayersList();
         playersList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> selectPlayerListChanged());
+    }
+
+    @Override
+    public Option getOption(ServerController controller) {
+        if (controller != null && controller.isInitialized()) {
+            return new PlayerMenu("players", "Player Entries", players_messages.getString("players_console_help"), players_messages);
+        } else {
+            return new Menu("players", "Player Entries", players_messages.getString("players_console_help"), new Option[0]) {
+                @Override
+                public String action(List<String> tokens) {
+                    return "Please select a server first.";
+                }
+
+                @Override
+                public Menu get() {
+                    return getParent();
+                }
+            };
+        }
     }
 }

@@ -11,10 +11,10 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class LocaleHelper {
-    public static ResourceBundle getBundle (String bundleName) {
+    public static ResourceBundle getBundle(String bundleName) {
         try {
             File file = new File("locales");
-            URL[] urls = new URL[]{file.toURI().toURL()};
+            URL[] urls = new URL[] {file.toURI().toURL()};
             ClassLoader loader = new URLClassLoader(urls);
             return ResourceBundle.getBundle(bundleName, Locale.getDefault(), loader);
         } catch (MalformedURLException ex) {
@@ -24,7 +24,7 @@ public class LocaleHelper {
         return null;
     }
 
-    public static String getPluralString (ResourceBundle bundle, String string, int count) {
+    public static String getPluralString(ResourceBundle bundle, String string, int count) {
         return bundle.getString(string + PluralRules.forLocale(ULocale.getDefault()).select(count));
     }
 }

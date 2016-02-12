@@ -1,35 +1,23 @@
 package org.gotti.wurmunlimited.patcher;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.logging.Logger;
-
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 
+import java.io.*;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
+import java.nio.file.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.logging.Logger;
+
 public class PatchServerJar {
 
     private enum Os {
         Windows {
-
             @Override
             public String getPatchedBinaryName() {
                 return "WurmServerLauncher-patched.exe";
@@ -42,7 +30,6 @@ public class PatchServerJar {
 
         },
         Linux {
-
             @Override
             public String getPatchedBinaryName() {
                 return "WurmServerLauncher-patched";
@@ -69,6 +56,7 @@ public class PatchServerJar {
         }
 
         public abstract String getPatchedBinaryName();
+
         public abstract String getOriginalBinaryName();
 
     }

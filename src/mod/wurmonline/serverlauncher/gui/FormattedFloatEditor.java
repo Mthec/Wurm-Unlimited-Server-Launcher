@@ -22,13 +22,13 @@ public class FormattedFloatEditor implements PropertyEditor<Float> {
             this.textField.textProperty().setValue(this.getValue().toString());
         });
         this.textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.length() > 0 && !newValue.matches("(^\\d*\\.?\\d*[0-9]+\\d*$)|(^[0-9]+\\d*\\.\\d*$)")) {
+            if (newValue.length() > 0 && !newValue.matches("(^\\d*\\.?\\d*[0-9]+\\d*$)|(^[0-9]+\\d*\\.\\d*$)")) {
                 FormattedFloatEditor.this.textField.textProperty().setValue(oldValue);
             }
 
         });
         this.textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(!newValue) {
+            if (!newValue) {
                 item.setValue(FormattedFloatEditor.this.getValue());
                 FormattedFloatEditor.this.textField.textProperty().setValue(FormattedFloatEditor.this.getValue().toString());
             }
@@ -54,25 +54,25 @@ public class FormattedFloatEditor implements PropertyEditor<Float> {
 
     private Float stringToObj(String str, Class<?> cls) {
         try {
-            if(str == null) {
+            if (str == null) {
                 return null;
             } else {
                 String t = cls.getName();
                 Float min = null;
                 Float max = null;
-                if(this.item instanceof MinMax) {
-                    min = ((MinMax)this.item).getMinValue();
-                    max = ((MinMax)this.item).getMaxValue();
+                if (this.item instanceof MinMax) {
+                    min = ((MinMax) this.item).getMinValue();
+                    max = ((MinMax) this.item).getMaxValue();
                 }
 
-                if(!t.equals("float") && !cls.equals(Float.class)) {
+                if (!t.equals("float") && !cls.equals(Float.class)) {
                     return null;
                 } else {
-                    if(str.length() == 0 || str.length() == 1 && str.contains(".")) {
-                        return min != null?min:new java.lang.Float(0.0F);
+                    if (str.length() == 0 || str.length() == 1 && str.contains(".")) {
+                        return min != null ? min : new java.lang.Float(0.0F);
                     } else {
                         java.lang.Float val = new java.lang.Float(str);
-                        return min != null && val < min ?min:(max != null && val > max ?max:val);
+                        return min != null && val < min ? min : (max != null && val > max ? max : val);
                     }
                 }
             }

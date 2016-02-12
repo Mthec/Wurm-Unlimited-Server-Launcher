@@ -6,5 +6,7 @@ import java.util.Set;
 
 public interface WurmArgsMod {
     Set<String> getArgs();
-    default void parseArgs(ServerController controller) {}
+
+    default void parseArgs(ServerController controller) {
+    }
 }
