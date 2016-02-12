@@ -223,7 +223,7 @@ public class ServerMain extends Application {
             launch(args);
         }
 
-        logger.info(main_messages.getString("finished"));
+        logger.fine(main_messages.getString("finished"));
     }
 
     @Override

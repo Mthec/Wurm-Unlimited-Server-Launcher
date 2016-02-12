@@ -188,6 +188,7 @@ public class ConsoleReader implements Runnable {
                 messages.getString("top_menu_help"),
                 options.toArray(new Option[options.size()]));
         currentMenu = topMenu;
+        System.out.println("========================================");
         System.out.println(topMenu.action(null));
     }
 }

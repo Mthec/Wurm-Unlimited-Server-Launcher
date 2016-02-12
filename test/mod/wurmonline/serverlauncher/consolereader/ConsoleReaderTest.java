@@ -54,7 +54,8 @@ public class ConsoleReaderTest {
         reader.reader = mock(BufferedReader.class);
         when(reader.reader.readLine()).thenReturn(null);
         reader.run();
-        assertEquals(reader.topMenu.getText() + System.lineSeparator(), outPut.toString());
+        String header = "========================================";
+        assertEquals(header + System.lineSeparator() + reader.topMenu.getText() + System.lineSeparator(), outPut.toString());
     }
 
     @Test(expected = ReservedOptionException.class)
