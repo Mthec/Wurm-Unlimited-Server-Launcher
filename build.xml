@@ -10,6 +10,7 @@
                 <exclude name="mod/wurmonline/serverlauncher/mods/**"/>
                 <exclude name="mod/wurmonline/serverlauncher/Test*"/>
                 <exclude name="org/gotti/wurmunlimited/patcher/*"/>
+                <exclude name="*.properties"/>
             </fileset>
             <fileset dir="src">
                 <include name="mod/wurmonline/serverlauncher/gui/ServerGui.fxml"/>
@@ -95,6 +96,7 @@
             <fileset dir="." includes="serverlauncherpatcher.bat"/>
             <fileset dir="." includes="serverlauncherpatcher.sh"/>
             <zipfileset dir="mods" prefix="mods" excludes="example*,example*/**"/>
+            <zipfileset dir="." prefix="" includes="modloader.jar"/>
             <zipfileset dir="." prefix="" includes="javassist.jar"/>
             <zipfileset dir="." prefix="" includes="icu4j-56_1.jar"/>
         </zip>
@@ -110,6 +112,7 @@
             <fileset dir="." includes="serverlauncher.sh"/>
             <fileset dir="." includes="serverlauncherpatcher.bat"/>
             <fileset dir="." includes="serverlauncherpatcher.sh"/>
+            <zipfileset dir="." prefix="" includes="modloader.jar"/>
             <fileset dir="." includes="javassist.jar"/>
             <fileset dir="." includes="icu4j-56_1.jar"/>
         </copy>
