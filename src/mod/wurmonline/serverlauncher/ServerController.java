@@ -240,7 +240,8 @@ public abstract class ServerController {
             System.out.println(MessageFormat.format(server_messages.getString("starting"), Servers.localServer.getName()));
             LocateRegistry.createRegistry(Servers.localServer.REGISTRATION_PORT);
             ServerProperties.setValue("ADMINPASSWORD", adminPassword);
-            currentServer.runServer(true);
+            // TODO - Offline server.
+            currentServer.runServer(true, false);
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
@@ -461,7 +462,7 @@ public abstract class ServerController {
     }
 
     protected void setup() {
-        DbConnector.setSqlite(true);
+        DbConnector.setUseSqlite(true);
         if (!locateCurrentDir()) {
             String error = createStartDirs();
             if (error != null && error.length() > 0) {
