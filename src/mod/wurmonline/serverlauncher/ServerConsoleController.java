@@ -19,7 +19,7 @@ public class ServerConsoleController extends ServerController {
         try {
             setCurrentDir(dbName + (dbName.endsWith(File.separator) ? "" : File.separator));
             initServer(dbName);
-            startServer();
+            startServer(false);
         } catch (IOException ex) {
             logger.severe(MessageFormat.format(server_messages.getString("cannot_find_db"), dbName));
             ex.printStackTrace();

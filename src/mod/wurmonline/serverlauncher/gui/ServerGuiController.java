@@ -57,6 +57,8 @@ public class ServerGuiController extends ServerController {
     @FXML
     protected Button startServerButton;
     @FXML
+    protected Button startOfflineServerButton;
+    @FXML
     protected ProgressIndicator startServerProgress;
     @FXML
     protected Spinner<Integer> serverShutdownTime;
@@ -197,6 +199,7 @@ public class ServerGuiController extends ServerController {
             statusText.setText(MessageFormat.format(ui_messages.getString("server_running_message"), currentDir, serverName));
             serverToRun.setText(MessageFormat.format(ui_messages.getString("database_server_name"), currentDir, serverName));
             startServerButton.setDisable(true);
+            startOfflineServerButton.setDisable(true);
             startServerProgress.setVisible(true);
             startServerProgress.setProgress(1.0);
             serverControls.setDisable(false);
@@ -207,6 +210,7 @@ public class ServerGuiController extends ServerController {
             statusText.setText(ui_messages.getString("ready"));
             serverToRun.setText(serverName);
             startServerButton.setDisable(false);
+            startOfflineServerButton.setDisable(false);
             startServerProgress.setVisible(false);
             serverControls.setDisable(true);
         }
@@ -215,6 +219,7 @@ public class ServerGuiController extends ServerController {
     void disableRunServerTab() {
         serverToRun.setText("");
         startServerButton.setDisable(true);
+        startOfflineServerButton.setDisable(true);
         startServerProgress.setVisible(false);
         serverControls.setDisable(true);
     }
@@ -243,26 +248,35 @@ public class ServerGuiController extends ServerController {
         if (!serverPropertySheet.checkIfIpIsValid()) {
             showErrorDialog(gui_messages.getString("error_start_title"), MessageFormat.format(gui_messages.getString("error_ip_header"), serverPropertySheet.getCurrentServerEntry().EXTERNALIP), gui_messages.getString("error_ip_message"), true);
         } else {
-            if (currentServer != null) {
-                if (currentServer.wasStarted()) {
-                    disableAllControls();
-                    showErrorDialog(gui_messages.getString("error_start_title"), gui_messages.getString("error_already_started_message"), gui_messages.getString("error_gui_restart"));
-                    return;
-                }
-            } else {
-                currentServer = new ServerLauncher();
-            }
-            startingServerState();
-            try {
-                startServer();
-                serverStartError = false;
-            } catch (IOException ex) {
-                showErrorDialog(gui_messages.getString("error_start_title"), gui_messages.getString("error_start_message"), ex.getMessage());
-                serverStartError = true;
-                statusText.setText(ui_messages.getString("status_error"));
-            }
-            startedServerState();
+            startServerClicked(false);
         }
+    }
+
+    @FXML
+    void startOfflineServerButtonClicked() {
+        startServerClicked(true);
+    }
+
+    private void startServerClicked(boolean offline) {
+        if (currentServer != null) {
+            if (currentServer.wasStarted()) {
+                disableAllControls();
+                showErrorDialog(gui_messages.getString("error_start_title"), gui_messages.getString("error_already_started_message"), gui_messages.getString("error_gui_restart"));
+                return;
+            }
+        } else {
+            currentServer = new ServerLauncher();
+        }
+        startingServerState();
+        try {
+            startServer(offline);
+            serverStartError = false;
+        } catch (IOException ex) {
+            showErrorDialog(gui_messages.getString("error_start_title"), gui_messages.getString("error_start_message"), ex.getMessage());
+            serverStartError = true;
+            statusText.setText(ui_messages.getString("status_error"));
+        }
+        startedServerState();
     }
 
     // Server is starting up.

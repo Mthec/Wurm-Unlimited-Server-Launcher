@@ -227,7 +227,7 @@ public abstract class ServerController {
         logger.warning(MessageFormat.format(server_messages.getString("current_dir_set_fail"), currentDir));
     }
 
-    public void startServer() throws IOException {
+    public void startServer(boolean offline) throws IOException {
         if (currentServer != null) {
             if (currentServer.wasStarted()) {
                 logger.info(server_messages.getString("already_started"));
@@ -241,7 +241,7 @@ public abstract class ServerController {
             LocateRegistry.createRegistry(Servers.localServer.REGISTRATION_PORT);
             ServerProperties.setValue("ADMINPASSWORD", adminPassword);
             // TODO - Offline server.
-            currentServer.runServer(true, false);
+            currentServer.runServer(true, offline);
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
